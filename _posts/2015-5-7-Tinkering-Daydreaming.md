@@ -11,5 +11,5 @@ Now, all of that being said, I have still been spending quite a bit of time on t
 
 Got home, ate a snack, and popped open the laptop to put my theory to practice. And then IT STILL DIDN'T WORK. Fortunately (or not!), I *can't* let a good puzzle go unsolved, so I chose to keep at it and just have leftovers for dinner. I'm happy to say my perseverence paid off and I got the code working in time to watch one of my Wednesday night television. I originally thought I'd give myself a break today as a reward...but here I am, already itching to move on to the next problem. I guess that's a good sign!
 
-<small><sup>*</sup>I walk about a mile and a half home everyday after work)</small>
+<small><sup>*</sup>I walk about a mile and a half home everyday after work</small>
 
