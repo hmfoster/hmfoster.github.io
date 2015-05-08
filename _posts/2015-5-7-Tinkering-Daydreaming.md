@@ -1,6 +1,7 @@
 ---
 layout: post
 title: On Tinkering, Day Dreaming, and Persevering
+category: HR Precourse
 ---
 
 Over the last week or so, I've been moving at a fairly rapid pace through Hack Reactor's precourse material. What I'm finding though, is that I'm spending a far greater amount of time learning related technologies and terminology (seem my last post) than I am actually solving the problems and reading through the material. I found this quite frustrating at first, but I've come to realize that this indirect learning is becoming more an more valuable. For one thing, its allowing me to accelerate my learning via transfer and adaptation. 
