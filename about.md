@@ -4,12 +4,8 @@ title: About
 permalink: /about/
 ---
 
-Some information about you!
-
-### More Information
-
-A place to include any other types of information that you'd like to include about yourself.
+After graduating from college, I taught math and science to middle and high school students for seven years, getting my Master’s in Education in the process. Teaching is awesome, but it is now time to move on to a new adventrue. I’m now working to become a full stack developer and will be starting Hack Reactor's RemoteBeta program this summer.  I’ll be sharing my experiences during and after this transition here.
 
 ### Contact me
 
-[email@domain.com](mailto:email@domain.com)
+[haileyhasmail@gmail.com](mailto:haileyhasmail@gmail.com)
