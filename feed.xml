@@ -1,21 +1,89 @@
----
-layout: null
----
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>{{ site.name | xml_escape }}</title>
-    <description>{{ site.description | xml_escape }}</description>
-    <link>{{ site.url }}</link>
-    <atom:link href="{{ site.url }}/feed.xml" rel="self" type="application/rss+xml" />
-    {% for post in site.posts limit:10 %}
+    <title>Hailey Foster</title>
+    <description>Learning to program while teaching some science.</description>
+    <link>http://hmfoster.github.io/</link>
+    <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    
       <item>
-        <title>{{ post.title | xml_escape }}</title>
-        <description>{{ post.content | xml_escape }}</description>
-        <pubDate>{{ post.date | date: "%a, %d %b %Y %H:%M:%S %z" }}</pubDate>
-        <link>{{ site.url }}{{ post.url }}</link>
-        <guid isPermaLink="true">{{ site.url }}{{ post.url }}</guid>
+        <title>On Tinkering, Day Dreaming, and Persevering</title>
+        <description>&lt;p&gt;Over the last week or so, I&amp;#39;ve been moving at a fairly rapid pace through Hack Reactor&amp;#39;s precourse material. What I&amp;#39;m finding though, is that I&amp;#39;m spending a far greater amount of time learning related technologies and terminology (seem my last post) than I am actually solving the problems and reading through the material. I found this quite frustrating at first, but I&amp;#39;ve come to realize that this indirect learning is becoming more an more valuable. For one thing, its allowing me to accelerate my learning via transfer and adaptation. &lt;/p&gt;
+
+&lt;p&gt;I have also found that while all of the reading, tutorials, etc... I did before beginning the precourse work is a helpful foundation, actually USING all of these tools is allowing me learn much more efficiently. This should come as no surprise, given that Bloom&amp;#39;s Hierarchy yadda yadda. As a result, I&amp;#39;ve decided to try to apply what I&amp;#39;m learning as much as possible outside of the precourse work. For example, I&amp;#39;ve switched from hosting my blog on WordPress.com, to using &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and hosting through GitHub. This will force me to practice using the command line, writing HTML, CSS and Markdown, and using Git. &lt;/p&gt;
+
+&lt;p&gt;Now, all of that being said, I have still been spending quite a bit of time on the actual precourse work. I read through HR&amp;#39;s presentation on closures and scoping rules and &lt;em&gt;thought&lt;/em&gt; that I understood it pretty well. However, when I then moved on to the second part of rewriting the Underscore.js library, I found these concepts to be quite a bit more difficult in practice. Fortunately, this forced me to actually &lt;strong&gt;use&lt;/strong&gt; the Chrome Developer&amp;#39;s tools. Even once I started using the debugger, I still got stuck on one of the functions for quite awhile. But then, on my walk home&lt;sup&gt;*&lt;/sup&gt;...EPIPHANY! Once I stopped fussy over the code in my computer and just thought about it while daydreaming, I realized I just needed to include an object in my code. Der. &lt;/p&gt;
+
+&lt;p&gt;Got home, ate a snack, and popped open the laptop to put my theory to practice. And then IT STILL DIDN&amp;#39;T WORK. Fortunately (or not!), I &lt;em&gt;can&amp;#39;t&lt;/em&gt; let a good puzzle go unsolved, so I chose to keep at it and just have leftovers for dinner. I&amp;#39;m happy to say my perseverence paid off and I got the code working in time to watch one of my Wednesday night television. I originally thought I&amp;#39;d give myself a break today as a reward...but here I am, already itching to move on to the next problem. I guess that&amp;#39;s a good sign!&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;&lt;sup&gt;*&lt;/sup&gt;I walk about a mile and a half home everyday after work&lt;/small&gt;&lt;/p&gt;
+</description>
+        <pubDate>Thu, 07 May 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Tinkering-Daydreaming/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Tinkering-Daydreaming/</guid>
       </item>
-    {% endfor %}
+    
+      <item>
+        <title>Automated Testing and Underscore.js</title>
+        <description>&lt;p&gt;Late last week I finally got into some completely novel concepts for me in the precourse work. The remaining Git ideas were fairly basic (forks and pull requests, and the workflow HR expects us to follow). Not much interesting there. However, I then moved on to the section on Automated Testing, about which I had only had a vague understanding of the general idea before.&lt;/p&gt;
+
+&lt;p&gt;In this section, I first read through a fairly brief reading introducing the idea of Automated Testing, which gave a few examples and introduced some of the key terminology and syntax. I honestly didn’t find this reading to be that helpful because it really only showed some example code without really explaining it, so I just skimmed through it to get the general idea. Next, I began working on the Javascript Koans exercises; these essentially introduce some foundational Javascript concepts using automated testing. I had no idea what I was supposed to be doing at first, but after ~15 minutes I figured it out and it was pretty smooth sailing from there. Unfortunately, for some reason two of the exercise sets seemingly “disappeared” from the testing file. I tried to fix up these exercises as best I could, but I was unable to get any feedback on them.&lt;/p&gt;
+
+&lt;p&gt;Yesterday I worked through the resources provided to learn about Chrome’s debugging tools. I haven’t had a chance to implement any of them yet, but they look like they will be extremely useful. I had been using the console and a few other tools provided by Chrome, but I didn’t really know what I was doing or how to use these effectively. I will definitely want to review this section again (and probably again).&lt;/p&gt;
+
+&lt;p&gt;Finally yesterday afternoon I got to the section I’ve been most looking forward too — rewriting some of the Underscore.js library! I got a little sidetracked when beginning this task, because one of my classmates figured out a way to use the automated testing suite in Node.js instead of in the browser, giving more helpful error messages. I hit  few hiccups while setting this up for myself, so it took a bit longer than it would have if I were a more experienced programmer. For example, one of the things you need to set up is a pacakge.json file; I copy/pasted the content of this file, including an unnecessary comma that through some mysterious errors at first. If I’d had more exposure to JSON syntax, I probably would have caught this error a lot earlier than I did. Lesson learned!&lt;/p&gt;
+
+&lt;p&gt;Writing the first few functions was a bit slow, primarily because I was still picking up on little nit-picky syntax requirements and figuring out my overall workflow. Now I’ve got a pretty good system worked out, and the latest function I rewrote only took me a few minutes. Basically, I write what I THINK the function should be, test it in the browser using the original testing file from HR, then test it in Node to get additional feedback. Then I’ll try it out in JSFiddle to tweak it until it works there, test it again in Node, and if that passes, double check it in the browser (this really isn’t necessary, but what can I say, I’m a perfectionist). I’ve also been committing all of this to a separate Git branch, so that I don’t get all of the Node files mixed into the master branch. Once I’m done, I’ll merge all of the changes to the file that contains the functions to the master branch, leaving out the Node files.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 03 May 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Automated-Testing-Underscore/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Automated-Testing-Underscore/</guid>
+      </item>
+    
+      <item>
+        <title>Reviewing</title>
+        <description>&lt;p&gt;Since getting the HR precourse work on Monday, I’m happy to say I’ve been able to work through the first section fairly quickly. It involved a basic review of HTML, CSS, and Javascript, and I had actually already read all of the provided resources. Because I want to make sure I REALLY know this stuff, I still worked back through it all, recording particularly important/tricky points with Evernote to review yet again before my start date in late June. I believe I now have a strong understanding of all of the concepts I reviewed, but of course I will need to do a lot more practice–especially with CSS positioning!–before I really feel competent.&lt;/p&gt;
+
+&lt;p&gt;I have now moved on to the section involving Git and using the command line. Again, most of this is review, but here HR has provided completely different resources than the ones I originally used. I’m especially enjoying GitImmersion labs, as these provide review of pertinent terminal and git commands along with plenty of opportunities to practice them. I also like this resource more than the CodeSchool tutorial on Git, because this tutorial has you work on your own computer’s command line by creating a practice repo with which to work. For some reason this seems to help me retain the information better than when working on CodeSchool’s somewhat contrived exercises. One of my favorite exercises I’ve done so far has been to create command line and git aliases–these will definitely save some time!&lt;/p&gt;
+
+&lt;p&gt;Now that I’ve gotten a good start on the precourse work, I think my general plan of attack has shifted somewhat; I want to try to work as quickly through the “easy” stuff as I can so that I have plenty of time to work through the more difficult tasks, such as the section on Recursion. Hopefully this strategy will allow me to better balance my time between work and HR, especially since the end of my school year coincides with the due dates for most of the sections.&lt;/p&gt;
+
+&lt;p&gt;Speaking of, yesterday one of my students somehow found out that one of the other math teachers and I will not be coming back next year. I knew this would happen eventually because it is impossible to keep a secret at a small boarding school, so I was prepared to explain to them exactly why I was leaving. Even though they’re mostly juniors and seniors, as the retiring math teacher pointed out, they really can be just little kids at heart. They are currently convinced that he and I are the BEST TEACHERS EVER, and that no one that comes in next year could possibly be as good as us. Having worked with a great many other teachers, I have my doubts about this opinion, but of course the kids can’t see the forest for the trees right now. I suppose it’s good that they found out earlier rather than later, so they’ll have time to get comfortable with the idea before the end of the year.&lt;/p&gt;
+
+&lt;p&gt;One valid concern they have is that since two of the three math teachers are leaving, they’re not sure who will be able to write their college math recommendations since only a few of them will have the remaining math teacher for calculus. Perhaps I will be able to write some recs for them next year, even if I’m no longer a teacher? Must ask the college counselor about this…&lt;/p&gt;
+</description>
+        <pubDate>Fri, 01 May 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Review-Work/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Review-Work/</guid>
+      </item>
+    
+      <item>
+        <title>HR Precourse Work Day 1</title>
+        <description>&lt;p&gt;After weeks of anticipation, Hack Reactor has finally released the precourse work to my classmates and me. Before seeing the outline of the work, I was concerned that there would be many topics with which I have no familiarity. It looks like I’ve done a decent job prepping myself, however, as I have at least touched upon almost everything on the list.&lt;/p&gt;
+
+&lt;p&gt;Everything you would expect to be there was (i.e. signing up for various services like GitHub, foundational Javascript and HTML/CSS concepts, how to use Git, etc…), but it is extremely helpful to have all of the resources laid out in a chronological list. One of the biggest things I’ve been struggling with while teaching myself how to program has been when, what, and where to study all of the necessary concepts; consequently, I found myself jumping from subject to subject a bit chaotically. Using CodeSchool definitely helped me develop a better strategy for tackling everything I had to learn, but it still wasn’t as well framed as the Hack Reactor work looks to be.&lt;/p&gt;
+
+&lt;p&gt;The first real task on the list involved reading through a comprehensive set of slides on basic Javascript concepts. I already knew most of the information covered in these slides, but was pleasantly surprised to find little nuggets here and there that better cemented the reasoning behind various syntax rules. For example, the slides do an excellent job explaining the definitions, characteristics, and behaviors of different Javascript objects.&lt;/p&gt;
+
+&lt;p&gt;I have also set-up a Trello board to help create a plan of attack so that I keep working through the various tasks in a reasonable amount of time. There are currently three major sections in the precourse work, and it looks like each section will take approximately the same amount of time. Therefore, I’ve got about 2 week to get through each section. I then took the first section and broke it down into and scheduled its subsections. This has made the mountain of work to get through much more manageable looking. Now I just have to remember to stay focused on my teaching load while at school, and leave my Hack Reactor work for home!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 27 Apr 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//HR-Precourse-1/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//HR-Precourse-1/</guid>
+      </item>
+    
+      <item>
+        <title>Moving On</title>
+        <description>&lt;p&gt;Ac ouple of years ago, I decided to try writing a &lt;a href=&quot;http://samjshah.com/2014/07/25/musings-on-the-180-blog/&quot;&gt;180blog&lt;/a&gt;. It didn’t workout so well. I started out strong two years in a row, and two weeks in just ran out of steam. You know the deal, conflicting priorities blah blah blah. Anyway, I’m now moving away from teaching anyway. Long story short, I love teaching, but it’s become impractical for me to continue. Not the usual teacher burnout; seven years in I’ve got my routines and plans down and have an excellent work-life balance. However, when I was fourteen I found out that I have a degenerative retinal disease called retinitis pigmentosa. Big words that basically mean I’m losing my vision from the outside in. Yes, I could technically continue teaching with various accommodations (hiring a full-time teacher’s aid to keep an eye on the kiddos for safety reasons being the biggest), but I always knew I wouldn’t be able to teach the way I want to forever. I also feel like while I may not have mastered teaching, it no longer challenges me creatively like it once did.&lt;/p&gt;
+
+&lt;p&gt;This year it reached a point where I can no longer comfortably supervise my chemistry labs, pushing me to start thinking about the future. I started looking into computer programming last fall. I began by studying Python through MIT’s OpenCourseWare, and then moved on to Udacity. I started looking into bootcamps in December and eventually applied to and was accepted to Hack Reactor’s RemoteBeta program. I’ve spent the last few months preparing myself because I know that I have far less experience than most of my classmates. I spent time going through CodeSchool’s Javascript HTML/CSS, and Git courses, practiced with coderbyte, and filled in some gaps with The Odin Project.&lt;/p&gt;
+
+&lt;p&gt;Ready or not, my precourse work from Hack Reactor arrives tomorrow and I must say I’m anxiously awaiting it! My cohort has already been in contact with each other and we’ve all joined a Slack Channel. Over the next couple of months I’ll be finishing my teaching career while starting the next. There is also a decent chance I’ll be moving to Portland in June as well, so time management will be vital. I am quite certain it will all be worth it in the long-run and I can’t wait for this new chapter to begin! (Gee, was that hokey or what?)&lt;/p&gt;
+</description>
+        <pubDate>Sun, 26 Apr 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Moving-On/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Moving-On/</guid>
+      </item>
+    
   </channel>
 </rss>
