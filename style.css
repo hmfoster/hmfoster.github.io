@@ -720,8 +720,7 @@ code {
 
 body {
   background-color: #0A0A1C;
-  background-image: url(images/blog-background.jpg);
-  background-attachment: fixed;
+  background: fixed url(images/blog-background.jpg) 100%;
   color: #BCA498;
 }
 
