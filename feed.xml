@@ -22,10 +22,15 @@
 
 &lt;h4&gt;The Logic:&lt;/h4&gt;
 
-&lt;p&gt;-Use &lt;code&gt;every&lt;/code&gt; to determine if all of the items &lt;strong&gt;fail&lt;/strong&gt; the test passed into &lt;code&gt;some&lt;/code&gt;. 
-  This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;strong&gt;opposite&lt;/strong&gt; of the &lt;code&gt;some&lt;/code&gt; test.
-  -If this &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;, &lt;strong&gt;none&lt;/strong&gt; of the items passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;false&lt;/code&gt;.
-  -If this &lt;code&gt;every&lt;/code&gt; returns false, &lt;strong&gt;at least one&lt;/strong&gt; item passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;true&lt;/code&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Use &lt;code&gt;every&lt;/code&gt; to determine if all of the items &lt;strong&gt;fail&lt;/strong&gt; the test passed into &lt;code&gt;some&lt;/code&gt;. 
+This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;strong&gt;opposite&lt;/strong&gt; of the &lt;code&gt;some&lt;/code&gt; test.
+
+&lt;ul&gt;
+&lt;li&gt;If this &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;, &lt;strong&gt;none&lt;/strong&gt; of the items passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;false&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;If this &lt;code&gt;every&lt;/code&gt; returns false, &lt;strong&gt;at least one&lt;/strong&gt; item passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;true&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;h4&gt;Example&lt;/h4&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;var collection1 = {6, 4, 12, 10};
@@ -50,9 +55,10 @@ some(collection1, isOdd);
 &lt;li&gt;&lt;code&gt;some&lt;/code&gt; passes &lt;code&gt;collection2&lt;/code&gt; and &lt;code&gt;isOdd&lt;/code&gt; to &lt;code&gt;every&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;every&lt;/code&gt; tests to see if &lt;strong&gt;all&lt;/strong&gt; of the items are not odd (&lt;code&gt;!isOdd&lt;/code&gt;).&lt;/li&gt;
 &lt;li&gt;Because &lt;code&gt;collection2[1]&lt;/code&gt; &lt;strong&gt;is&lt;/strong&gt; odd, &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;false&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Therefore, at least one item passes the &lt;code&gt;isOdd&lt;/code&gt; test, so &lt;code&gt;some&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;h2&gt;4. Therefore, at least one item passes the &lt;code&gt;isOdd&lt;/code&gt; test, so &lt;code&gt;some&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;.&lt;/h2&gt;
+&lt;hr&gt;
 
 &lt;p&gt;Whew! Let me know if this does (or doesn&amp;#39;t!) make sense, and if you have any suggestions for how to improve it!&lt;/p&gt;
 </description>

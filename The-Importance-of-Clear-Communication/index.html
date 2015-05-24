@@ -72,10 +72,15 @@
 
 <h4>The Logic:</h4>
 
-<p>-Use <code>every</code> to determine if all of the items <strong>fail</strong> the test passed into <code>some</code>. 
-  This means that this <code>every</code> needs to test for the <strong>opposite</strong> of the <code>some</code> test.
-  -If this <code>every</code> returns <code>true</code>, <strong>none</strong> of the items passed the test given to <code>some</code>, so <code>some</code> should return <code>false</code>.
-  -If this <code>every</code> returns false, <strong>at least one</strong> item passed the test given to <code>some</code>, so <code>some</code> should return <code>true</code>.</p>
+<ul>
+<li>Use <code>every</code> to determine if all of the items <strong>fail</strong> the test passed into <code>some</code>. 
+This means that this <code>every</code> needs to test for the <strong>opposite</strong> of the <code>some</code> test.
+
+<ul>
+<li>If this <code>every</code> returns <code>true</code>, <strong>none</strong> of the items passed the test given to <code>some</code>, so <code>some</code> should return <code>false</code>.</li>
+<li>If this <code>every</code> returns false, <strong>at least one</strong> item passed the test given to <code>some</code>, so <code>some</code> should return <code>true</code>.</li>
+</ul></li>
+</ul>
 
 <h4>Example</h4>
 <div class="highlight"><pre><code class="language-text" data-lang="text">var collection1 = {6, 4, 12, 10};
@@ -100,9 +105,10 @@ some(collection1, isOdd);
 <li><code>some</code> passes <code>collection2</code> and <code>isOdd</code> to <code>every</code>.</li>
 <li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
 <li>Because <code>collection2[1]</code> <strong>is</strong> odd, <code>every</code> returns <code>false</code>.</li>
+<li>Therefore, at least one item passes the <code>isOdd</code> test, so <code>some</code> returns <code>true</code>.</li>
 </ol>
 
-<h2>4. Therefore, at least one item passes the <code>isOdd</code> test, so <code>some</code> returns <code>true</code>.</h2>
+<hr>
 
 <p>Whew! Let me know if this does (or doesn&#39;t!) make sense, and if you have any suggestions for how to improve it!</p>
 
