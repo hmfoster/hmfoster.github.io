@@ -7,6 +7,61 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>The Importance of Clear Communication</title>
+        <description>&lt;p&gt;A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function &lt;code&gt;every&lt;/code&gt; would return &lt;code&gt;true&lt;/code&gt; if all items in the collection passed the test, while the function &lt;code&gt;some&lt;/code&gt; would return true if one or more of the items passed the test. Writing &lt;code&gt;every&lt;/code&gt; was fairly straightforward using Javascript&amp;#39;s &lt;code&gt;reduce&lt;/code&gt; function, but because I was trying to use my &lt;code&gt;every&lt;/code&gt; function in the &lt;code&gt;some&lt;/code&gt; function to practice functional programming, it took me a while longer to write &lt;code&gt;some&lt;/code&gt;. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the &lt;code&gt;some&lt;/code&gt; function to one of my students, it just ended up sounding like gibberish; it sounded something like, &amp;quot;...so if every value is not false, not every returns true, so some is true.&amp;quot; Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example. &lt;/p&gt;
+
+&lt;p&gt;Since I did such a paltry job the first time I tried to explain &lt;code&gt;some&lt;/code&gt;, I&amp;#39;ve decided to try again here. As all teachers know, if you can&amp;#39;t teach it, you don&amp;#39;t really understand it. So, instead of simply providing my solution, here I&amp;#39;m going to try to explain it using pseudocode. &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h4&gt;What the code &lt;em&gt;should&lt;/em&gt; do:&lt;/h4&gt;
+
+&lt;p&gt;&lt;code&gt;every(collection, test)&lt;/code&gt;: Uses javascript&amp;#39;s &lt;code&gt;reduce&lt;/code&gt; function to apply a test to each item, and  returns true if all items in the collection pass the test. &lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;some(collection, test)&lt;/code&gt;: Uses &lt;code&gt;every&lt;/code&gt; returns true if at least one item passes the test.&lt;/p&gt;
+
+&lt;h4&gt;The Logic:&lt;/h4&gt;
+
+&lt;p&gt;-Use &lt;code&gt;every&lt;/code&gt; to determine if all of the items &lt;strong&gt;fail&lt;/strong&gt; the test passed into &lt;code&gt;some&lt;/code&gt;. 
+  This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;strong&gt;opposite&lt;/strong&gt; of the &lt;code&gt;some&lt;/code&gt; test.
+  -If this &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;, &lt;strong&gt;none&lt;/strong&gt; of the items passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;false&lt;/code&gt;.
+  -If this &lt;code&gt;every&lt;/code&gt; returns false, &lt;strong&gt;at least one&lt;/strong&gt; item passed the test given to &lt;code&gt;some&lt;/code&gt;, so &lt;code&gt;some&lt;/code&gt; should return &lt;code&gt;true&lt;/code&gt;.&lt;/p&gt;
+
+&lt;h4&gt;Example&lt;/h4&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;var collection1 = {6, 4, 12, 10};
+var collection2 = {6, 3, 12, 10};
+
+//Return true if the item is odd.
+var isOdd = function(item){
+    return item % 2 == 1;
+}
+some(collection1, isOdd);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;some&lt;/code&gt; passes &lt;code&gt;collection1&lt;/code&gt; and &lt;code&gt;isOdd&lt;/code&gt; to &lt;code&gt;every&lt;/code&gt;. &lt;/li&gt;
+&lt;li&gt;&lt;code&gt;every&lt;/code&gt; tests to see if &lt;strong&gt;all&lt;/strong&gt; of the items are not odd (&lt;code&gt;!isOdd&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;All of the items in &lt;code&gt;collection1&lt;/code&gt; are not odd, so &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;When &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;, &lt;code&gt;some&lt;/code&gt; returns &lt;code&gt;false&lt;/code&gt;: &lt;em&gt;none&lt;/em&gt; of the items in &lt;code&gt;collection1&lt;/code&gt; are odd.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code&gt;some(collection2, isOdd);&lt;/code&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;code&gt;some&lt;/code&gt; passes &lt;code&gt;collection2&lt;/code&gt; and &lt;code&gt;isOdd&lt;/code&gt; to &lt;code&gt;every&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;every&lt;/code&gt; tests to see if &lt;strong&gt;all&lt;/strong&gt; of the items are not odd (&lt;code&gt;!isOdd&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Because &lt;code&gt;collection2[1]&lt;/code&gt; &lt;strong&gt;is&lt;/strong&gt; odd, &lt;code&gt;every&lt;/code&gt; returns &lt;code&gt;false&lt;/code&gt;.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h2&gt;4. Therefore, at least one item passes the &lt;code&gt;isOdd&lt;/code&gt; test, so &lt;code&gt;some&lt;/code&gt; returns &lt;code&gt;true&lt;/code&gt;.&lt;/h2&gt;
+
+&lt;p&gt;Whew! Let me know if this does (or doesn&amp;#39;t!) make sense, and if you have any suggestions for how to improve it!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 24 May 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//The-Importance-of-Clear-Communication/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//The-Importance-of-Clear-Communication/</guid>
+      </item>
+    
+      <item>
         <title>The Elusive Zone of Proximal Development</title>
         <description>&lt;p&gt;Whoops! Though it doesn&amp;#39;t feel like long, upon outlining what I want to write about, I&amp;#39;ve realized that too much time has passed since my last post. Hack Reactor&amp;#39;s precourse work touches upon many different subjects, so in just a few days, I&amp;#39;ve worked through a ton of material! I&amp;#39;ll try not to make that mistake again; I think it will be best if I try to write every other day.&lt;/p&gt;
 
