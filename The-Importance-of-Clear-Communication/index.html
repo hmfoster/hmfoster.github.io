@@ -83,15 +83,16 @@ This means that this <code>every</code> needs to test for the <strong>opposite</
 </ul>
 
 <h4>Example</h4>
-<div class="highlight"><pre><code class="language-text" data-lang="text">var collection1 = {6, 4, 12, 10};
-var collection2 = {6, 3, 12, 10};
 
-//Return true if the item is odd.
-var isOdd = function(item){
-    return item % 2 == 1;
-}
-some(collection1, isOdd);
-</code></pre></div>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">collection1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">};</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">collection2</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">};</span>
+<a name="True-3"></a>
+<a name="True-4"></a><span class="c1">//Return true if the item is odd.</span>
+<a name="True-5"></a><span class="kd">var</span> <span class="nx">isOdd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
+<a name="True-6"></a>   <span class="k">return</span> <span class="nx">item</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+<a name="True-7"></a><span class="p">}</span>
+<a name="True-8"></a><span class="nx">some</span><span class="p">(</span><span class="nx">collection1</span><span class="p">,</span> <span class="nx">isOdd</span><span class="p">);</span></code></pre></div>
+
 <ol>
 <li><code>some</code> passes <code>collection1</code> and <code>isOdd</code> to <code>every</code>. </li>
 <li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
@@ -99,7 +100,7 @@ some(collection1, isOdd);
 <li>When <code>every</code> returns <code>true</code>, <code>some</code> returns <code>false</code>: <em>none</em> of the items in <code>collection1</code> are odd.</li>
 </ol>
 
-<p><code>some(collection2, isOdd);</code></p>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">some</span><span class="p">(</span><span class="nx">collection2</span><span class="p">,</span> <span class="nx">isOdd</span><span class="p">);</span></code></pre></div>
 
 <ol>
 <li><code>some</code> passes <code>collection2</code> and <code>isOdd</code> to <code>every</code>.</li>
