@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://hmfoster.github.io//End-of-Year-Hustle/</loc>
+    <lastmod>2015-06-04T00:00:00-07:00</lastmod>
+  </url>
+  <url>
     <loc>http://hmfoster.github.io//The-Importance-of-Clear-Communication/</loc>
     <lastmod>2015-05-24T00:00:00-07:00</lastmod>
   </url>
@@ -41,6 +45,18 @@
     <loc>http://hmfoster.github.io//</loc>
   </url>
   <url>
+    <loc>http://hmfoster.github.io//category/general/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/programming/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/learning/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/life/</loc>
+  </url>
+  <url>
     <loc>http://hmfoster.github.io//tag/hack-reactor/</loc>
   </url>
   <url>
@@ -68,12 +84,6 @@
     <loc>http://hmfoster.github.io//tag/collaboration/</loc>
   </url>
   <url>
-    <loc>http://hmfoster.github.io//category/general/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/programming/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/learning/</loc>
+    <loc>http://hmfoster.github.io//tag/time-management/</loc>
   </url>
 </urlset>

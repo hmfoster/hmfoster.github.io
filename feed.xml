@@ -7,6 +7,21 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>The End of Year Hustle</title>
+        <description>&lt;p&gt;I am so glad I decided to power through as much of the precourse work for Hack Reactor as possible when I first got it, because the last couple of weeks have been so packed with other things that I&amp;#39;ve barely had a chance to glance back at any of it. Today was my last &amp;quot;normal&amp;quot; teaching day; finals start tomorrow, and next Thursday is the last day of school. &lt;/p&gt;
+
+&lt;p&gt;Each year I have taught, I&amp;#39;ve tried to tweak this part of the year to make it flow better, but the kids (I call them kids--they&amp;#39;re all at least 16) and I are all so ready for the end that it never quite works out like I&amp;#39;d like. This year I had my chemistry students complete a final project in place of a traditional final. They had three weeks to work on it, including about 5 class periods to plan, research, and ask questions. As one would expect, some of the kids took advantage of this time, and others procrastinated as much as they could. Consequently, some of their presentations were vastly more entertaining than others; guess which ones I enjoyed grading more! &lt;/p&gt;
+
+&lt;p&gt;Because cheating is so prevalent among our students, I also changed up the precalculus final this year. It is completely open note and students have access to their calculator for the entire exam if they&amp;#39;d like. However, none of the questions involve calculations. I figure that I&amp;#39;ve seen enough of their basic skills during the year, so instead I&amp;#39;m asking a variety of critical thinking questions. For example, several of the problems involve error analysis, one asks students to decide which method of proving a trigonometric identity is &amp;quot;better&amp;quot;, and one just asks them to &amp;quot;tell me everything [they] know about conic sections.&amp;quot; I&amp;#39;m also having students write and solve three of their own problems, and to justify what grade they believe they have earned in my class. Because all of these problems have more than one &amp;quot;right&amp;quot; answer, I&amp;#39;m hoping that it will be virtually cheat-proof. &lt;/p&gt;
+
+&lt;p&gt;Because I&amp;#39;ve almost finished grading the chemistry projects, I only have a few more school related tasks left this year (grading finals, updating the inventory, clearing out &lt;em&gt;my&lt;/em&gt; stuff). I should have more time to refocus on programming within the next couple of days, and they it will be clear sailing until June 29th! &lt;/p&gt;
+</description>
+        <pubDate>Thu, 04 Jun 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//End-of-Year-Hustle/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//End-of-Year-Hustle/</guid>
+      </item>
+    
+      <item>
         <title>The Importance of Clear Communication</title>
         <description>&lt;p&gt;A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function &lt;code&gt;every&lt;/code&gt; would return &lt;code&gt;true&lt;/code&gt; if all items in the collection passed the test, while the function &lt;code&gt;some&lt;/code&gt; would return true if one or more of the items passed the test. Writing &lt;code&gt;every&lt;/code&gt; was fairly straightforward using Javascript&amp;#39;s &lt;code&gt;reduce&lt;/code&gt; function, but because I was trying to use my &lt;code&gt;every&lt;/code&gt; function in the &lt;code&gt;some&lt;/code&gt; function to practice functional programming, it took me a while longer to write &lt;code&gt;some&lt;/code&gt;. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the &lt;code&gt;some&lt;/code&gt; function to one of my students, it just ended up sounding like gibberish; it sounded something like, &amp;quot;...so if every value is not false, not every returns true, so some is true.&amp;quot; Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example. &lt;/p&gt;
 
