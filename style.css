@@ -837,7 +837,7 @@ a.tag:hover {
   color: #B1B445;
 }
 
-.site-description {
+.site-description em {
   font-style: italic;
 }
 
