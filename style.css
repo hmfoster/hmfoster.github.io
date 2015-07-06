@@ -871,3 +871,99 @@ sup {
   vertical-align: super;
   font-size: smaller;
 }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+  padding: 0px;
+  background-color: #0A0A1C;
+}
+
+th {
+  font-weight: bold;
+  font-size: 18px;
+  color: #E67027;
+}
+
+tr:last-child td:last-child {
+  -moz-border-radius-bottomright: 2px;
+  -webkit-border-bottom-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+table tr:first-child td:first-child {
+  -moz-border-radius-topleft: 2px;
+  -webkit-border-top-left-radius: 2px;
+  border-top-left-radius: 2px;
+}
+
+table tr:first-child td:last-child {
+  -moz-border-radius-topright: 2px;
+  -webkit-border-top-right-radius: 2px;
+  border-top-right-radius: 2px;
+}
+
+tr:last-child td:first-child {
+  -moz-border-radius-bottomleft: 2px;
+  -webkit-border-bottom-left-radius: 2px;
+  border-bottom-left-radius: 2px;
+}
+
+tr:hover td {
+  background-color: #003f7f;
+}
+
+td {
+  vertical-align: middle;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#003f7f", endColorstr="#003f7f");
+  background-color: #0A0A1C;
+  border: 1px solid #ffff56;
+  border-width: 0px 1px 1px 0px;
+  text-align: left;
+  padding: 3px;
+  font-size: 10px;
+  font-family: Arial;
+  font-weight: normal;
+  color: #ffffff;
+}
+
+tr:last-child td {
+  border-width: 0px 1px 0px 0px;
+}
+
+tr td:last-child {
+  border-width: 0px 0px 1px 0px;
+}
+
+tr:last-child td:last-child {
+  border-width: 0px 0px 0px 0px;
+}
+
+tr:first-child td {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00007f", endColorstr="#003f7f");
+  background-color: #00007f;
+  border: 0px solid #ffff56;
+  text-align: center;
+  border-width: 0px 0px 1px 1px;
+  font-size: 14px;
+  font-family: Arial;
+  font-weight: bold;
+  color: #ff7f00;
+}
+
+tr:first-child:hover td {
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#00007f", endColorstr="#003f7f");
+  background: -o-linear-gradient(top, #00007f, 3f7f);
+  background-color: #00007f;
+}
+
+tr:first-child td:first-child {
+  border-width: 0px 0px 1px 0px;
+}
+
+tr:first-child td:last-child {
+  border-width: 0px 0px 1px 1px;
+}

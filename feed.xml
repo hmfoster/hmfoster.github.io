@@ -2,9 +2,97 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hailey Foster</title>
-    <description>How to do everything nobody thought you could.</description>
+    <description>A teachers perspective on programming.</description>
     <link>http://hmfoster.github.io/</link>
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Deciphering Javascript Instantiation Patterns</title>
+        <description>&lt;p&gt;Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
+&lt;span style = &quot;cursos:help;&quot; title = &quot;a technique for encapsulating and modularizing object creation&quot;&gt;instantiation patterns&lt;/span&gt;, which can also be considered strategies for creating new classes:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Functional&lt;/li&gt;
+&lt;li&gt;Functional Shared&lt;/li&gt;
+&lt;li&gt;Prototypical&lt;/li&gt;
+&lt;li&gt;Pseudoclassical&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Much has been written about these four styles already&amp;mdash;checkout the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt; for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.&lt;/p&gt;
+
+&lt;p&gt;All four patterns accomplish the same three objectives:
+1. Declare a new object (outlined in orange)
+2. Add properties common to all members of the class (also in orange)
+3. Add methods common to all members of the class (outlined in green)&lt;/p&gt;
+
+&lt;p&gt;Below each function, I have also shown how each pattern is called upon to create new objects. Notice that functional, functional shared, and prototypical all use the same general code here, but the pseudoclassical pattern uses the keyword &lt;code&gt;new&lt;/code&gt;. Additionally, the functional shared code here uses &lt;a href=&quot;file:///Users/haileyfoster/Library/Application%20Support/Dash/DocSets/UnderscoreJS/UnderscoreJS.docset/Contents/Resources/Documents/index.html#extend&quot;&gt;Underscore&amp;#39;s &lt;code&gt;_.extend&lt;/code&gt; function&lt;/a&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Pattern&lt;/th&gt;
+        &lt;th&gt;General Structure&lt;/th&gt;
+        &lt;th&gt;Example Code&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Functional&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Functional Shared&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-Shared.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional Shared-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Prototypal&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Pseudoclassical&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;p&gt;Again, each of these patterns are useful in different circumstances. In addition to the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt;, &lt;a href=&quot;http://www.hackreactor.com/blog/javascript-instantiation-patterns&quot;&gt;Brett Hoyer&lt;/a&gt; presents the advantages and disadvantages of each pattern quite clearly on Hack Reactor&amp;#39;s blog.&lt;/p&gt;
+
+&lt;p&gt;In addition to the instantiation patterns shown above, Javascript allows for the use of &lt;strong&gt;function decorators&lt;/strong&gt;. While these do not instantiate new objects, they are useful for modifying the properties and methods of existing objects. They &lt;em&gt;can&lt;/em&gt; also be used to instantiate a new object if an empty object is passed in as one of the arguments, but this is far less efficient that using any of the class declaration patterns above. &lt;/p&gt;
+
+&lt;p&gt;There are two decorator patterns:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Functional Object Decorator with Duplicate Methods&lt;/li&gt;
+&lt;li&gt;Functional Object Decorator with Shared Methods&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These two patterns look almost identical to the functional and functional shared patterns above, and have similar pros and cons. However, unlike the instantiation patterns, these must have an object passed in as one of their arguments.&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Pattern&lt;/th&gt;
+        &lt;th&gt;General Structure&lt;/th&gt;
+        &lt;th&gt;Example Code&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Decorator with Duplicate Methods&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Decorator with Shared Methods&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared.png&quot;&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared-ex.png&quot;&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Much more can be said about all of these patterns &amp;mdash; why some use &lt;code&gt;this&lt;/code&gt;and/or &lt;code&gt;new&lt;/code&gt;, which are more efficient etc...&amp;mdash; but I hope this is enough to help clarify the structure of each pattern, and to use as a quick reference for those who are already familiar with them.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 05 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</guid>
+      </item>
     
       <item>
         <title>And So It Begins</title>
