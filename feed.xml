@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Hailey Foster</title>
-    <description>A teachers perspective on programming.</description>
+    <description>A teacher&#39;s perspective on programming.</description>
     <link>http://hmfoster.github.io/</link>
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
@@ -18,7 +18,7 @@
 &lt;li&gt;Pseudoclassical&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;Much has been written about these four styles already&amp;mdash;checkout the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt; for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.&lt;/p&gt;
+&lt;p&gt;Much has been written about these four styles already&amp;mdash;check out the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt; for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.&lt;/p&gt;
 
 &lt;p&gt;All four patterns accomplish the same three objectives:
 1. Declare a new object (outlined in orange)
