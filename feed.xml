@@ -16,11 +16,9 @@ var feedCat = function(){ this.appetite = &amp;quot;full&amp;quot;; };
 //attempt to call the method on the object
 cat.feedCat(); 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;This doesn&amp;#39;t work, because &lt;code&gt;feedCat&lt;/code&gt; isn&amp;#39;t a property of the cat object. Similarly, &lt;code&gt;feedCat(cat)&lt;/code&gt; won&amp;#39;t work, because the &lt;code&gt;this&lt;/code&gt; inside of &lt;code&gt;feedCat&lt;/code&gt; will be bound to &lt;code&gt;window&lt;/code&gt;. However, we can use JavaScript&amp;#39;s &lt;code&gt;call&lt;/code&gt; or &lt;code&gt;apply&lt;/code&gt; methods to manually bind &lt;code&gt;this&lt;/code&gt; to the &lt;code&gt;cat&lt;/code&gt; object:
-&lt;code&gt;
-feedCat.call(cat); //does work, because cat is now bound to this
-&lt;/code&gt;&lt;/p&gt;
-
+&lt;p&gt;This doesn&amp;#39;t work, because &lt;code&gt;feedCat&lt;/code&gt; isn&amp;#39;t a property of the cat object. Similarly, &lt;code&gt;feedCat(cat)&lt;/code&gt; won&amp;#39;t work, because the &lt;code&gt;this&lt;/code&gt; inside of &lt;code&gt;feedCat&lt;/code&gt; will be bound to &lt;code&gt;window&lt;/code&gt;. However, we can use JavaScript&amp;#39;s &lt;code&gt;call&lt;/code&gt; or &lt;code&gt;apply&lt;/code&gt; methods to manually bind &lt;code&gt;this&lt;/code&gt; to the &lt;code&gt;cat&lt;/code&gt; object:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;feedCat.call(cat);
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 &lt;p&gt;However, if we try to use a browser method, such as &lt;code&gt;setTimout&lt;/code&gt;, funny things start to happen:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; setTimeout(feedCat.call(cat), 10000); 
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;

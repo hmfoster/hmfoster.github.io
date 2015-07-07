@@ -66,11 +66,9 @@ var feedCat = function(){ this.appetite = &quot;full&quot;; };
 //attempt to call the method on the object
 cat.feedCat(); 
 </code></pre></div>
-<p>This doesn&#39;t work, because <code>feedCat</code> isn&#39;t a property of the cat object. Similarly, <code>feedCat(cat)</code> won&#39;t work, because the <code>this</code> inside of <code>feedCat</code> will be bound to <code>window</code>. However, we can use JavaScript&#39;s <code>call</code> or <code>apply</code> methods to manually bind <code>this</code> to the <code>cat</code> object:
-<code>
-feedCat.call(cat); //does work, because cat is now bound to this
-</code></p>
-
+<p>This doesn&#39;t work, because <code>feedCat</code> isn&#39;t a property of the cat object. Similarly, <code>feedCat(cat)</code> won&#39;t work, because the <code>this</code> inside of <code>feedCat</code> will be bound to <code>window</code>. However, we can use JavaScript&#39;s <code>call</code> or <code>apply</code> methods to manually bind <code>this</code> to the <code>cat</code> object:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">feedCat.call(cat);
+</code></pre></div>
 <p>However, if we try to use a browser method, such as <code>setTimout</code>, funny things start to happen:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"> setTimeout(feedCat.call(cat), 10000); 
 </code></pre></div>
