@@ -7,6 +7,60 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Wrapping your Brain Around JavaScript&#39;s Bind Method</title>
+        <description>&lt;p&gt;I think everyone can agree that fully understanding JavaScript&amp;#39;s keyword &lt;code&gt;this&lt;/code&gt; is...challenging. The object to which it refers changes depending upon the context in which it is called. Fortunately, you can use JavaScript&amp;#39;s native &lt;code&gt;bind&lt;/code&gt; method to take control of matters. The code below demonstrates both the &lt;em&gt;need&lt;/em&gt; for the &lt;code&gt;bind&lt;/code&gt; method and works up to explain how exactly it work. &lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;//Make a new object and a related(ish) function
+var cat = {appetite: &amp;quot;hungry&amp;quot;}; 
+var feedCat = function(){ this.appetite = &amp;quot;full&amp;quot;; }; 
+
+//attempt to call the method on the object
+cat.feedCat(); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This doesn&amp;#39;t work, because &lt;code&gt;feedCat&lt;/code&gt; isn&amp;#39;t a property of the cat object. Similarly, &lt;code&gt;feedCat(cat)&lt;/code&gt; won&amp;#39;t work, because the &lt;code&gt;this&lt;/code&gt; inside of &lt;code&gt;feedCat&lt;/code&gt; will be bound to &lt;code&gt;window&lt;/code&gt;. However, we can use JavaScript&amp;#39;s &lt;code&gt;call&lt;/code&gt; or &lt;code&gt;apply&lt;/code&gt; methods to manually bind &lt;code&gt;this&lt;/code&gt; to the &lt;code&gt;cat&lt;/code&gt; object:
+&lt;code&gt;
+feedCat.call(cat); //does work, because cat is now bound to this
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;However, if we try to use a browser method, such as &lt;code&gt;setTimout&lt;/code&gt;, funny things start to happen:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; setTimeout(feedCat.call(cat), 10000); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The code above doesn&amp;#39;t work, because the feedCat function is invoked &lt;em&gt;immediately&lt;/em&gt; and doesn&amp;#39;t return a function to be invoked later. So &lt;code&gt;setTimeout&lt;/code&gt; is essentially trying to call &lt;code&gt;undefined&lt;/code&gt;, not a function. &lt;/p&gt;
+
+&lt;p&gt;It is tempting imagine that any easy fix might be simply adding the &lt;code&gt;feedCat&lt;/code&gt; function as a property of &lt;code&gt;cat&lt;/code&gt;.&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cat.feedCat = feedcat;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Unfortunately, &lt;code&gt;setTimeout(cat.feedcat, 1000)&lt;/code&gt; &lt;strong&gt;&lt;em&gt;still won&amp;#39;t work&lt;/em&gt;&lt;/strong&gt; because  &lt;code&gt;setTimeout&lt;/code&gt; belongs to the &lt;code&gt;window&lt;/code&gt; object, so when we call functions with it, &lt;code&gt;this&lt;/code&gt; automatically binds to the &lt;code&gt;window&lt;/code&gt; object (or other global object)!&lt;/p&gt;
+
+&lt;p&gt;We must use a wrapper function instead:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; setTimeout(function(){feedCat.call(cat);}, 10000); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The wrapper function doesn&amp;#39;t get called until later, can because &lt;code&gt;feedCat.call(cat)&lt;/code&gt; is &lt;em&gt;inside&lt;/em&gt; of the wrapper function, it doesn&amp;#39;t get called until that function is called. &lt;/p&gt;
+
+&lt;p&gt;So now, let&amp;#39;s imagine that instead of using an anonymous wrapper function, we have a function called &lt;code&gt;bind&lt;/code&gt; that does essentially the same thing. It&amp;#39;s code would need to look something like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; var bind = function(func, args){
+    func.call(args);
+ }
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Notice that the first parameter is the function we &lt;em&gt;really&lt;/em&gt; want to call, and the second parameter is the object to which we want to bind &lt;code&gt;this&lt;/code&gt;; any additional parameters could be passed to the interior function.&lt;/p&gt;
+
+&lt;p&gt;We could then run this code:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; setTimeout(bind(feedCat, cat), 10000); 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;And that&amp;#39;s basically all the &lt;code&gt;bind&lt;/code&gt; function does. It essentially cements the keyword &lt;code&gt;this&lt;/code&gt; to whatever you want it to be. Instead of a rewriting &lt;code&gt;bind&lt;/code&gt; everytime we want to use it with a different function, JavaScript has attached it as a method to the Function prototype. Because all functions delegate here, all functions have access to bind. The real source code looks something like this:&lt;/p&gt;
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; Function.prototype.bind = function(context){ 
+    var fn = this; 
+    return function(){ return fn.apply(context, arguments); 
+        }; 
+    };
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Using &lt;code&gt;apply&lt;/code&gt; instead of &lt;code&gt;call&lt;/code&gt; accounts for slightly more complicated situations in which many parameters must be passed in to the interior function. It also uses &lt;code&gt;returns&lt;/code&gt; to account for the fact that most functions will need to return something, and not just implement a side effect like in ouf &lt;code&gt;feedCat&lt;/code&gt; function.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 06 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Understanding-Bind/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Understanding-Bind/</guid>
+      </item>
+    
+      <item>
         <title>Deciphering Javascript Instantiation Patterns</title>
         <description>&lt;p&gt;Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
 &lt;span style = &quot;cursos:help;&quot; title = &quot;a technique for encapsulating and modularizing object creation&quot;&gt;instantiation patterns&lt;/span&gt;, which can also be considered strategies for creating new classes:&lt;/p&gt;
@@ -275,19 +329,6 @@ This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;st
         <pubDate>Mon, 27 Apr 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//HR-Precourse-1/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//HR-Precourse-1/</guid>
-      </item>
-    
-      <item>
-        <title>Moving On</title>
-        <description>&lt;p&gt;A couple of years ago, I decided to try writing a &lt;a href=&quot;http://samjshah.com/2014/07/25/musings-on-the-180-blog/&quot;&gt;180blog&lt;/a&gt;. It didn’t workout so well. I started out strong two years in a row, and two weeks in just ran out of steam. You know the deal, conflicting priorities blah blah blah. Anyway, I’m now moving away from teaching anyway. Long story short, I love teaching, but it’s become impractical for me to continue. Not the usual teacher burnout; seven years in I’ve got my routines and plans down and have an excellent work-life balance. However, when I was fourteen I found out that I have a degenerative retinal disease called retinitis pigmentosa. Big words that basically mean I’m losing my vision from the outside in. Yes, I could technically continue teaching with various accommodations (hiring a full-time teacher’s aid to keep an eye on the kiddos for safety reasons being the biggest), but I always knew I wouldn’t be able to teach the way I want to forever. I also feel like while I may not have mastered teaching, it no longer challenges me creatively like it once did.&lt;/p&gt;
-
-&lt;p&gt;This year it reached a point where I can no longer comfortably supervise my chemistry labs, pushing me to start thinking about the future. I started looking into computer programming last fall. I began by studying Python through MIT’s OpenCourseWare, and then moved on to Udacity. I started looking into bootcamps in December and eventually applied to and was accepted to Hack Reactor’s RemoteBeta program. I’ve spent the last few months preparing myself because I know that I have far less experience than most of my classmates. I spent time going through CodeSchool’s Javascript HTML/CSS, and Git courses, practiced with coderbyte, and filled in some gaps with The Odin Project.&lt;/p&gt;
-
-&lt;p&gt;Ready or not, my precourse work from Hack Reactor arrives tomorrow and I must say I’m anxiously awaiting it! My cohort has already been in contact with each other and we’ve all joined a Slack Channel. Over the next couple of months I’ll be finishing my teaching career while starting the next. There is also a decent chance I’ll be moving to Portland in June as well, so time management will be vital. I am quite certain it will all be worth it in the long-run and I can’t wait for this new chapter to begin! (Gee, was that hokey or what?)&lt;/p&gt;
-</description>
-        <pubDate>Sun, 26 Apr 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Moving-On/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Moving-On/</guid>
       </item>
     
   </channel>
