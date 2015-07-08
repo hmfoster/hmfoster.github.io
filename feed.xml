@@ -27,7 +27,8 @@ cat.feedCat();
 &lt;p&gt;It is tempting imagine that any easy fix might be simply adding the &lt;code&gt;feedCat&lt;/code&gt; function as a property of &lt;code&gt;cat&lt;/code&gt;.&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt;cat.feedCat = feedcat;
 &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;p&gt;Unfortunately, &lt;code&gt;setTimeout(cat.feedcat, 1000)&lt;/code&gt; &lt;strong&gt;&lt;em&gt;still won&amp;#39;t work&lt;/em&gt;&lt;/strong&gt; because  &lt;code&gt;setTimeout&lt;/code&gt; belongs to the &lt;code&gt;window&lt;/code&gt; object, so when we call functions with it, &lt;code&gt;this&lt;/code&gt; automatically binds to the &lt;code&gt;window&lt;/code&gt; object (or other global object)!&lt;/p&gt;
+&lt;p&gt;Unfortunately, &lt;code&gt;setTimeout(cat.feedcat, 1000)&lt;/code&gt; &lt;strong&gt;&lt;em&gt;still won&amp;#39;t work&lt;/em&gt;&lt;/strong&gt; because  &lt;code&gt;setTimeout&lt;/code&gt; belongs to the &lt;code&gt;window&lt;/code&gt; object, so when we call functions with it, &lt;code&gt;this&lt;/code&gt; automatically binds to the &lt;code&gt;window&lt;/code&gt; object (or other global object)!
+One of my Hack Reactor peers wrote up a more detailed explanation of that problem &lt;a href=&quot;http://lukesavage.me/jekyll/2015/07/08/setTimeout-and-this/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;We must use a wrapper function instead:&lt;/p&gt;
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-text&quot; data-lang=&quot;text&quot;&gt; setTimeout(function(){feedCat.call(cat);}, 10000); 

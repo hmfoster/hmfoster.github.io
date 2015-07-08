@@ -77,7 +77,8 @@ cat.feedCat();
 <p>It is tempting imagine that any easy fix might be simply adding the <code>feedCat</code> function as a property of <code>cat</code>.</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text">cat.feedCat = feedcat;
 </code></pre></div>
-<p>Unfortunately, <code>setTimeout(cat.feedcat, 1000)</code> <strong><em>still won&#39;t work</em></strong> because  <code>setTimeout</code> belongs to the <code>window</code> object, so when we call functions with it, <code>this</code> automatically binds to the <code>window</code> object (or other global object)!</p>
+<p>Unfortunately, <code>setTimeout(cat.feedcat, 1000)</code> <strong><em>still won&#39;t work</em></strong> because  <code>setTimeout</code> belongs to the <code>window</code> object, so when we call functions with it, <code>this</code> automatically binds to the <code>window</code> object (or other global object)!
+One of my Hack Reactor peers wrote up a more detailed explanation of that problem <a href="http://lukesavage.me/jekyll/2015/07/08/setTimeout-and-this/">here</a>.</p>
 
 <p>We must use a wrapper function instead:</p>
 <div class="highlight"><pre><code class="language-text" data-lang="text"> setTimeout(function(){feedCat.call(cat);}, 10000); 
