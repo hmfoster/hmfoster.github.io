@@ -57,6 +57,18 @@
     <loc>http://hmfoster.github.io//</loc>
   </url>
   <url>
+    <loc>http://hmfoster.github.io//category/general/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/programming/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/learning/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/life/</loc>
+  </url>
+  <url>
     <loc>http://hmfoster.github.io//tag/hack-reactor/</loc>
   </url>
   <url>
@@ -94,17 +106,5 @@
   </url>
   <url>
     <loc>http://hmfoster.github.io//tag/keyword%20this/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/general/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/programming/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/learning/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/life/</loc>
   </url>
 </urlset>

@@ -59,49 +59,61 @@
 
   <div class="entry">
     <p>I think everyone can agree that fully understanding JavaScript&#39;s keyword <code>this</code> is...challenging. The object to which it refers changes depending upon the context in which it is called. Fortunately, you can use JavaScript&#39;s native <code>bind</code> method to take control of matters. The code below demonstrates both the <em>need</em> for the <code>bind</code> method and works up to explain how exactly it work. </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">//Make a new object and a related(ish) function
-var cat = {appetite: &quot;hungry&quot;}; 
-var feedCat = function(){ this.appetite = &quot;full&quot;; }; 
 
-//attempt to call the method on the object
-cat.feedCat(); 
-</code></pre></div>
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Make a new object and a related(ish) function</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">cat</span> <span class="o">=</span> <span class="p">{</span><span class="nx">appetite</span><span class="o">:</span> <span class="s2">&quot;hungry&quot;</span><span class="p">};</span> 
+<a name="True-3"></a><span class="kd">var</span> <span class="nx">feedCat</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">this</span><span class="p">.</span><span class="nx">appetite</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span><span class="p">;</span> <span class="p">};</span> 
+<a name="True-4"></a>
+<a name="True-5"></a><span class="c1">//attempt to call the method on the object</span>
+<a name="True-6"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">feedCat</span><span class="p">();</span></code></pre></div>
+
 <p>This doesn&#39;t work, because <code>feedCat</code> isn&#39;t a property of the cat object. Similarly, <code>feedCat(cat)</code> won&#39;t work, because the <code>this</code> inside of <code>feedCat</code> will be bound to <code>window</code>. However, we can use JavaScript&#39;s <code>call</code> or <code>apply</code> methods to manually bind <code>this</code> to the <code>cat</code> object:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">feedCat.call(cat);
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">feedCat</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">cat</span><span class="p">);</span></code></pre></div>
+
 <p>However, if we try to use a browser method, such as <code>setTimout</code>, funny things start to happen:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> setTimeout(feedCat.call(cat), 10000); 
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">feedCat</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">cat</span><span class="p">),</span> <span class="mi">10000</span><span class="p">);</span></code></pre></div>
+
 <p>The code above doesn&#39;t work, because the feedCat function is invoked <em>immediately</em> and doesn&#39;t return a function to be invoked later. So <code>setTimeout</code> is essentially trying to call <code>undefined</code>, not a function. </p>
 
 <p>It is tempting imagine that any easy fix might be simply adding the <code>feedCat</code> function as a property of <code>cat</code>.</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">cat.feedCat = feedcat;
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">cat</span><span class="p">.</span><span class="nx">feedCat</span> <span class="o">=</span> <span class="nx">feedcat</span><span class="p">;</span></code></pre></div>
+
 <p>Unfortunately, <code>setTimeout(cat.feedcat, 1000)</code> <strong><em>still won&#39;t work</em></strong> because  <code>setTimeout</code> belongs to the <code>window</code> object, so when we call functions with it, <code>this</code> automatically binds to the <code>window</code> object (or other global object)!
 One of my Hack Reactor peers wrote up a more detailed explanation of that problem <a href="http://lukesavage.me/jekyll/2015/07/08/setTimeout-and-this/">here</a>.</p>
 
 <p>We must use a wrapper function instead:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> setTimeout(function(){feedCat.call(cat);}, 10000); 
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="nx">feedCat</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">cat</span><span class="p">);},</span> <span class="mi">10000</span><span class="p">);</span></code></pre></div>
+
 <p>The wrapper function doesn&#39;t get called until later, can because <code>feedCat.call(cat)</code> is <em>inside</em> of the wrapper function, it doesn&#39;t get called until that function is called. </p>
 
 <p>So now, let&#39;s imagine that instead of using an anonymous wrapper function, we have a function called <code>bind</code> that does essentially the same thing. It&#39;s code would need to look something like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> var bind = function(func, args){
-    func.call(args);
- }
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">func</span><span class="p">,</span> <span class="nx">args</span><span class="p">){</span>
+<a name="True-2"></a>    <span class="nx">func</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">args</span><span class="p">);</span>
+<a name="True-3"></a> <span class="p">}</span></code></pre></div>
+
 <p>Notice that the first parameter is the function we <em>really</em> want to call, and the second parameter is the object to which we want to bind <code>this</code>; any additional parameters could be passed to the interior function.</p>
 
 <p>We could then run this code:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> setTimeout(bind(feedCat, cat), 10000); 
-</code></pre></div>
-<p>And that&#39;s basically all the <code>bind</code> function does. It essentially cements the keyword <code>this</code> to whatever you want it to be. Instead of a rewriting <code>bind</code> everytime we want to use it with a different function, JavaScript has attached it as a method to the Function prototype. Because all functions delegate here, all functions have access to bind. The real source code looks something like this:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text"> Function.prototype.bind = function(context){ 
-    var fn = this; 
-    return function(){ return fn.apply(context, arguments); 
-        }; 
-    };
-</code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">bind</span><span class="p">(</span><span class="nx">feedCat</span><span class="p">,</span> <span class="nx">cat</span><span class="p">),</span> <span class="mi">10000</span><span class="p">);</span></code></pre></div>
+
+<p>And that&#39;s basically all the <code>bind</code> function does. It essentially cements the keyword <code>this</code> to whatever you want it to be. Instead of a rewriting <code>bind</code> everytime we want to use it with a different function, JavaScript has attached it as a method to the Function prototype. Because all functions delegate here, all functions have access to bind, so we would actually call it like this:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">setTimeout</span><span class="p">(</span><span class="nx">feedCat</span><span class="p">.</span><span class="nx">bind</span><span class="p">(</span><span class="nx">cat</span><span class="p">),</span> <span class="mi">10000</span><span class="p">);</span></code></pre></div>
+
+<p>The real source code looks something like this:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nb">Function</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">bind</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">context</span><span class="p">){</span> 
+<a name="True-2"></a>    <span class="kd">var</span> <span class="nx">fn</span> <span class="o">=</span> <span class="k">this</span><span class="p">;</span> 
+<a name="True-3"></a>    <span class="k">return</span> <span class="kd">function</span><span class="p">(){</span> <span class="k">return</span> <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="nx">context</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">);</span> 
+<a name="True-4"></a>        <span class="p">};</span> 
+<a name="True-5"></a>    <span class="p">};</span></code></pre></div>
+
 <p>Using <code>apply</code> instead of <code>call</code> accounts for slightly more complicated situations in which many parameters must be passed in to the interior function. It also uses <code>returns</code> to account for the fact that most functions will need to return something, and not just implement a side effect like in ouf <code>feedCat</code> function.</p>
 
   </div>

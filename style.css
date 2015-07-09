@@ -316,13 +316,30 @@ footer {
   text-align: center;
 }
 
+/* Solarized Dark 
+
+For use with Jekyll and Pygments
+
+http://ethanschoonover.com/solarized
+
+SOLARIZED HEX      ROLE
+--------- -------- ------------------------------------------
+base03    #002b36  background
+base01    #586e75  comments / secondary content
+base1     #93a1a1  body text / default code / primary content
+orange    #cb4b16  constants
+red       #dc322f  regex, special keywords
+blue      #268bd2  reserved keywords
+cyan      #2aa198  strings, numbers
+green     #859900  operators, other keywords
+*/
 .highlight {
   background-color: #1C1536;
-  color: #F2EA96;
+  color: #93a1a1;
 }
 
 .highlight .lineno {
-  color: #D640F2;
+  color: #586e75;
 }
 
 /* Line Numbers */
@@ -342,12 +359,12 @@ footer {
 
 /* Generic */
 .highlight .k {
-  color: #859900;
+  color: #AE351F;
 }
 
 /* Keyword */
 .highlight .l {
-  color: #93a1a1;
+  color: #ADBFBF;
 }
 
 /* Literal */
@@ -357,7 +374,7 @@ footer {
 
 /* Name */
 .highlight .o {
-  color: #859900;
+  color: #6B18FF;
 }
 
 /* Operator */
