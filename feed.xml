@@ -7,6 +7,42 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A Beginner&#39;s Guide to Test Driven Development, Part 1</title>
+        <description>&lt;p&gt;Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you how to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (&lt;em&gt;cough&lt;/em&gt; Internet Explorer &lt;em&gt;cough&lt;/em&gt;), determine if you were succesful, and modify your plans if you weren&amp;#39;t. &lt;/p&gt;
+
+&lt;p&gt;Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this &lt;strong&gt;[backward design]&lt;/strong&gt;(https://en.wikipedia.org/wiki/Backward&lt;em&gt;design); programmers call it &lt;strong&gt;[test driven development]&lt;/strong&gt;(https://en.wikipedia.org/wiki/Test-driven&lt;/em&gt;development). Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.&lt;/p&gt;
+
+&lt;p&gt;I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:
+1. Write a failing test (one that your program/ students cannot yet pass)
+2. Add just enough code (or instruction) so the program/students can pass the test; this called &lt;em&gt;unit testing&lt;/em&gt;.
+3. Refactor (or reteach) where necessary.&lt;/p&gt;
+
+&lt;p&gt;However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming. &lt;/p&gt;
+
+&lt;p&gt;One way of implementing TDD is in the browser using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt;. If you do a quick google search of each of these, you will learn that Mocha is a &amp;quot;testing framework&amp;quot;, Chai is an &amp;quot;expectation library,&amp;quot; and Sinon is a.... well, let&amp;#39;s call it a &amp;quot;virtual environment library.&amp;quot; Unfortunately, if you&amp;#39;re new to programming none of that means anything to you. If you&amp;#39;re like me, when you first read each of those &amp;quot;definitions,&amp;quot; you may have thought to yourself, &amp;quot;Ok, but what &lt;em&gt;is&lt;/em&gt; a testing framework? Actually, what&amp;#39;s a &lt;em&gt;framework&lt;/em&gt;?? And what is the difference between a library and a framework?&amp;quot; &lt;/p&gt;
+
+&lt;p&gt;The everyday definition of &lt;strong&gt;framework&lt;/strong&gt; is &lt;a href=&quot;http://dictionary.reference.com/browse/framework&quot;&gt;a skeletal structure designed to support or enclose something&lt;/a&gt;. Many high school English teachers provide their students with essay frameworks &lt;a href=&quot;http://unilearning.uow.edu.au/essay/4bi.html&quot;&gt;like this one&lt;/a&gt; to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.&lt;/p&gt;
+
+&lt;p&gt;This is not that different from what a programming framework does; from [Wikipedia](https://en.wikipedia.org/wiki/Software_framework, a software framework, &amp;quot;is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.&amp;quot; In other words, it makes it easier and faster for you to write &lt;em&gt;your&lt;/em&gt; program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.  &lt;/p&gt;
+
+&lt;p&gt;Because unit testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter renders in an easy-to-read format in the browser. &lt;/p&gt;
+
+&lt;p&gt;At first, it can be difficult to differentiate between a &lt;em&gt;framework&lt;/em&gt;, and a &lt;em&gt;library&lt;/em&gt;. Like a framework, libraries provide us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms related to the topic the teacher encourages students to use in their essay.&lt;/p&gt;
+
+&lt;p&gt;Chai and Sinon are both software libraries. Each provide a collection of related modular code that can be used from within the Mocha framework. When writing our tests, we need to be able to decide if our program is actually doing what we want. Chai essentially gives us a set of tests we can apply to our program, while Sinon allows us to trick our program into running in a fake environment so we can spy on it.&lt;/p&gt;
+
+&lt;p&gt;The tests Chai and other, &lt;a href=&quot;http://stackoverflow.com/questions/10472152/standalone-assertion-libraries&quot;&gt;similar libraries&lt;/a&gt;, use are called &lt;em&gt;assertions&lt;/em&gt;. An &lt;em&gt;assertion&lt;/em&gt; simply compares what we &lt;em&gt;want&lt;/em&gt; our program to do, to what it actually &lt;em&gt;is&lt;/em&gt; doing. As such, they return a boolean value: if our programm &lt;em&gt;is&lt;/em&gt;working correctly, the assertion evaluates to true, and it passes the test. &lt;/p&gt;
+
+&lt;p&gt;Sinon uses &lt;em&gt;spies&lt;/em&gt;, &lt;em&gt;stubs&lt;/em&gt;, and &lt;em&gt;mocks&lt;/em&gt; to keep track of everything our program is doing and allow it to run without the actual &lt;a href=&quot;https://en.wikipedia.org/wiki/Dependency&quot;&gt;dependencies&lt;/a&gt; it will need. A &lt;em&gt;spy&lt;/em&gt; records function arguments, return values and other data used and created by our program. &lt;em&gt;Stubs&lt;/em&gt; are basically spies with super powers. Not only do they keep track of the data related to our program, they also allow us to &lt;strong&gt;fake&lt;/strong&gt; functionality so the rest of our system thinks the program is running normally. Finally, a &lt;em&gt;mock&lt;/em&gt; combines the concepts of spies, stubs, and assertions all together. I will go into these ideas more in a later blog post, as they are difficult to conceptualize without detailed examples.&lt;/p&gt;
+
+&lt;p&gt;So, now we know what TDD is, why we would use it, and how our testing frameworks and libraries work together to allow us to implement it. Next up, I&amp;#39;ll explain step-by-step how to actually set up a testing suite using a concrete JavaScript example. &lt;/p&gt;
+</description>
+        <pubDate>Thu, 09 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Test-Driven-Development/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Test-Driven-Development/</guid>
+      </item>
+    
+      <item>
         <title>Wrapping your Brain Around JavaScript&#39;s Bind Method</title>
         <description>&lt;p&gt;I think everyone can agree that fully understanding JavaScript&amp;#39;s keyword &lt;code&gt;this&lt;/code&gt; is...challenging. The object to which it refers changes depending upon the context in which it is called. Fortunately, you can use JavaScript&amp;#39;s native &lt;code&gt;bind&lt;/code&gt; method to take control of matters. The code below demonstrates both the &lt;em&gt;need&lt;/em&gt; for the &lt;code&gt;bind&lt;/code&gt; method and works up to explain how exactly it work. &lt;/p&gt;
 
@@ -325,21 +361,6 @@ This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;st
         <pubDate>Fri, 01 May 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//Review-Work/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//Review-Work/</guid>
-      </item>
-    
-      <item>
-        <title>HR Precourse Work Day 1</title>
-        <description>&lt;p&gt;After weeks of anticipation, Hack Reactor has finally released the precourse work to my classmates and me. Before seeing the outline of the work, I was concerned that there would be many topics with which I have no familiarity. It looks like I’ve done a decent job prepping myself, however, as I have at least touched upon almost everything on the list.&lt;/p&gt;
-
-&lt;p&gt;Everything you would expect to be there was (i.e. signing up for various services like GitHub, foundational Javascript and HTML/CSS concepts, how to use Git, etc…), but it is extremely helpful to have all of the resources laid out in a chronological list. One of the biggest things I’ve been struggling with while teaching myself how to program has been when, what, and where to study all of the necessary concepts; consequently, I found myself jumping from subject to subject a bit chaotically. Using CodeSchool definitely helped me develop a better strategy for tackling everything I had to learn, but it still wasn’t as well framed as the Hack Reactor work looks to be.&lt;/p&gt;
-
-&lt;p&gt;The first real task on the list involved reading through a comprehensive set of slides on basic Javascript concepts. I already knew most of the information covered in these slides, but was pleasantly surprised to find little nuggets here and there that better cemented the reasoning behind various syntax rules. For example, the slides do an excellent job explaining the definitions, characteristics, and behaviors of different Javascript objects.&lt;/p&gt;
-
-&lt;p&gt;I have also set-up a Trello board to help create a plan of attack so that I keep working through the various tasks in a reasonable amount of time. There are currently three major sections in the precourse work, and it looks like each section will take approximately the same amount of time. Therefore, I’ve got about 2 week to get through each section. I then took the first section and broke it down into and scheduled its subsections. This has made the mountain of work to get through much more manageable looking. Now I just have to remember to stay focused on my teaching load while at school, and leave my Hack Reactor work for home!&lt;/p&gt;
-</description>
-        <pubDate>Mon, 27 Apr 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//HR-Precourse-1/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//HR-Precourse-1/</guid>
       </item>
     
   </channel>
