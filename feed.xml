@@ -10,12 +10,15 @@
         <title>A Beginner&#39;s Guide to Test Driven Development, Part 1</title>
         <description>&lt;p&gt;Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you how to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (&lt;em&gt;cough&lt;/em&gt; Internet Explorer &lt;em&gt;cough&lt;/em&gt;), determine if you were succesful, and modify your plans if you weren&amp;#39;t. &lt;/p&gt;
 
-&lt;p&gt;Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this &lt;strong&gt;[backward design]&lt;/strong&gt;(https://en.wikipedia.org/wiki/Backward&lt;em&gt;design); programmers call it &lt;strong&gt;[test driven development]&lt;/strong&gt;(https://en.wikipedia.org/wiki/Test-driven&lt;/em&gt;development). Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.&lt;/p&gt;
+&lt;p&gt;Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this &lt;a href=&quot;https://en.wikipedia.org/wiki/Backward_design&quot;&gt;backward design&lt;/a&gt;; programmers call it &lt;a href=&quot;https://en.wikipedia.org/wiki/Test-driven_development&quot;&gt;test driven development&lt;/a&gt;. Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.&lt;/p&gt;
 
-&lt;p&gt;I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:
-1. Write a failing test (one that your program/ students cannot yet pass)
-2. Add just enough code (or instruction) so the program/students can pass the test; this called &lt;em&gt;unit testing&lt;/em&gt;.
-3. Refactor (or reteach) where necessary.&lt;/p&gt;
+&lt;p&gt;I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Write a failing test (one that your program/ students cannot yet pass)&lt;/li&gt;
+&lt;li&gt;Add just enough code (or instruction) so the program/students can pass the  test; this called &lt;em&gt;unit testing&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Refactor (or reteach) where necessary.&lt;/li&gt;
+&lt;/ol&gt;
 
 &lt;p&gt;However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming. &lt;/p&gt;
 
