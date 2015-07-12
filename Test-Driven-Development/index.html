@@ -66,7 +66,7 @@
 
 <ol>
 <li>Write a failing test (one that your program/ students cannot yet pass)</li>
-<li>Add just enough code (or instruction) so the program/students can pass the  test; this called <em>unit testing</em>.</li>
+<li>Add just enough code (or instruction) so the program/students can pass the  test.</li>
 <li>Refactor (or reteach) where necessary.</li>
 </ol>
 
@@ -74,11 +74,20 @@
 
 <p>One way of implementing TDD is in the browser using <a href="http://mochajs.org/">Mocha</a>, <a href="http://chaijs.com/">Chai</a>, and <a href="http://sinonjs.org/">Sinon</a>. If you do a quick google search of each of these, you will learn that Mocha is a &quot;testing framework&quot;, Chai is an &quot;expectation library,&quot; and Sinon is a.... well, let&#39;s call it a &quot;virtual environment library.&quot; Unfortunately, if you&#39;re new to programming none of that means anything to you. If you&#39;re like me, when you first read each of those &quot;definitions,&quot; you may have thought to yourself, &quot;Ok, but what <em>is</em> a testing framework? Actually, what&#39;s a <em>framework</em>?? And what is the difference between a library and a framework?&quot; </p>
 
+<h3>Defining a Framework</h3>
+
+<p><a title="By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg"><img width='420px' style = "float: left; margin-right: 10px" alt="Seattle library framework inside" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg"/></a></p>
+
 <p>The everyday definition of <strong>framework</strong> is <a href="http://dictionary.reference.com/browse/framework">a skeletal structure designed to support or enclose something</a>. Many high school English teachers provide their students with essay frameworks <a href="http://unilearning.uow.edu.au/essay/4bi.html">like this one</a> to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.</p>
 
 <p>This is not that different from what a programming framework does; from <a href="https://en.wikipedia.org/wiki/Software_framework">Wikipedia</a>, a software framework, &quot;is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.&quot; In other words, it makes it easier and faster for you to write <em>your</em> program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.  </p>
 
-<p>Because unit testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser. </p>
+<p>Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser. </p>
+
+<h3>Libraries</h3>
+
+<p><img src="../images/TDD/Library_Pengo.jpg" alt="Libary books">
+&quot;<a href="https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg">Library Pengo</a>&quot;. Licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0<p></p>&quot;&gt;CC BY-SA 3.0</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.</p>
 
 <p>At first, it can be difficult to differentiate between a <em>framework</em>, and a <em>library</em>. Like a framework, a library provides us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms the teacher encourages students to use in their essay.</p>
 

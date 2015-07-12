@@ -114,7 +114,7 @@
 
 &lt;ol&gt;
 &lt;li&gt;Write a failing test (one that your program/ students cannot yet pass)&lt;/li&gt;
-&lt;li&gt;Add just enough code (or instruction) so the program/students can pass the  test; this called &lt;em&gt;unit testing&lt;/em&gt;.&lt;/li&gt;
+&lt;li&gt;Add just enough code (or instruction) so the program/students can pass the  test.&lt;/li&gt;
 &lt;li&gt;Refactor (or reteach) where necessary.&lt;/li&gt;
 &lt;/ol&gt;
 
@@ -122,11 +122,20 @@
 
 &lt;p&gt;One way of implementing TDD is in the browser using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt;. If you do a quick google search of each of these, you will learn that Mocha is a &amp;quot;testing framework&amp;quot;, Chai is an &amp;quot;expectation library,&amp;quot; and Sinon is a.... well, let&amp;#39;s call it a &amp;quot;virtual environment library.&amp;quot; Unfortunately, if you&amp;#39;re new to programming none of that means anything to you. If you&amp;#39;re like me, when you first read each of those &amp;quot;definitions,&amp;quot; you may have thought to yourself, &amp;quot;Ok, but what &lt;em&gt;is&lt;/em&gt; a testing framework? Actually, what&amp;#39;s a &lt;em&gt;framework&lt;/em&gt;?? And what is the difference between a library and a framework?&amp;quot; &lt;/p&gt;
 
+&lt;h3&gt;Defining a Framework&lt;/h3&gt;
+
+&lt;p&gt;&lt;a title=&quot;By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons&quot; href=&quot;https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg&quot;&gt;&lt;img width=&#39;420px&#39; style = &quot;float: left; margin-right: 10px&quot; alt=&quot;Seattle library framework inside&quot; src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg&quot;/&gt;&lt;/a&gt;&lt;/p&gt;
+
 &lt;p&gt;The everyday definition of &lt;strong&gt;framework&lt;/strong&gt; is &lt;a href=&quot;http://dictionary.reference.com/browse/framework&quot;&gt;a skeletal structure designed to support or enclose something&lt;/a&gt;. Many high school English teachers provide their students with essay frameworks &lt;a href=&quot;http://unilearning.uow.edu.au/essay/4bi.html&quot;&gt;like this one&lt;/a&gt; to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.&lt;/p&gt;
 
 &lt;p&gt;This is not that different from what a programming framework does; from &lt;a href=&quot;https://en.wikipedia.org/wiki/Software_framework&quot;&gt;Wikipedia&lt;/a&gt;, a software framework, &amp;quot;is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.&amp;quot; In other words, it makes it easier and faster for you to write &lt;em&gt;your&lt;/em&gt; program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.  &lt;/p&gt;
 
-&lt;p&gt;Because unit testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser. &lt;/p&gt;
+&lt;p&gt;Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser. &lt;/p&gt;
+
+&lt;h3&gt;Libraries&lt;/h3&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Library_Pengo.jpg&quot; alt=&quot;Libary books&quot;&gt;
+&amp;quot;&lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg&quot;&gt;Library Pengo&lt;/a&gt;&amp;quot;. Licensed under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot; title=&quot;Creative Commons Attribution-Share Alike 3.0&lt;p&gt;&lt;/p&gt;&amp;quot;&amp;gt;CC BY-SA 3.0&lt;/a&gt; via &lt;a href=&quot;//commons.wikimedia.org/wiki/&quot;&gt;Wikimedia Commons&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;At first, it can be difficult to differentiate between a &lt;em&gt;framework&lt;/em&gt;, and a &lt;em&gt;library&lt;/em&gt;. Like a framework, a library provides us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms the teacher encourages students to use in their essay.&lt;/p&gt;
 
