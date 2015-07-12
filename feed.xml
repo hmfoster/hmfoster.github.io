@@ -7,6 +7,104 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A Beginner&#39;s Guide to Test Driven Development, Part 2</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://haileyfoster.com/Test-Driven-Development/&quot;&gt;Part 1&lt;/a&gt; of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt; and &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;. We will actually implement this environment in Part 3, and finally, Part 4 will provide additional details about when, why, and how to use &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt; to test more complex programs.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s say you want to write a JavaScript program that will determine if a sequence of numbers is &lt;a href=&quot;https://purplemath.com/modules/series3.htm&quot;&gt;arithmetic, geometric, or neither&lt;/a&gt;. This is a fairly straightforward task that gives us a good example with which to set-up a testing environment. &lt;/p&gt;
+
+&lt;p&gt;Remember, the main premise of TDD is to write and test small units of code at a time to minimize the chances of writing a hard-to-catch-bug. This means that we will want to set up our environment &lt;em&gt;before&lt;/em&gt; writing any code. Of course, there are many options for how to go about setting up your environment depending upon your level of experience. The goal of this post is to simplify the process so that novice programmers will be more likely to use these tools from the beginning. Therefore, we will be using &lt;a href=&quot;https://github.com/phillipalexander/generator-test&quot;&gt;a generator&lt;/a&gt; from Phillip Alexander for our initial set-up. &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h4&gt;Before Moving On&lt;/h4&gt;
+
+&lt;p&gt;In order to use the test generator, you will need to have &lt;a href=&quot;https://nodejs.org/download/&quot;&gt;Node.js&lt;/a&gt; installed and have some familiarity with your command line. If you have yet to use your command line, I recommend going through at least the first few chapters in &lt;a href=&quot;http://cli.learncodethehardway.org/book/&quot;&gt;The Command Line Crash Course&lt;/a&gt; to get over your fear of breaking your computer (which you won&amp;#39;t do). There are many options for installing Node; check out a clear set of directions &lt;a href=&quot;http://blog.teamtreehouse.com/install-node-js-npm-mac&quot;&gt;here&lt;/a&gt; if you use a Mac. Node will allow us to use a package manager called &lt;strong&gt;npm&lt;/strong&gt; to install the remaining tools we will need, and will allow us to run our tests from the command line if we choose.&lt;/p&gt;
+
+&lt;p&gt;We will also be installing &lt;a href=&quot;http://yeoman.io/&quot;&gt;Yeoman&lt;/a&gt; in our initial set-up, but you don&amp;#39;t actually need to understand what it is or how it works. &lt;/p&gt;
+
+&lt;hr&gt;
+
+&lt;h3&gt;Initial Set-Up&lt;/h3&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Create an &lt;em&gt;empty&lt;/em&gt; folder for your program. All of the rest of the files needed for our program will be added here.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Install Yeoman&lt;/strong&gt;: In your command line, type: &lt;code&gt;$ npm install -g yo&lt;/code&gt; &lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Install Phillip Alexander&amp;#39;s generator&lt;/strong&gt;: In your command line, type: &lt;code&gt;npm install -g generator-test&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;&lt;strong&gt;Initiate the generator&lt;/strong&gt;:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;From the command line, change directories into the folder you created earlier. For example, since I created my directory on my Desktop, I would type: &lt;code&gt;cd ~/Desktop/Arith-Geo-Test&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Type &lt;code&gt;yo test&lt;/code&gt;. This will use Yeoman to install the files you will need. At this point, your command line should look something like this:
+&lt;img src=&quot;../images/TDD/Yeoman1.png&quot; alt=&quot;Generator Welcome Screen&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;You now need to decide if you want to run your tests in the browser, or in Node. I recommend using the browser unless you are already comfortable with Node, and the remainder of this tutorial will make use of the browser for our tests. Use your arrow keys to make your choice, and hit enter.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;The generator will now ask for the &lt;em&gt;name&lt;/em&gt; of the algorithm you&amp;#39;d like to test. Enter a name for the program you want to write. We&amp;#39;re going to call ours &lt;code&gt;sequenceType&lt;/code&gt;. Note that if you already have some JavaScript files in your directory, the generator will ask you to choose one of these instead, and base the rest of the set-up upon this existing file.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Yeoman2.png&quot; alt=&quot;Generator file choice&quot;&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;After entering your choice, the generator will do its thing and create all of the files you will need to run your unit tests. It will also install another package manager called &lt;a href=&quot;http://blog.teamtreehouse.com/getting-started-bower&quot;&gt;Bower&lt;/a&gt; so it can install all of the &lt;a href=&quot;http://askubuntu.com/questions/361741/what-are-dependencies&quot;&gt;dependencies&lt;/a&gt; you&amp;#39;ll need&amp;mdash;in our case, this is Mocha and Chai.
+&lt;img src=&quot;../images/TDD/Yeoman3.png&quot; alt=&quot;Generator install screen&quot;&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3&gt;The TDD Scaffold&lt;/h3&gt;
+
+&lt;p&gt;Now when we look in our previously empty directory, we should see the following file structure:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;Bower Components&lt;/code&gt;: contains the packages for Mocha and Chai&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;bower.json&lt;/code&gt;: lists the packages downloaded by Bower&amp;mdash;useful for installing updates if needed in the future&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: the html file through which we will run our tests&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: our JavaScript file&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;spec&lt;/code&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: the JavaScript file within which we will write our tests. Also called the &lt;strong&gt;spec&lt;/strong&gt; file.&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Although we need the packages stored in the Bower Components, we don&amp;#39;t need to do anything with them. If you are curious, by all means feel free to explore the contents of this folder. What we really care about is the index.html file, and the two sequenceType.js files. Note that both the spec file and our program have the same name, but are located in different places in our directory. If this is confusing, you can change the name of the spec file, but you&amp;#39;ll need to be careful to change it every it is referenced from within the generated documents.&lt;/p&gt;
+
+&lt;p&gt;Let&amp;#39;s begin by opening the index.html file in your text editor.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/index_html.png&quot; alt=&quot;The index.html file&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the generator has automatically set up our index.html file for us:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The meta and title elements have been created&lt;/li&gt;
+&lt;li&gt;The css file from the Mocha package is referenced&lt;/li&gt;
+&lt;li&gt;The Mocha, Chai, spec, and algorithm scripts are referenced&lt;/li&gt;
+&lt;li&gt;Scripts needed to setup and run Mocha and Chai are embedded &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If we open this file in the browser, we will see a nicely formatted document with some dummy text.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Mocha_Spec_Runner.png&quot; alt=&quot;The index.html file in the browser&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Don&amp;#39;t worry about what any of this means, or where it came from yet. We&amp;#39;ll get there.&lt;/p&gt;
+
+&lt;p&gt;Next, let&amp;#39;s open up our program, &lt;code&gt;sequenceType.js&lt;/code&gt; &lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/EmptyProgram.png&quot; alt=&quot;Our program&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;The generator has pre-populated our file for us, but we can alter it as we like. Feel free to remove the first two lines entirely if you wish. &lt;/p&gt;
+
+&lt;p&gt;Finally, let&amp;#39;s look at that spec file from &lt;code&gt;spec/sequenceType.js&lt;/code&gt;. This is the one we&amp;#39;re really interested in.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Spec.png&quot; alt=&quot;The spec&quot;&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, the generator has pre-populated this file for us with a small template. The lines starting with &lt;code&gt;describe&lt;/code&gt; and &lt;code&gt;it&lt;/code&gt; are from the Mocha framework, while the lines starting with &lt;code&gt;expect&lt;/code&gt; come from Chai.&lt;/p&gt;
+
+&lt;p&gt;You should now be ready to actually start using TDD to write your program. Feel free to start playing around, or watch out for Part 3: Implementing TDD.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//TDD-2/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//TDD-2/</guid>
+      </item>
+    
+      <item>
         <title>A Beginner&#39;s Guide to Test Driven Development, Part 1</title>
         <description>&lt;p&gt;Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (&lt;em&gt;cough&lt;/em&gt; Internet Explorer &lt;em&gt;cough&lt;/em&gt;), determine if you were succesful, and modify your plans if you weren&amp;#39;t. &lt;/p&gt;
 
@@ -347,23 +445,6 @@ This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;st
         <pubDate>Sun, 03 May 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//Automated-Testing-Underscore/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//Automated-Testing-Underscore/</guid>
-      </item>
-    
-      <item>
-        <title>Reviewing</title>
-        <description>&lt;p&gt;Since getting the HR precourse work on Monday, I’m happy to say I’ve been able to work through the first section fairly quickly. It involved a basic review of HTML, CSS, and Javascript, and I had actually already read all of the provided resources. Because I want to make sure I REALLY know this stuff, I still worked back through it all, recording particularly important/tricky points with Evernote to review yet again before my start date in late June. I believe I now have a strong understanding of all of the concepts I reviewed, but of course I will need to do a lot more practice–especially with CSS positioning!–before I really feel competent.&lt;/p&gt;
-
-&lt;p&gt;I have now moved on to the section involving Git and using the command line. Again, most of this is review, but here HR has provided completely different resources than the ones I originally used. I’m especially enjoying the material on Git, as it provides review of pertinent terminal and git commands along with plenty of opportunities to practice them. I also like this resource more than the CodeSchool tutorial on Git, because this tutorial has you work on your own computer’s command line by creating a practice repo with which to work. For some reason this seems to help me retain the information better than when working on CodeSchool’s somewhat contrived exercises. One of my favorite exercises I’ve done so far has been to create command line and git aliases–these will definitely save some time!&lt;/p&gt;
-
-&lt;p&gt;Now that I’ve gotten a good start on the precourse work, I think my general plan of attack has shifted somewhat; I want to try to work as quickly through the “easy” stuff as I can so that I have plenty of time to work through the more difficult tasks, such as the section on Recursion. Hopefully this strategy will allow me to better balance my time between work and HR, especially since the end of my school year coincides with the due dates for most of the sections.&lt;/p&gt;
-
-&lt;p&gt;Speaking of, yesterday one of my students somehow found out that one of the other math teachers and I will not be coming back next year. I knew this would happen eventually because it is impossible to keep a secret at a small boarding school, so I was prepared to explain to them exactly why I was leaving. Even though they’re mostly juniors and seniors, as the retiring math teacher pointed out, they really can be just little kids at heart. They are currently convinced that he and I are the BEST TEACHERS EVER, and that no one that comes in next year could possibly be as good as us. Having worked with a great many other teachers, I have my doubts about this opinion, but of course the kids can’t see the forest for the trees right now. I suppose it’s good that they found out earlier rather than later, so they’ll have time to get comfortable with the idea before the end of the year.&lt;/p&gt;
-
-&lt;p&gt;One valid concern they have is that since two of the three math teachers are leaving, they’re not sure who will be able to write their college math recommendations since only a few of them will have the remaining math teacher for calculus. Perhaps I will be able to write some recs for them next year, even if I’m no longer a teacher? Must ask the college counselor about this…&lt;/p&gt;
-</description>
-        <pubDate>Fri, 01 May 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Review-Work/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Review-Work/</guid>
       </item>
     
   </channel>
