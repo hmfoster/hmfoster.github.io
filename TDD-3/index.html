@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Driven Development, Part 3 – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="This is the third part in a short series on applying test driven development to a JavaScript program using Mocha, Chai, and Sinon. Part 1 and Part 2 gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.
+" />
+    <meta property="og:description" content="This is the third part in a short series on applying test driven development to a JavaScript program using Mocha, Chai, and Sinon. Part 1 and Part 2 gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="Test Driven Development, Part 3" />
+    <meta property="twitter:title" content="Test Driven Development, Part 3" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Test Driven Development, Part 3</h1>
+  
+   <a href="/tag/JavaScript" title="View posts tagged with &quot;JavaScript&quot;" class = "tag">JavaScript</a>     <a href="/tag/testing" title="View posts tagged with &quot;testing&quot;" class = "tag">testing</a>   
+
+  <div class="entry">
+    <p>This is the third part in a short series on applying test driven development to a JavaScript program using <a href="www.mochajs.org">Mocha</a>, <a href="www.chaijs.org">Chai</a>, and <a href="www.sinonjs.org">Sinon</a>. <a href="http://haileyfoster.com/Test-Driven-Development/">Part 1</a> and <a href="http://haileyfoster.com/TDD-2/">Part 2</a> gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.</p>
+
+<h2>The Spec Code and Rendering</h2>
+
+<p>If you&#39;ve been following along, you know that we&#39;re designing a very simple program to identify if an array of numbers contains an arithmetic or geometric sequence. We have yet to write any code in our function, but we do have a pre-populated html file linked to both our code, and our testing spec; this will allow us to run our tests in the browser. Here is a comparison of the spec file and the rendered html: </p>
+
+<p><img src="../images/TDD/spec-to-html.png" alt="Spec to browser comparison"> </p>
+
+<p>Again, the <code>describe</code> and <code>it</code> statements are from the Mocha framework, while the <code>expect</code> statements are from Chai. Notice how these are rendered to the browser:</p>
+
+<ul>
+<li>The text inside of the <code>describe</code> statement is rendered as a heading for a set of tests.</li>
+<li>Each <code>it</code> statement is rendered as a different test; if the test is passing, we see a green check mark, while if it is failing, we see a red &quot;x&quot;</li>
+<li>Finally, Chai provides additional information for any failing test in the form of an error. </li>
+</ul>
+
+<p>Clicking on each of the tests will reveal the specific <code>expect</code> statement to which they relate; this can be quite helpful when trying to interpret the results. Of the three default tests provided by the test generator we are using, only the first provides us with any real information&mdash;that our function exists. The other two are just placeholders to get us started writing our own tests. </p>
+
+<h2>Creating Objectives</h2>
+
+<p>Before writing the specific tests, let&#39;s think about the overarching goal of our little program and then break it down into smaller objectives (for those of you that read Part 1, this is analogous to <a href="https://www.mydigitalchalkboard.org/portal/default/Content/Viewer/Content?action=2&amp;sciId=829">&quot;unpacking&quot; local, state and national standards</a>). </p>
+
+<p>We know we want our program to <strong>identify if a set of numbers is an arithmetic or geometric sequence</strong>. Let&#39;s think more deeply about what that means our program will need to do:</p>
+
+<ol>
+<li>Accept an input of numbers in the form of an array or string</li>
+<li>Determine if the sequence of numbers has a common difference or common ratio</li>
+<li>Output the result as a string stating if the sequence was arithmetic, geometric, or neither.</li>
+</ol>
+
+<p>Each of these objectives can then be translated into smaller tests that our program will either pass or fail. Because we will then working to pass just one test at a time, I feel it is best to start with the tests for the output, and then work our way backwards; this strategy will not work for all programs, but it does fit this situation nicely. Some of these tests may seem a bit contrived, but I think it is important to illustrate the fact that you want to write tests for the smallest bit of code you can test at a time.</p>
+
+<p>We will first write these tests in pseudocode, and then translate them into Mocha and Chai.</p>
+
+<h4>The Output Message</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should return the result as a string.</span>
+<a name="True-2"></a><span class="c1">//If the sequence is arithmetic, it should return &quot;This sequence is arithmetic&quot;</span>
+<a name="True-3"></a><span class="c1">//If the sequence is geometric, it should return &quot;This sequence is geometric&quot;</span>
+<a name="True-4"></a><span class="c1">//Otherwise, it should return &quot;This sequence is not a recognized pattern&quot;</span></code></pre></div>
+
+<h4>The Function</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should identify an arithmetic sequence.</span>
+<a name="True-2"></a><span class="c1">//It should identify a geometric sequence.</span>
+<a name="True-3"></a><span class="c1">//It should not identify other types of sequences</span>
+<a name="True-4"></a><span class="c1">//It should work for decreasing functions.</span></code></pre></div>
+
+<h4>The Input Data</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should accept an array of numbers</span>
+<a name="True-2"></a><span class="c1">//It should accept a string of numbers that are comma delimited</span>
+<a name="True-3"></a><span class="c1">//It should accept a string of numbers that are space delimited</span></code></pre></div>
+
+<h2>Writing the Code</h2>
+
+<h4>Describe Statements</h4>
+
+<p>Now that we know what behavior we expect our program to have, it is time to start writing the actual tests. Each section of tests lends itself nicely to a Mocha <code>describe</code> statement; let&#39;s start by writing those.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//This first line was written by the test generator; we will keep it to </span>
+<a name="True-2"></a><span class="c1">//maintain the overarching focus on our sequenceType function.</span>
+<a name="True-3"></a>
+<a name="True-4"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sequenceType()&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-5"></a>
+<a name="True-6"></a>  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-7"></a>    <span class="nx">expect</span><span class="p">(</span><span class="nx">sequenceType</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">);</span>
+<a name="True-8"></a>  <span class="p">});</span>
+<a name="True-9"></a>
+<a name="True-10"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-11"></a>  <span class="p">});</span>
+<a name="True-12"></a>
+<a name="True-13"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-14"></a>  <span class="p">});</span>
+<a name="True-15"></a>
+<a name="True-16"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Input Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-17"></a>  <span class="p">});</span>
+<a name="True-18"></a>
+<a name="True-19"></a><span class="p">});</span></code></pre></div>
+
+<p>Notice each describe statement is a function that takes two parameters: a general title, and a callback function. Our individual tests will go inside of that callback function. For now, when we open this function in the browser, this is what we see:</p>
+
+<p><img src="../images/TDD/Empty-tests.png" alt="Browser render of empty tests"></p>
+
+<p>The empty describe statements will not render until we give them some <code>it</code> statements. </p>
+
+<h4>If statements</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sequenceType()&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-2"></a>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
+<a name="True-3"></a>
+<a name="True-4"></a>  <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;exists&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-5"></a>    <span class="nx">expect</span><span class="p">(</span><span class="nx">sequenceType</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;function&#39;</span><span class="p">);</span>
+<a name="True-6"></a>  <span class="p">});</span>
+<a name="True-7"></a>
+<a name="True-8"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-9"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-10"></a>    <span class="p">});</span>
+<a name="True-11"></a>
+<a name="True-12"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-13"></a>    <span class="p">});</span>
+<a name="True-14"></a>
+<a name="True-15"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is geometric&quot; for geometric sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-16"></a>    <span class="p">});</span>
+<a name="True-17"></a>
+<a name="True-18"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is not a recognized pattern&quot; otherwise&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-19"></a>    <span class="p">});</span> 
+<a name="True-20"></a>
+<a name="True-21"></a>  <span class="p">});</span>
+<a name="True-22"></a>
+<a name="True-23"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-24"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify an arithmetic sequence&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-25"></a>    <span class="p">});</span>
+<a name="True-26"></a>
+<a name="True-27"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify an geometric sequence&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-28"></a>    <span class="p">});</span>
+<a name="True-29"></a>
+<a name="True-30"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should not identify other sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-31"></a>    <span class="p">});</span>
+<a name="True-32"></a>
+<a name="True-33"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should work for decreasing functions&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-34"></a>    <span class="p">});</span>
+<a name="True-35"></a>
+<a name="True-36"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Input Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-37"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept an array of numbers&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-38"></a>    <span class="p">});</span>
+<a name="True-39"></a>
+<a name="True-40"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept a string of numbers that are comma delimited&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-41"></a>    <span class="p">});</span>
+<a name="True-42"></a>
+<a name="True-43"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept a string of numbers that are space delimited&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-44"></a>    <span class="p">});</span>
+<a name="True-45"></a>  <span class="p">});</span>
+<a name="True-46"></a>
+<a name="True-47"></a><span class="p">});</span></code></pre></div>
+
+<p>The browser rendering is now starting to look more like we want it to:
+<img src="../images/TDD/All-passing.png" alt="Empty it statements; all passing"></p>
+
+<p>All of our tests are currently passing, because we haven&#39;t actually written any assertions. If you want to focus on any individual test, you can do so by clicking on one of the small arrows to the right. Clicking on a description heading will also allow you to focus on one set of related tests.</p>
+
+<h4>Assertions</h4>
+
+<p>At this point, we are finally ready to write the tests themselves. Instead of writing them all at once, we&#39;re just going to work on one section of tests at a time; this will keep our program organized and require us to maintain focus. We are going to write our tests using <a href="http://chaijs.com/api/bdd/">Chai&#39;s chainable expect style</a>. I suggest reading through their API to see all of the possible methods for constructing statements; for now, we will stick with a few basic patterns: </p>
+
+<ul>
+<li><code>expect(something).to.be.a(something)</code></li>
+<li><code>expect(something).to.equal(something)</code></li>
+</ul>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-2"></a>    
+<a name="True-3"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-4"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>  
+<a name="True-5"></a>    <span class="p">});</span>
+<a name="True-6"></a>
+<a name="True-7"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-8"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-9"></a>    <span class="p">});</span>
+<a name="True-10"></a>
+<a name="True-11"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is geometric&quot; for geometric sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-12"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-13"></a>    <span class="p">});</span>
+<a name="True-14"></a>
+<a name="True-15"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;Not a recognized pattern&quot; otherwise&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-16"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-17"></a>    <span class="p">});</span> 
+<a name="True-18"></a>
+<a name="True-19"></a>  <span class="p">});</span></code></pre></div>
+
+<p>Now when we open up our spec, we see that we hae four failing tests. We can also see that the four failing tests all display the same message: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">ReferenceError: returnValue is not defined
+</code></pre></div>
+<p>This is followed by information about where this error is occurring for each test. We care most about the top line of that location, which reads:</p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">at Context.&lt;anonymous&gt; (file:///Users/haileyfoster/Desktop/Arith-Geo-Test/spec/sequenceType.js:14:14)
+</code></pre></div>
+<p>We can see that our error is occurring in our spec file, at line 14, character 14. Looking at our spec, we can see this is because we are calling on a variable, <code>returnValue</code> that we haven&#39;t actually defined anywhere in our test. Let&#39;s go ahead and define this variable in the spec above all of the <code>it</code>statements in this section.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-2"></a>    <span class="kd">var</span> <span class="nx">returnValue</span><span class="p">;</span> <span class="c1">//defining the variable here will give the following tests access to the variable</span>
+<a name="True-3"></a>    
+<a name="True-4"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>  
+<a name="True-5"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>  
+<a name="True-6"></a>    <span class="p">});</span></code></pre></div>
+
+<p>Now our tests are giving us an assertion error: </p>
+<div class="highlight"><pre><code class="language-text" data-lang="text">AssertionError: expected undefined to be a string
+</code></pre></div>
+<h2>Passing the tests</h2>
+
+<p>Finally, we are at the point where we can turn to our sequenceType function and write enough code there so that it passes one test at a time. Our first test tells us it should return a string. Let&#39;s make this test pass with the smallest amount of code possible:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
+<a name="True-2"></a>  <span class="k">return</span> <span class="s1">&#39;string&#39;</span><span class="p">;</span>
+<a name="True-3"></a><span class="p">};</span></code></pre></div>
+
+<p>Hmmm...if we run the spec, we see we&#39;re getting the same error as before. The problem is that we haven&#39;t actually called our function from the spec yet. Let&#39;s do that:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-2"></a>    <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">();</span>
+<a name="True-3"></a>    <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>   
+<a name="True-4"></a><span class="p">});</span></code></pre></div>
+
+<p>Great! By giving our function a very simple return statement, our first test is passing. </p>
+
+<p>From here, I&#39;m just going to present the the work necessary to get each consecutive test to pass, only commenting when necessary to clarify the thinking process. </p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Spec</span>
+<a name="True-2"></a><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-4"></a>    <span class="p">});</span>
+<a name="True-5"></a>
+<a name="True-6"></a><span class="c1">//Passing Code</span>
+<a name="True-7"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
+<a name="True-8"></a>  <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-9"></a><span class="p">};</span></code></pre></div>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Spec</span>
+<a name="True-2"></a><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is geometric&quot; for geometric sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-4"></a>    <span class="p">});</span>
+<a name="True-5"></a>
+<a name="True-6"></a><span class="c1">//Passing Code</span>
+<a name="True-7"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
+<a name="True-8"></a>  <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-9"></a><span class="p">};</span></code></pre></div>
+
+<p>Uh-oh! Now when we run our spec, we see that the third test passes, but the second test is now failing! Obviously this is because we were just changing the returned string. Time to rethink our code so that both tests will pass. </p>
+
+<p>First we will need to update our code so that it will take a parameter and return a different message depending upon the argument passed in. We also need to update our spec file to pass different arguments to the function for each test.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Our updated specs</span>
+<a name="True-2"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;1,3,5,7&quot;</span><span class="p">);</span>
+<a name="True-4"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-5"></a>    <span class="p">});</span>
+<a name="True-6"></a>
+<a name="True-7"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is geometric&quot; for geometric sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-8"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;2,4,8,16&quot;</span><span class="p">);</span>
+<a name="True-9"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-10"></a>    <span class="p">});</span>
+<a name="True-11"></a>
+<a name="True-12"></a><span class="c1">//The updated code</span>
+<a name="True-13"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-14"></a>  <span class="k">return</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s2">&quot;1,3,5,7&quot;</span> <span class="o">?</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="o">:</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-15"></a><span class="p">};</span></code></pre></div>
+
+<p>Of course this is only going to work for these exact sequences, but right now, that doesn&#39;t matter. We just want to get the specs to pass; we will use later tests to ensure that it works for any sequence passed it. Moving on...</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Spec</span>
+<a name="True-2"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;1,3,5,7&quot;</span><span class="p">);</span>
+<a name="True-4"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-5"></a>    <span class="p">});</span>
+<a name="True-6"></a>
+<a name="True-7"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is geometric&quot; for geometric sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-8"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;2,4,8,16&quot;</span><span class="p">);</span>
+<a name="True-9"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-10"></a>    <span class="p">});</span>
+<a name="True-11"></a>
+<a name="True-12"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;Not a recognized pattern&quot; otherwise&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-13"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;1,4,2,9&quot;</span><span class="p">);</span>
+<a name="True-14"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-15"></a>    <span class="p">});</span> 
+<a name="True-16"></a>
+<a name="True-17"></a><span class="c1">//Code</span>
+<a name="True-18"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-19"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span> <span class="o">===</span> <span class="s2">&quot;1,3,5,7&quot;</span><span class="p">){</span>
+<a name="True-20"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-21"></a>  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span> <span class="o">===</span> <span class="s2">&quot;2,4,8,16&quot;</span><span class="p">){</span>
+<a name="True-22"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-23"></a>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<a name="True-24"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
+<a name="True-25"></a>  <span class="p">}</span>
+<a name="True-26"></a><span class="p">};</span></code></pre></div>
+
+<p>On to the next set of tests! We&#39;ll just basically rinse and repeat what we did above: Write failing tests, write code to pass the test, refactor. Because all of these tests are also going to use the variable <code>returnValue</code>, we will move this declaration to the outer <code>describe</code> function, so that all inner functions have access to it. We will also pass in our sequences as an array instead of a string so we have one less thing to deal with in our tests.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
+<a name="True-2"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>    
+<a name="True-4"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify an arithmetic sequence.&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-5"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">]);</span>
+<a name="True-6"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-7"></a>    <span class="p">});</span>
+<a name="True-8"></a>
+<a name="True-9"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify a geometric sequence.&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-10"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">16</span><span class="p">]);</span>
+<a name="True-11"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-12"></a>    <span class="p">});</span>
+<a name="True-13"></a>
+<a name="True-14"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should not identify other sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-15"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">]);</span>
+<a name="True-16"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-17"></a>    <span class="p">});</span>
+<a name="True-18"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should work for decreasing functions&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-19"></a>      <span class="kd">var</span> <span class="nx">deArith</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">]);</span>
+<a name="True-20"></a>      <span class="kd">var</span> <span class="nx">deGeo</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">48</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">]);</span>
+<a name="True-21"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-22"></a>    <span class="p">});</span>
+<a name="True-23"></a>  <span class="p">});</span>
+<a name="True-24"></a>
+<a name="True-25"></a>  <span class="c1">//The Code</span>
+<a name="True-26"></a>  <span class="kd">var</span> <span class="nx">arithTest</span><span class="p">;</span>
+<a name="True-27"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-28"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span>
+<a name="True-29"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-30"></a>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-31"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-32"></a>    <span class="p">}</span>
+<a name="True-33"></a>    <span class="nx">arithTest</span> <span class="o">=</span> <span class="nx">arithTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-34"></a>  <span class="p">}</span>
+<a name="True-35"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">arithTest</span><span class="p">){</span>
+<a name="True-36"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-37"></a>  <span class="p">}</span>
+<a name="True-38"></a>
+<a name="True-39"></a>  <span class="kd">var</span> <span class="nx">geoTest</span><span class="p">;</span>
+<a name="True-40"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-41"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="p">]){</span>
+<a name="True-42"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-43"></a>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-44"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-45"></a>    <span class="p">}</span>
+<a name="True-46"></a>    <span class="nx">geoTest</span> <span class="o">=</span> <span class="nx">geoTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-47"></a>  <span class="p">}</span>
+<a name="True-48"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">geoTest</span><span class="p">){</span>
+<a name="True-49"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-50"></a>  <span class="p">}</span>
+<a name="True-51"></a>
+<a name="True-52"></a>  <span class="k">else</span> <span class="p">{</span>
+<a name="True-53"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
+<a name="True-54"></a>  <span class="p">}</span>
+<a name="True-55"></a><span class="p">};</span></code></pre></div>
+
+<p>We made our next test pass with this bit of code, but now our second test is failing. 
+<img src="../images/TDD/String-problem.png" alt="Failing test"></p>
+
+<p>Opening up the details of our spec, we see this is because this test is passing in a string, and our function can only work with arrays right now.
+<img src="../images/TDD/String-prob-reason.png" alt="Reason for failing test"></p>
+
+<p>The easiest way to fix this is to change our input for this test to an array instead of a string. </p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
+<a name="True-2"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>    
+<a name="True-4"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-5"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">]);</span>
+<a name="True-6"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>
+<a name="True-7"></a>    
+<a name="True-8"></a>    <span class="p">});</span></code></pre></div>
+
+<p>We&#39;ll need to remember to change the input for the other tests as well.</p>
+
+<p>Moving on...</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
+<a name="True-2"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>    
+<a name="True-4"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify an arithmetic sequence.&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-5"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">7</span><span class="p">]);</span>
+<a name="True-6"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-7"></a>    <span class="p">});</span>
+<a name="True-8"></a>
+<a name="True-9"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should identify a geometric sequence.&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-10"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">16</span><span class="p">]);</span>
+<a name="True-11"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">);</span>
+<a name="True-12"></a>    <span class="p">});</span>
+<a name="True-13"></a>
+<a name="True-14"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should not identify other sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-15"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">9</span><span class="p">]);</span>
+<a name="True-16"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-17"></a>    <span class="p">});</span>
+<a name="True-18"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should work for decreasing functions&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-19"></a>      <span class="kd">var</span> <span class="nx">deArith</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">3</span><span class="p">]);</span>
+<a name="True-20"></a>      <span class="kd">var</span> <span class="nx">deGeo</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">48</span><span class="p">,</span><span class="mi">12</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="o">/</span><span class="mi">4</span><span class="p">]);</span>
+<a name="True-21"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">);</span>
+<a name="True-22"></a>    <span class="p">});</span>
+<a name="True-23"></a>  <span class="p">});</span>
+<a name="True-24"></a>
+<a name="True-25"></a>  <span class="c1">//The Code</span>
+<a name="True-26"></a>  <span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-27"></a>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+<a name="True-28"></a>    <span class="nx">sequence</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">);</span>
+<a name="True-29"></a>  <span class="p">}</span>
+<a name="True-30"></a>
+<a name="True-31"></a>  <span class="kd">var</span> <span class="nx">arithTest</span><span class="p">;</span>
+<a name="True-32"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-33"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span>
+<a name="True-34"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-35"></a>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-36"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-37"></a>    <span class="p">}</span>
+<a name="True-38"></a>    <span class="nx">arithTest</span> <span class="o">=</span> <span class="nx">arithTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-39"></a>  <span class="p">}</span>
+<a name="True-40"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">arithTest</span><span class="p">){</span>
+<a name="True-41"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-42"></a>  <span class="p">}</span>
+<a name="True-43"></a>
+<a name="True-44"></a>  <span class="kd">var</span> <span class="nx">geoTest</span><span class="p">;</span>
+<a name="True-45"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-46"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">j</span><span class="p">]){</span>
+<a name="True-47"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-48"></a>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-49"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-50"></a>    <span class="p">}</span>
+<a name="True-51"></a>    <span class="nx">geoTest</span> <span class="o">=</span> <span class="nx">geoTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-52"></a>  <span class="p">}</span>
+<a name="True-53"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">geoTest</span><span class="p">){</span>
+<a name="True-54"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-55"></a>  <span class="p">}</span>
+<a name="True-56"></a>
+<a name="True-57"></a>  <span class="k">else</span> <span class="p">{</span>
+<a name="True-58"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
+<a name="True-59"></a>  <span class="p">}</span>
+<a name="True-60"></a><span class="p">};</span></code></pre></div>
+
+<p>Now for our final set of tests</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
+<a name="True-2"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Input Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-3"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept an array of numbers&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-4"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">([</span><span class="mi">5</span><span class="p">,</span><span class="mi">16</span><span class="p">,</span><span class="mi">27</span><span class="p">,</span><span class="mi">38</span><span class="p">]);</span>
+<a name="True-5"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-6"></a>    <span class="p">});</span>
+<a name="True-7"></a>
+<a name="True-8"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept a string of numbers that are comma delimited&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-9"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;5,16,27,38&quot;</span><span class="p">);</span>
+<a name="True-10"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-11"></a>    <span class="p">});</span>
+<a name="True-12"></a>
+<a name="True-13"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should accept a string of numbers that are space delimited&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-14"></a>      <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">(</span><span class="s2">&quot;5 16 27 38&quot;</span><span class="p">);</span>
+<a name="True-15"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">equal</span><span class="p">(</span><span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">);</span>
+<a name="True-16"></a>    <span class="p">});</span>
+<a name="True-17"></a>  <span class="p">});</span></code></pre></div>
+
+<p>Our function already passes the first test here, but we can see we need to add some code to deal with string inputs.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The code</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-3"></a>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+<a name="True-4"></a>    <span class="nx">sequence</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">);</span>
+<a name="True-5"></a>  <span class="p">}</span>
+<a name="True-6"></a>
+<a name="True-7"></a>  <span class="kd">var</span> <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-8"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-9"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span>
+<a name="True-10"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-11"></a>      <span class="p">}</span>
+<a name="True-12"></a>      <span class="nx">arithTest</span> <span class="o">=</span> <span class="nx">arithTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-13"></a>  <span class="p">}</span>
+<a name="True-14"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">arithTest</span><span class="p">){</span>
+<a name="True-15"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-16"></a>  <span class="p">}</span>
+<a name="True-17"></a>
+<a name="True-18"></a>  <span class="kd">var</span> <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+<a name="True-19"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">2</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-20"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">!==</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">/</span><span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span>
+<a name="True-21"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-22"></a>      <span class="p">}</span>
+<a name="True-23"></a>      <span class="nx">geoTest</span> <span class="o">=</span> <span class="nx">geoTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-24"></a>  <span class="p">}</span>
+<a name="True-25"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">geoTest</span><span class="p">){</span>
+<a name="True-26"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-27"></a>  <span class="p">}</span>
+<a name="True-28"></a>
+<a name="True-29"></a>  <span class="k">else</span> <span class="p">{</span>
+<a name="True-30"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
+<a name="True-31"></a>  <span class="p">}</span>
+<a name="True-32"></a><span class="p">};</span></code></pre></div>
+
+<p>Almost there! Only the last test is failing; this is a pretty easy fix using a regex when we split the string.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Code</span>
+<a name="True-2"></a><span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+<a name="True-3"></a>    <span class="nx">sequence</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/[,\w/]/</span><span class="p">);</span>
+<a name="True-4"></a>  <span class="p">}</span></code></pre></div>
+
+<p>And that&#39;s it! Our function passes all of our specs and does exactly what we wanted it to do. We can now refactor our code a bit to make it cleaner and more efficient, checking our specs as we make changes to ensure they all still pass. Here is the final refactored code:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-2"></a>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
+<a name="True-3"></a>    <span class="nx">sequence</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/[,\w/]/</span><span class="p">);</span>
+<a name="True-4"></a>  <span class="p">}</span>
+<a name="True-5"></a>
+<a name="True-6"></a>  <span class="kd">var</span> <span class="nx">arithTest</span><span class="p">,</span> <span class="nx">geoTest</span><span class="p">;</span>
+<a name="True-7"></a>  <span class="kd">var</span> <span class="nx">last</span><span class="p">,</span> <span class="nx">current</span><span class="p">,</span> <span class="nx">next</span><span class="p">;</span>
+<a name="True-8"></a>
+<a name="True-9"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">length</span><span class="o">-</span><span class="mi">1</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-10"></a>    
+<a name="True-11"></a>    <span class="nx">last</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">];</span>
+<a name="True-12"></a>    <span class="nx">current</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+<a name="True-13"></a>    <span class="nx">next</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">[</span><span class="nx">i</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
+<a name="True-14"></a>    
+<a name="True-15"></a>    <span class="nx">arithTest</span> <span class="o">=</span> <span class="nx">next</span><span class="o">-</span><span class="nx">current</span> <span class="o">===</span> <span class="nx">current</span><span class="o">-</span><span class="nx">last</span> <span class="o">?</span> <span class="kc">true</span> <span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-16"></a>    <span class="nx">arithTest</span> <span class="o">=</span> <span class="nx">arithTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-17"></a>
+<a name="True-18"></a>    <span class="nx">geoTest</span> <span class="o">=</span> <span class="nx">next</span><span class="o">/</span><span class="nx">current</span> <span class="o">===</span> <span class="nx">current</span><span class="o">/</span><span class="nx">last</span> <span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-19"></a>    <span class="nx">geoTest</span> <span class="o">=</span> <span class="nx">geoTest</span> <span class="o">===</span> <span class="kc">true</span><span class="o">?</span> <span class="kc">true</span><span class="o">:</span> <span class="kc">false</span><span class="p">;</span>
+<a name="True-20"></a>  <span class="p">}</span>
+<a name="True-21"></a>
+<a name="True-22"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">arithTest</span><span class="p">){</span>
+<a name="True-23"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="p">;</span>
+<a name="True-24"></a>  <span class="p">}</span><span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">geoTest</span><span class="p">){</span>
+<a name="True-25"></a>    <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
+<a name="True-26"></a>  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+<a name="True-27"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
+<a name="True-28"></a>  <span class="p">}</span>
+<a name="True-29"></a><span class="p">};</span></code></pre></div>
+ 
+
+<p>In the final part of this series, we will look into the power Sinon can give to our tests.</p>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on July 17, 2015
+  </div>
+  <p id="post-meta"></p>
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:haileyhasmail@gmail.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/TDD-3/',
+		  'title': 'Test Driven Development, Part 3'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>
