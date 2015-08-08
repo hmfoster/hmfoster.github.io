@@ -7,6 +7,34 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>How to Choose a Project Fast</title>
+        <description>&lt;h2&gt;WARNING: You are now entering the &amp;quot;Project Phase&amp;quot;.&lt;/h2&gt;
+
+&lt;p&gt;Regardless of the field within which you work or study, one of the hardest parts of doing a project or developing a product is coming up with an initial idea. It can be difficult to think of novel ideas that will also result in something interesting, feasible, and/or useful. I&amp;#39;m going to briefly outline the process I like to use to come up with a viable project or product idea. &lt;/p&gt;
+
+&lt;h3&gt;Step 1: Brainstorm&lt;/h3&gt;
+
+&lt;p&gt;This may seem like an obvious first step, but in my experience, most people don&amp;#39;t brainstorm &lt;em&gt;effectively&lt;/em&gt;. Even when working in a group, it is important to begin brainstorming silently and &lt;strong&gt;independently&lt;/strong&gt;, before sharing out ideas in a group. When moderating a brainstorming session, I like to give people about five minutes of independent, guided brainstorming. By guided, I mean that about once a minute, I provide my group with a prompt to help initiate divergent thinking. For example, I&amp;#39;ll say things like, &amp;quot;Ok, now imagine you are developing a product for five-year-olds,&amp;quot; or perhaps, &amp;quot;Actually, you&amp;#39;re grandma is going to be using this.&amp;quot; These prompts can be anything so long as they will result in a variety of diverse ideas. &lt;/p&gt;
+
+&lt;h2&gt;Step 2: Culling&lt;/h2&gt;
+
+&lt;p&gt;After the initial brainstorming session is over, you&amp;#39;ll want to gather all of the group&amp;#39;s ideas in one place. This could be on a whiteboard, a google doc etc... Working through the list of ideas, have each group member briefly explain each of their ideas; if they get to an idea and realize they absolutely do not know what they meant, they can eliminate it. &lt;/p&gt;
+
+&lt;p&gt;After hearing all ideas, quickly go through them one-by-one and eliminate or keep: if ONE person says &amp;quot;keep&amp;quot;, keep the idea on the board, otherwise, eliminate it.&lt;/p&gt;
+
+&lt;h2&gt;Step 3: Choose&lt;/h2&gt;
+
+&lt;p&gt;Finally, vote on the remaining ideas. All group members to vote for multiple ideas, but the idea with the most votes wins. If there is a tie, call on someone to &amp;quot;stump&amp;quot; for each idea and then vote again on those that tied. &lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;&lt;em&gt;Variation&lt;/em&gt;&lt;/strong&gt;
+Instead of only choosing one final idea, instead have the group vote for the &amp;quot;most inspirational&amp;quot; idea, &amp;quot;most practical&amp;quot; idea, and the &amp;quot;most profitable&amp;quot; idea. Take a break until the next time you meet, and then narrow down the idea to one of these three.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 08 Aug 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Choosing-A-Project/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Choosing-A-Project/</guid>
+      </item>
+    
+      <item>
         <title>Test Driven Development, Part 3</title>
         <description>&lt;p&gt;This is the third part in a short series on applying test driven development to a JavaScript program using &lt;a href=&quot;www.mochajs.org&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;www.chaijs.org&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;www.sinonjs.org&quot;&gt;Sinon&lt;/a&gt;. &lt;a href=&quot;http://haileyfoster.com/Test-Driven-Development/&quot;&gt;Part 1&lt;/a&gt; and &lt;a href=&quot;http://haileyfoster.com/TDD-2/&quot;&gt;Part 2&lt;/a&gt; gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.&lt;/p&gt;
 
@@ -940,23 +968,6 @@ This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;st
         <pubDate>Thu, 14 May 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//Zone-of-Proximal-Development/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//Zone-of-Proximal-Development/</guid>
-      </item>
-    
-      <item>
-        <title>On Tinkering, Day Dreaming, and Persevering</title>
-        <description>&lt;p&gt;Over the last week or so, I&amp;#39;ve been moving at a fairly rapid pace through Hack Reactor&amp;#39;s precourse material. What I&amp;#39;m finding though, is that I&amp;#39;m spending a far greater amount of time learning related technologies and terminology (seem my last post) than I am actually solving the problems and reading through the material. I found this quite frustrating at first, but I&amp;#39;ve come to realize that this indirect learning is becoming more an more valuable. For one thing, its allowing me to accelerate my learning via transfer and adaptation. &lt;/p&gt;
-
-&lt;p&gt;I have also found that while all of the reading, tutorials, etc... I did before beginning the precourse work is a helpful foundation, actually USING all of these tools is allowing me learn much more efficiently. This should come as no surprise, given that Bloom&amp;#39;s Hierarchy yadda yadda. As a result, I&amp;#39;ve decided to try to apply what I&amp;#39;m learning as much as possible outside of the precourse work. For example, I&amp;#39;ve switched from hosting my blog on WordPress.com, to using &lt;a href=&quot;http://jekyllrb.com/&quot;&gt;Jekyll&lt;/a&gt; and hosting through GitHub. This will force me to practice using the command line, writing HTML, CSS and Markdown, and using Git. &lt;/p&gt;
-
-&lt;p&gt;Now, all of that being said, I have still been spending quite a bit of time on the actual precourse work. I read through HR&amp;#39;s presentation on closures and scoping rules and &lt;em&gt;thought&lt;/em&gt; that I understood it pretty well. However, when I then moved on to the second part of rewriting the library, I found these concepts to be quite a bit more difficult in practice. Fortunately, this forced me to actually &lt;strong&gt;use&lt;/strong&gt; the Chrome Developer&amp;#39;s tools. Even once I started using the debugger, I still got stuck on one of the functions for quite awhile. But then, on my walk home&lt;sup&gt;*&lt;/sup&gt;...EPIPHANY! Once I stopped fussy over the code in my computer and just thought about it while daydreaming, I realized I just needed to include an object in my code. Der. &lt;/p&gt;
-
-&lt;p&gt;Got home, ate a snack, and popped open the laptop to put my theory to practice. And then IT STILL DIDN&amp;#39;T WORK. Fortunately (or not!), I &lt;em&gt;can&amp;#39;t&lt;/em&gt; let a good puzzle go unsolved, so I chose to keep at it and just have leftovers for dinner. I&amp;#39;m happy to say my perseverence paid off and I got the code working in time to watch one of my Wednesday night television. I originally thought I&amp;#39;d give myself a break today as a reward...but here I am, already itching to move on to the next problem. I guess that&amp;#39;s a good sign!&lt;/p&gt;
-
-&lt;p&gt;&lt;small&gt;&lt;sup&gt;*&lt;/sup&gt;I walk about a mile and a half home everyday after work&lt;/small&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 07 May 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Tinkering-Daydreaming/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Tinkering-Daydreaming/</guid>
       </item>
     
   </channel>
