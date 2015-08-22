@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd" xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://hmfoster.github.io//Auth0-Google/</loc>
+    <lastmod>2015-08-22T00:00:00-07:00</lastmod>
+  </url>
+  <url>
     <loc>http://hmfoster.github.io//Choosing-A-Project/</loc>
     <lastmod>2015-08-08T00:00:00-07:00</lastmod>
   </url>
@@ -73,21 +77,6 @@
     <loc>http://hmfoster.github.io//</loc>
   </url>
   <url>
-    <loc>http://hmfoster.github.io//category/general/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/programming/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/learning/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/life/</loc>
-  </url>
-  <url>
-    <loc>http://hmfoster.github.io//category/product%20development/</loc>
-  </url>
-  <url>
     <loc>http://hmfoster.github.io//tag/hack-reactor/</loc>
   </url>
   <url>
@@ -137,5 +126,26 @@
   </url>
   <url>
     <loc>http://hmfoster.github.io//tag/projects/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//tag/authorization/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/general/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/programming/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/learning/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/life/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/product%20development/</loc>
+  </url>
+  <url>
+    <loc>http://hmfoster.github.io//category/software%20development/</loc>
   </url>
 </urlset>

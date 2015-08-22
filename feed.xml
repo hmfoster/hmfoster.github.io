@@ -7,6 +7,45 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>A Visual Guide to using the Google+ API with Auth0</title>
+        <description>&lt;p&gt;This week I learned how to use &lt;a href=&quot;https://auth0.com/&quot;&gt;Auth0&lt;/a&gt; to authenticate an AngularJS/Node.js app. Auth0 provides a fairly clear tutorial for the initial front- and back-end set-up, but a few of the later steps proved a bit trickier, in part because some of the information in the Auth0 documents for the Google API is a bit out of date. Here is a quick visual guide to supplement that provided by Auth0 once you&amp;#39;ve finished the initial setup.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;From your Auth0 dashboard, navigate to App/API menu and choose your app.
+&lt;img src=&quot;../images/Auth0/App-API.png&quot; alt=&quot;App/API menu&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Enter each url with which you want to use your app. Be sure to include the localhost address you use for development, your auth0 domain ending with &lt;code&gt;/login/callback&lt;/code&gt;, and the url of your deployed app.
+&lt;img src=&quot;../images/Auth0/CallbackURLs.png&quot; alt=&quot;Callback urls&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Navigate to the Connections/Social menu.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Conn-Social.png&quot; alt=&quot;Social-Connections&quot;&gt;&lt;/li&gt;
+&lt;li&gt;Turn on Google, then click on it. This will open up a form in which you will need to enter the Client ID and Client Secret you will next retrieve from the Google API.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Social_Connections.png&quot; alt=&quot;Google-Connection&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Next, go to the &lt;a href=&quot;https://console.developers.google.com/&quot;&gt;Google Developers&amp;#39; Console&lt;/a&gt;. If necessary, sign-up for an account.&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Create a new project.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Create-Proj.png&quot; alt=&quot;Create new project&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Enter a name, and then create your project.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Create-Proj2.png&quot; alt=&quot;Create new project&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Navigate to the Google+ API.
+&lt;img src=&quot;../images/Auth0/API_Library.png&quot; alt=&quot;Navigate through APIs&amp;amp;Auth, APIs, API library, Social APIs, Google+ API&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Enable Google+, then go back to the main menu.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Google__API.png&quot; alt=&quot;Enable Google+, go back&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Navigate to your credentials and add the OAuth 2.0 client ID.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Credentials.png&quot; alt=&quot;Add OAuth 2.0&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Select Web application.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Create_client_ID.png&quot; alt=&quot;Create web application&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Enter your auth0 domain into the JavaScript Origins field, and your auth0 callback url into the Redirect URI field, then create.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/Create_client_ID2.png&quot; alt=&quot;Add JS Origins and Redirect URI&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Copy/paste the given Client ID and Client Secret into your Auth0 form for the Google API from step 4.&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/OAuth_client2.png&quot; alt=&quot;Google+ Client Id and Secret&quot;&gt;&lt;br&gt;
+&lt;img src=&quot;../images/Auth0/ClientID-Key.png&quot; alt=&quot;Auth0 Form: Client Id and Secret&quot;&gt;&lt;br&gt;&lt;/li&gt;
+&lt;li&gt;Save, and check out your app! You should now be able to log in to it using Google+.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 22 Aug 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Auth0-Google/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Auth0-Google/</guid>
+      </item>
+    
+      <item>
         <title>How to Choose a Project Fast</title>
         <description>&lt;h3&gt;WARNING: You are now entering the &amp;quot;Project Phase&amp;quot;.&lt;/h3&gt;
 
@@ -946,29 +985,6 @@ This means that this &lt;code&gt;every&lt;/code&gt; needs to test for the &lt;st
         <pubDate>Sun, 24 May 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//The-Importance-of-Clear-Communication/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//The-Importance-of-Clear-Communication/</guid>
-      </item>
-    
-      <item>
-        <title>The Elusive Zone of Proximal Development</title>
-        <description>&lt;p&gt;Whoops! Though it doesn&amp;#39;t feel like long, upon outlining what I want to write about, I&amp;#39;ve realized that too much time has passed since my last post. Hack Reactor&amp;#39;s precourse work touches upon many different subjects, so in just a few days, I&amp;#39;ve worked through a ton of material! I&amp;#39;ll try not to make that mistake again; I think it will be best if I try to write every other day.&lt;/p&gt;
-
-&lt;p&gt;After finishing up the &lt;code&gt;_.memoize&lt;/code&gt; function last week (which was much easier once I realized I should use an object to store past function results, and that I could use &lt;code&gt;.map&lt;/code&gt; on function arguments), I took a couple of days off to attend to other work and to spend some time with the fam. I only had two more functions left in this task at that point, and got through them relatively quickly. I still am not entirely sure why one would use &lt;code&gt;_.delay&lt;/code&gt; instead of Javascript&amp;#39;s regular &lt;code&gt;setInterval()&lt;/code&gt; function, as they both take the same number of parameters. Doesn&amp;#39;t seem any more convenient to me. Finally, while working through &lt;code&gt;_.shuffle&lt;/code&gt;, I was forced to recognize the difference between slicing and splicing--up to this point, I hadn&amp;#39;t realized these were two different methods. Other than that, I found these last two functions to be pretty easy.&lt;/p&gt;
-
-&lt;p&gt;The second half of this section of work primarily involves front-end development. I had already worked through the CSS tutorial listed in the syllabus and so I skipped these videos, but I still found it valuable to work through the practice problems again to review all of the important concepts. I had also started the given JQuery tutorial, but for some reason JQuery just doesn&amp;#39;t &amp;quot;stick&amp;quot; with me, so I started this tutorial over from the beginning. The syllabus says that it should take you 1-2 hours to finish this tutorial, but this was not true for me! I&amp;#39;d say it took me at least 3 hours to finish the whole thing, even though I felt that I was working at a decently quick pace--none of the practice problems took me long to finish, and the videos are not long.&lt;/p&gt;
-
-&lt;p&gt;To be honest, I didn&amp;#39;t find the JQuery tutorial to be that helpful. The videos had clear explanations, but CodeSchool&amp;#39;s practice problems just don&amp;#39;t help me learn to apply new material that well. They are always too basic, so I just feel like I&amp;#39;m copy/pasting answers from the video examples and am never required to think through the code. Consequently, I don&amp;#39;t feel like I &lt;strong&gt;really&lt;/strong&gt; understand JQuery functions that well. I&amp;#39;m sure this will change as I write more and more code, but it is frustrating for now. &lt;/p&gt;
-
-&lt;p&gt;There was a Soviet psychologist by the name of &lt;a href=&quot;http://en.wikipedia.org/wiki/Lev_Vygotsky&quot;&gt;Lev Vygotsky&lt;/a&gt; who proposed a concept called the &lt;strong&gt;&lt;a href=&quot;http://www.toolsofthemind.org/philosophy/scaffolding/&quot;&gt;Zone of Proximal Development&lt;/a&gt;&lt;/strong&gt;. Vygotsky posited that the most successful learning happens in the &amp;quot;zone&amp;quot; between what the learner can do independently, and what they can do with support. New material is &amp;quot;too easy&amp;quot; when it is something the learner already understands and can do independently; it is not worth the learner&amp;#39;s time to continue working on it. On the other had, if the new material is so difficult the learner cannot comprehend it even with support, they become frustrated and tend to give up. This idea resonated deeply with me when I first studied it while completing my Master&amp;#39;s in Education. At the time, I was thinking about the theory from the perspective of a teacher, and saw how well it fit my experiences with my students. Now that I&amp;#39;m back to being a student myself, I see again how important it is to find that sweet spot, the ZPD. &lt;/p&gt;
-
-&lt;p&gt;I began working on the Twittler project earlier this week, and because using JQuery without assistance is just a little beyond me right now, it&amp;#39;s been....slow going. At first, I couldn&amp;#39;t get my HTML to show up because the JQuery code was clearing the HTML. Once I got that straightened out, I had to figure out how to use JQuery to implement my HTML, which was not something I&amp;#39;d ever seen done before. Next, I realized I had no idea how to access Javascript data from a different file using JQuery &lt;small&gt;(side note: I was overthinking this)&lt;/small&gt;. Fortunately, my classmates are generous with their knowledge, so they&amp;#39;ve been able to provide some of the extra scaffolding I&amp;#39;ve needed to get me going&lt;sup&gt;*&lt;/sup&gt;. I&amp;#39;m very close to getting the main requirements of the project done (I&amp;#39;ve just got a few bugs that still need squashing), but I&amp;#39;m still not at all comfortable with JQuery. I&amp;#39;m hoping to have some time left at the end of the precourse work to go back and do some more work with it. It looks like &lt;a href=&quot;http://www.theodinproject.com/javascript-and-jquery&quot;&gt;The Odin Project&lt;/a&gt; has a lot of good resources, and I found their site to be extremely helpful for learning HTML/CSS, so I&amp;#39;ll start there.&lt;/p&gt;
-
-&lt;p&gt;I also want to take some time this weekend to try to style this here blog; given that the end of the school year is approaching and I still have new lessons and tests to write, projects to grade, and a room to clean out, we&amp;#39;ll see when that task actually gets done!&lt;/p&gt;
-
-&lt;p&gt;&lt;small&gt;&lt;sup&gt;*&lt;/sup&gt;Immediately after first posting this, one of my classmates shared a &lt;strong&gt;very&lt;/strong&gt; helpful article with me that allowed me to finish the basic requirements for the project in less than 5 minutes!&lt;/small&gt;&lt;/p&gt;
-</description>
-        <pubDate>Thu, 14 May 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Zone-of-Proximal-Development/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Zone-of-Proximal-Development/</guid>
       </item>
     
   </channel>

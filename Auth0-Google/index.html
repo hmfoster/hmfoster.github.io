@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>A Visual Guide to using the Google+ API with Auth0 – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="This week I learned how to use Auth0 to authenticate an AngularJS/Node.js app. Auth0 provides a fairly clear tutorial for the initial front- and back-end set-up, but a few of the later steps proved a bit trickier, in part because some of the information in the Auth0 documents for the Google API is a bit out of date. Here is a quick visual guide to supplement that provided by Auth0 once you&#39;ve finished the initial setup.
+" />
+    <meta property="og:description" content="This week I learned how to use Auth0 to authenticate an AngularJS/Node.js app. Auth0 provides a fairly clear tutorial for the initial front- and back-end set-up, but a few of the later steps proved a bit trickier, in part because some of the information in the Auth0 documents for the Google API is a bit out of date. Here is a quick visual guide to supplement that provided by Auth0 once you&#39;ve finished the initial setup.
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="A Visual Guide to using the Google+ API with Auth0" />
+    <meta property="twitter:title" content="A Visual Guide to using the Google+ API with Auth0" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>A Visual Guide to using the Google+ API with Auth0</h1>
+  
+   <a href="/tag/JavaScript" title="View posts tagged with &quot;JavaScript&quot;" class = "tag">JavaScript</a>     <a href="/tag/projects" title="View posts tagged with &quot;projects&quot;" class = "tag">projects</a>     <a href="/tag/authorization" title="View posts tagged with &quot;authorization&quot;" class = "tag">authorization</a>   
+
+  <div class="entry">
+    <p>This week I learned how to use <a href="https://auth0.com/">Auth0</a> to authenticate an AngularJS/Node.js app. Auth0 provides a fairly clear tutorial for the initial front- and back-end set-up, but a few of the later steps proved a bit trickier, in part because some of the information in the Auth0 documents for the Google API is a bit out of date. Here is a quick visual guide to supplement that provided by Auth0 once you&#39;ve finished the initial setup.</p>
+
+<ol>
+<li>From your Auth0 dashboard, navigate to App/API menu and choose your app.
+<img src="../images/Auth0/App-API.png" alt="App/API menu"></li>
+<li>Enter each url with which you want to use your app. Be sure to include the localhost address you use for development, your auth0 domain ending with <code>/login/callback</code>, and the url of your deployed app.
+<img src="../images/Auth0/CallbackURLs.png" alt="Callback urls"></li>
+<li>Navigate to the Connections/Social menu.<br>
+<img src="../images/Auth0/Conn-Social.png" alt="Social-Connections"></li>
+<li>Turn on Google, then click on it. This will open up a form in which you will need to enter the Client ID and Client Secret you will next retrieve from the Google API.<br>
+<img src="../images/Auth0/Social_Connections.png" alt="Google-Connection"><br></li>
+<li>Next, go to the <a href="https://console.developers.google.com/">Google Developers&#39; Console</a>. If necessary, sign-up for an account.<br></li>
+<li>Create a new project.<br>
+<img src="../images/Auth0/Create-Proj.png" alt="Create new project"><br></li>
+<li>Enter a name, and then create your project.<br>
+<img src="../images/Auth0/Create-Proj2.png" alt="Create new project"><br></li>
+<li>Navigate to the Google+ API.
+<img src="../images/Auth0/API_Library.png" alt="Navigate through APIs&amp;Auth, APIs, API library, Social APIs, Google+ API"><br></li>
+<li>Enable Google+, then go back to the main menu.<br>
+<img src="../images/Auth0/Google__API.png" alt="Enable Google+, go back"><br></li>
+<li>Navigate to your credentials and add the OAuth 2.0 client ID.<br>
+<img src="../images/Auth0/Credentials.png" alt="Add OAuth 2.0"><br></li>
+<li>Select Web application.<br>
+<img src="../images/Auth0/Create_client_ID.png" alt="Create web application"><br></li>
+<li>Enter your auth0 domain into the JavaScript Origins field, and your auth0 callback url into the Redirect URI field, then create.<br>
+<img src="../images/Auth0/Create_client_ID2.png" alt="Add JS Origins and Redirect URI"><br></li>
+<li>Copy/paste the given Client ID and Client Secret into your Auth0 form for the Google API from step 4.<br>
+<img src="../images/Auth0/OAuth_client2.png" alt="Google+ Client Id and Secret"><br>
+<img src="../images/Auth0/ClientID-Key.png" alt="Auth0 Form: Client Id and Secret"><br></li>
+<li>Save, and check out your app! You should now be able to log in to it using Google+.</li>
+</ol>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on August 22, 2015
+  </div>
+  <p id="post-meta"></p>
+  
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:haileyhasmail@gmail.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/Auth0-Google/',
+		  'title': 'A Visual Guide to using the Google+ API with Auth0'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>
