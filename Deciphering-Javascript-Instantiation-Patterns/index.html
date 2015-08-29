@@ -11,9 +11,11 @@
     
     <meta name="description" content="Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
 instantiation patterns, which can also be considered strategies for creating new classes:
+
 " />
     <meta property="og:description" content="Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
 instantiation patterns, which can also be considered strategies for creating new classes:
+
 " />
     
     <meta name="author" content="Hailey Foster" />
@@ -61,23 +63,23 @@ instantiation patterns, which can also be considered strategies for creating new
 
   <div class="entry">
     <p>Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
-<span style = "cursos:help;" title = "a technique for encapsulating and modularizing object creation">instantiation patterns</span>, which can also be considered strategies for creating new classes:</p>
+<span style="cursos:help;" title="a technique for encapsulating and modularizing object creation">instantiation patterns</span>, which can also be considered strategies for creating new classes:</p>
 
 <ul>
-<li>Functional</li>
-<li>Functional Shared</li>
-<li>Prototypical</li>
-<li>Pseudoclassical</li>
+  <li>Functional</li>
+  <li>Functional Shared</li>
+  <li>Prototypical</li>
+  <li>Pseudoclassical</li>
 </ul>
 
-<p>Much has been written about these four styles already&mdash;check out the posts by <a href="http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/">Tyler McGinnis</a> and <a href="http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/">Ian Lynon</a> for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.</p>
+<p>Much has been written about these four styles already—check out the posts by <a href="http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/">Tyler McGinnis</a> and <a href="http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/">Ian Lynon</a> for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.</p>
 
 <p>All four patterns accomplish the same three objectives:
 1. Declare a new object (outlined in orange)
 2. Add properties common to all members of the class (also in orange)
 3. Add methods common to all members of the class (outlined in green)</p>
 
-<p>Below each function, I have also shown how each pattern is called upon to create new objects. Notice that functional, functional shared, and prototypical all use the same general code here, but the pseudoclassical pattern uses the keyword <code>new</code>. Additionally, the functional shared code here uses <a href="file:///Users/haileyfoster/Library/Application%20Support/Dash/DocSets/UnderscoreJS/UnderscoreJS.docset/Contents/Resources/Documents/index.html#extend">Underscore&#39;s <code>_.extend</code> function</a>.</p>
+<p>Below each function, I have also shown how each pattern is called upon to create new objects. Notice that functional, functional shared, and prototypical all use the same general code here, but the pseudoclassical pattern uses the keyword <code>new</code>. Additionally, the functional shared code here uses <a href="file:///Users/haileyfoster/Library/Application%20Support/Dash/DocSets/UnderscoreJS/UnderscoreJS.docset/Contents/Resources/Documents/index.html#extend">Underscore’s <code>_.extend</code> function</a>.</p>
 
 <table>
     <tr>
@@ -87,36 +89,36 @@ instantiation patterns, which can also be considered strategies for creating new
     </tr>
     <tr>
         <td>Functional</td>
-        <td><img src="../images/Instatiation/Functional.png"> </td>
-        <td><img src="../images/Instatiation/Functional-ex.png"></td>
+        <td><img src="../images/Instatiation/Functional.png" /> </td>
+        <td><img src="../images/Instatiation/Functional-ex.png" /></td>
     </tr>
     <tr>
         <td>Functional Shared</td>
-        <td><img src="../images/Instatiation/Functional-Shared.png"> </td>
-        <td><img src="../images/Instatiation/Functional Shared-ex.png"></td>
+        <td><img src="../images/Instatiation/Functional-Shared.png" /> </td>
+        <td><img src="../images/Instatiation/Functional Shared-ex.png" /></td>
     </tr>
     <tr>
         <td>Prototypal</td>
-        <td><img src="../images/Instatiation/Prototypal.png"> </td>
-        <td><img src="../images/Instatiation/Prototypal-ex.png"></td>
+        <td><img src="../images/Instatiation/Prototypal.png" /> </td>
+        <td><img src="../images/Instatiation/Prototypal-ex.png" /></td>
     </tr>
     <tr>
         <td>Pseudoclassical</td>
-        <td><img src="../images/Instatiation/Pseudoclassical.png"> </td>
-        <td><img src="../images/Instatiation/Pseudoclassical-ex.png"></td>
+        <td><img src="../images/Instatiation/Pseudoclassical.png" /> </td>
+        <td><img src="../images/Instatiation/Pseudoclassical-ex.png" /></td>
     </tr>
 
 </table>
 
-<p>Again, each of these patterns are useful in different circumstances. In addition to the posts by <a href="http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/">Tyler McGinnis</a> and <a href="http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/">Ian Lynon</a>, <a href="http://www.hackreactor.com/blog/javascript-instantiation-patterns">Brett Hoyer</a> presents the advantages and disadvantages of each pattern quite clearly on Hack Reactor&#39;s blog.</p>
+<p>Again, each of these patterns are useful in different circumstances. In addition to the posts by <a href="http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/">Tyler McGinnis</a> and <a href="http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/">Ian Lynon</a>, <a href="http://www.hackreactor.com/blog/javascript-instantiation-patterns">Brett Hoyer</a> presents the advantages and disadvantages of each pattern quite clearly on Hack Reactor’s blog.</p>
 
-<p>In addition to the instantiation patterns shown above, Javascript allows for the use of <strong>function decorators</strong>. While these do not instantiate new objects, they are useful for modifying the properties and methods of existing objects. They <em>can</em> also be used to instantiate a new object if an empty object is passed in as one of the arguments, but this is far less efficient that using any of the class declaration patterns above. </p>
+<p>In addition to the instantiation patterns shown above, Javascript allows for the use of <strong>function decorators</strong>. While these do not instantiate new objects, they are useful for modifying the properties and methods of existing objects. They <em>can</em> also be used to instantiate a new object if an empty object is passed in as one of the arguments, but this is far less efficient that using any of the class declaration patterns above.</p>
 
 <p>There are two decorator patterns:</p>
 
 <ul>
-<li>Functional Object Decorator with Duplicate Methods</li>
-<li>Functional Object Decorator with Shared Methods</li>
+  <li>Functional Object Decorator with Duplicate Methods</li>
+  <li>Functional Object Decorator with Shared Methods</li>
 </ul>
 
 <p>These two patterns look almost identical to the functional and functional shared patterns above, and have similar pros and cons. However, unlike the instantiation patterns, these must have an object passed in as one of their arguments.</p>
@@ -129,17 +131,17 @@ instantiation patterns, which can also be considered strategies for creating new
     </tr>
     <tr>
         <td>Decorator with Duplicate Methods</td>
-        <td><img src="../images/Instatiation/Decorator-Duplicate.png"> </td>
-        <td><img src="../images/Instatiation/Decorator-Duplicate-ex.png"></td>
+        <td><img src="../images/Instatiation/Decorator-Duplicate.png" /> </td>
+        <td><img src="../images/Instatiation/Decorator-Duplicate-ex.png" /></td>
     </tr>
     <tr>
         <td>Decorator with Shared Methods</td>
-        <td><img src="../images/Instatiation/Decorator-Shared.png"> </td>
-        <td><img src="../images/Instatiation/Decorator-Shared-ex.png"></td>
+        <td><img src="../images/Instatiation/Decorator-Shared.png" /> </td>
+        <td><img src="../images/Instatiation/Decorator-Shared-ex.png" /></td>
     </tr>
 </table>
 
-<p>Much more can be said about all of these patterns &mdash; why some use <code>this</code>and/or <code>new</code>, which are more efficient etc...&mdash; but I hope this is enough to help clarify the structure of each pattern, and to use as a quick reference for those who are already familiar with them.</p>
+<p>Much more can be said about all of these patterns — why some use <code>this</code>and/or <code>new</code>, which are more efficient etc…— but I hope this is enough to help clarify the structure of each pattern, and to use as a quick reference for those who are already familiar with them.</p>
 
   </div>
 

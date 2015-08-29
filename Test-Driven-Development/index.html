@@ -9,9 +9,11 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (cough Internet Explorer cough), determine if you were succesful, and modify your plans if you weren&#39;t. 
+    <meta name="description" content="Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (cough Internet Explorer cough), determine if you were succesful, and modify your plans if you weren’t.
+
 " />
-    <meta property="og:description" content="Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (cough Internet Explorer cough), determine if you were succesful, and modify your plans if you weren&#39;t. 
+    <meta property="og:description" content="Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (cough Internet Explorer cough), determine if you were succesful, and modify your plans if you weren’t.
+
 " />
     
     <meta name="author" content="Hailey Foster" />
@@ -58,46 +60,44 @@
    <a href="/tag/JavaScript" title="View posts tagged with &quot;JavaScript&quot;" class = "tag">JavaScript</a>     <a href="/tag/testing" title="View posts tagged with &quot;testing&quot;" class = "tag">testing</a>     <a href="/tag/frameworks" title="View posts tagged with &quot;frameworks&quot;" class = "tag">frameworks</a>     <a href="/tag/libraries" title="View posts tagged with &quot;libraries&quot;" class = "tag">libraries</a>   
 
   <div class="entry">
-    <p>Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (<em>cough</em> Internet Explorer <em>cough</em>), determine if you were succesful, and modify your plans if you weren&#39;t. </p>
+    <p>Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (<em>cough</em> Internet Explorer <em>cough</em>), determine if you were succesful, and modify your plans if you weren’t.</p>
 
 <p>Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this <a href="https://en.wikipedia.org/wiki/Backward_design">backward design</a>; programmers call it <a href="https://en.wikipedia.org/wiki/Test-driven_development">test driven development</a>. Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.</p>
 
 <p>I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:</p>
 
 <ol>
-<li>Write a failing test (one that your program/ students cannot yet pass)</li>
-<li>Add just enough code (or instruction) so the program/students can pass the  test.</li>
-<li>Refactor (or reteach) where necessary.</li>
+  <li>Write a failing test (one that your program/ students cannot yet pass)</li>
+  <li>Add just enough code (or instruction) so the program/students can pass the  test.</li>
+  <li>Refactor (or reteach) where necessary.</li>
 </ol>
 
-<p>However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming. </p>
+<p>However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming.</p>
 
-<p>One way of implementing TDD is in the browser using <a href="http://mochajs.org/">Mocha</a>, <a href="http://chaijs.com/">Chai</a>, and <a href="http://sinonjs.org/">Sinon</a>. If you do a quick google search of each of these, you will learn that Mocha is a &quot;testing framework&quot;, Chai is an &quot;expectation library,&quot; and Sinon is a.... well, let&#39;s call it a &quot;virtual environment library.&quot; Unfortunately, if you&#39;re new to programming none of that means anything to you. If you&#39;re like me, when you first read each of those &quot;definitions,&quot; you may have thought to yourself, &quot;Ok, but what <em>is</em> a testing framework? Actually, what&#39;s a <em>framework</em>?? And what is the difference between a library and a framework?&quot; </p>
+<p>One way of implementing TDD is in the browser using <a href="http://mochajs.org/">Mocha</a>, <a href="http://chaijs.com/">Chai</a>, and <a href="http://sinonjs.org/">Sinon</a>. If you do a quick google search of each of these, you will learn that Mocha is a “testing framework”, Chai is an “expectation library,” and Sinon is a…. well, let’s call it a “virtual environment library.” Unfortunately, if you’re new to programming none of that means anything to you. If you’re like me, when you first read each of those “definitions,” you may have thought to yourself, “Ok, but what <em>is</em> a testing framework? Actually, what’s a <em>framework</em>?? And what is the difference between a library and a framework?”</p>
 
-<h3>Defining a Framework</h3>
-
-<p><a title="By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg"><img width='420px' style = "float: left; margin-right: 10px" alt="Seattle library framework inside" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg"/></a></p>
+<h3 id="defining-a-framework">Defining a Framework</h3>
+<p><a title="By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons" href="https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg"><img width="420px" style="float: left; margin-right: 10px" alt="Seattle library framework inside" src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg" /></a></p>
 
 <p>The everyday definition of <strong>framework</strong> is <a href="http://dictionary.reference.com/browse/framework">a skeletal structure designed to support or enclose something</a>. Many high school English teachers provide their students with essay frameworks <a href="http://unilearning.uow.edu.au/essay/4bi.html">like this one</a> to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.</p>
 
-<p>This is not that different from what a programming framework does; from <a href="https://en.wikipedia.org/wiki/Software_framework">Wikipedia</a>, a software framework, &quot;is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.&quot; In other words, it makes it easier and faster for you to write <em>your</em> program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.  </p>
+<p>This is not that different from what a programming framework does; from <a href="https://en.wikipedia.org/wiki/Software_framework">Wikipedia</a>, a software framework, “is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.” In other words, it makes it easier and faster for you to write <em>your</em> program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.</p>
 
-<p>Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser. </p>
+<p>Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser.</p>
 
-<h3>Libraries</h3>
-
-<p><img src="../images/TDD/Library_Pengo.jpg" alt="Libary books">
-&quot;<a href="https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg">Library Pengo</a>&quot;. Licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0<p></p>&quot;&gt;CC BY-SA 3.0</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.</p>
+<h3 id="libraries">Libraries</h3>
+<p><img src="../images/TDD/Library_Pengo.jpg" alt="Libary books" />
+“<a href="https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg">Library Pengo</a>”. Licensed under <a href="http://creativecommons.org/licenses/by-sa/3.0/" title="Creative Commons Attribution-Share Alike 3.0&lt;p&gt;&lt;/p&gt;">CC BY-SA 3.0</a> via <a href="//commons.wikimedia.org/wiki/">Wikimedia Commons</a>.</p>
 
 <p>At first, it can be difficult to differentiate between a <em>framework</em>, and a <em>library</em>. Like a framework, a library provides us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms the teacher encourages students to use in their essay.</p>
 
 <p>Chai and Sinon are both software libraries. Each provide a collection of related modular code that can be used from within the Mocha framework. When writing our tests, we need to be able to decide if our program is actually doing what we want. Chai essentially gives us a set of tests we can apply to our program, while Sinon allows us to trick our program into running in a fake environment so we can spy on it.</p>
 
-<p>The tests Chai and other, <a href="http://stackoverflow.com/questions/10472152/standalone-assertion-libraries">similar libraries</a>, use are called <em>assertions</em>. An <em>assertion</em> simply compares what we <em>want</em> our program to do, to what it actually <em>is</em> doing. As such, they return a boolean value: if our programm <em>is</em>working correctly, the assertion evaluates to true, and it passes the test. </p>
+<p>The tests Chai and other, <a href="http://stackoverflow.com/questions/10472152/standalone-assertion-libraries">similar libraries</a>, use are called <em>assertions</em>. An <em>assertion</em> simply compares what we <em>want</em> our program to do, to what it actually <em>is</em> doing. As such, they return a boolean value: if our programm <em>is</em>working correctly, the assertion evaluates to true, and it passes the test.</p>
 
 <p>Sinon uses <em>spies</em>, <em>stubs</em>, and <em>mocks</em> to keep track of everything our program is doing and allow it to run without the actual <a href="https://en.wikipedia.org/wiki/Dependency">dependencies</a> it will need. A <em>spy</em> records function arguments, return values and other data used and created by our program. <em>Stubs</em> are basically spies with super powers. Not only do they keep track of the data related to our program, they also allow us to <strong>fake</strong> functionality so the rest of our system thinks the program is running normally. Finally, a <em>mock</em> combines the concepts of spies, stubs, and assertions all together. I will go into these ideas more in a later blog post, as they are difficult to conceptualize without detailed examples.</p>
 
-<p>So, now we know what TDD is, why we would use it, and how our testing frameworks and libraries work together to allow us to implement it. <a href="http://haileyfoster.com/TDD-2/">Next up</a> I&#39;ll explain step-by-step how to actually set up a testing suite using a concrete JavaScript example. </p>
+<p>So, now we know what TDD is, why we would use it, and how our testing frameworks and libraries work together to allow us to implement it. <a href="http://haileyfoster.com/TDD-2/">Next up</a> I’ll explain step-by-step how to actually set up a testing suite using a concrete JavaScript example.</p>
 
   </div>
 

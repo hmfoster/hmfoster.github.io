@@ -10,8 +10,10 @@
 
     
     <meta name="description" content="Part 1 of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using Mocha and Chai. We will actually implement this environment in Part 3, and finally, Part 4 will provide additional details about when, why, and how to use Sinon to test more complex programs.
+
 " />
     <meta property="og:description" content="Part 1 of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using Mocha and Chai. We will actually implement this environment in Part 3, and finally, Part 4 will provide additional details about when, why, and how to use Sinon to test more complex programs.
+
 " />
     
     <meta name="author" content="Hailey Foster" />
@@ -60,90 +62,97 @@
   <div class="entry">
     <p><a href="http://haileyfoster.com/Test-Driven-Development/">Part 1</a> of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using <a href="http://mochajs.org/">Mocha</a> and <a href="http://chaijs.com/">Chai</a>. We will actually implement this environment in <a href="http://haileyfoster.com/TDD-3">Part 3</a>, and finally, Part 4 will provide additional details about when, why, and how to use <a href="http://sinonjs.org/">Sinon</a> to test more complex programs.</p>
 
-<p>Let&#39;s say you want to write a JavaScript program that will determine if a sequence of numbers is <a href="https://purplemath.com/modules/series3.htm">arithmetic, geometric, or neither</a>. This is a fairly straightforward task that gives us a good example with which to set-up a testing environment. </p>
+<p>Let’s say you want to write a JavaScript program that will determine if a sequence of numbers is <a href="https://purplemath.com/modules/series3.htm">arithmetic, geometric, or neither</a>. This is a fairly straightforward task that gives us a good example with which to set-up a testing environment.</p>
 
-<p>Remember, the main premise of TDD is to write and test small units of code at a time to minimize the chances of writing a hard-to-catch-bug. This means that we will want to set up our environment <em>before</em> writing any code. Of course, there are many options for how to go about setting up your environment depending upon your level of experience. The goal of this post is to simplify the process so that novice programmers will be more likely to use these tools from the beginning. Therefore, we will be using <a href="https://github.com/phillipalexander/generator-test">a generator</a> from Phillip Alexander for our initial set-up. </p>
+<p>Remember, the main premise of TDD is to write and test small units of code at a time to minimize the chances of writing a hard-to-catch-bug. This means that we will want to set up our environment <em>before</em> writing any code. Of course, there are many options for how to go about setting up your environment depending upon your level of experience. The goal of this post is to simplify the process so that novice programmers will be more likely to use these tools from the beginning. Therefore, we will be using <a href="https://github.com/phillipalexander/generator-test">a generator</a> from Phillip Alexander for our initial set-up.</p>
 
-<hr>
+<hr />
+<p>####Before Moving On</p>
 
-<h4>Before Moving On</h4>
+<p>In order to use the test generator, you will need to have <a href="https://nodejs.org/download/">Node.js</a> installed and have some familiarity with your command line. If you have yet to use your command line, I recommend going through at least the first few chapters in <a href="http://cli.learncodethehardway.org/book/">The Command Line Crash Course</a> to get over your fear of breaking your computer (which you won’t do). There are many options for installing Node; check out a clear set of directions <a href="http://blog.teamtreehouse.com/install-node-js-npm-mac">here</a> if you use a Mac. Node will allow us to use a package manager called <strong>npm</strong> to install the remaining tools we will need, and will allow us to run our tests from the command line if we choose.</p>
 
-<p>In order to use the test generator, you will need to have <a href="https://nodejs.org/download/">Node.js</a> installed and have some familiarity with your command line. If you have yet to use your command line, I recommend going through at least the first few chapters in <a href="http://cli.learncodethehardway.org/book/">The Command Line Crash Course</a> to get over your fear of breaking your computer (which you won&#39;t do). There are many options for installing Node; check out a clear set of directions <a href="http://blog.teamtreehouse.com/install-node-js-npm-mac">here</a> if you use a Mac. Node will allow us to use a package manager called <strong>npm</strong> to install the remaining tools we will need, and will allow us to run our tests from the command line if we choose.</p>
+<p>We will also be installing <a href="http://yeoman.io/">Yeoman</a> in our initial set-up, but you don’t actually need to understand what it is or how it works.</p>
 
-<p>We will also be installing <a href="http://yeoman.io/">Yeoman</a> in our initial set-up, but you don&#39;t actually need to understand what it is or how it works. </p>
+<hr />
 
-<hr>
-
-<h3>Initial Set-Up</h3>
-
-<ol>
-<li><p>Create an <em>empty</em> folder for your program. All of the rest of the files needed for our program will be added here.</p></li>
-<li><p><strong>Install Yeoman</strong>: In your command line, type: <code>$ npm install -g yo</code> </p></li>
-<li><p><strong>Install Phillip Alexander&#39;s generator</strong>: In your command line, type: <code>npm install -g generator-test</code></p></li>
-<li><p><strong>Initiate the generator</strong>:</p>
+<h3 id="initial-set-up">Initial Set-Up</h3>
 
 <ol>
-<li>From the command line, change directories into the folder you created earlier. For example, since I created my directory on my Desktop, I would type: <code>cd ~/Desktop/Arith-Geo-Test</code>.</li>
-<li>Type <code>yo test</code>. This will use Yeoman to install the files you will need. At this point, your command line should look something like this:
-<img src="../images/TDD/Yeoman1.png" alt="Generator Welcome Screen"></li>
-</ol></li>
-<li><p>You now need to decide if you want to run your tests in the browser, or in Node. I recommend using the browser unless you are already comfortable with Node, and the remainder of this tutorial will make use of the browser for our tests. Use your arrow keys to make your choice, and hit enter.</p></li>
-<li><p>The generator will now ask for the <em>name</em> of the algorithm you&#39;d like to test. Enter a name for the program you want to write. We&#39;re going to call ours <code>sequenceType</code>. Note that if you already have some JavaScript files in your directory, the generator will ask you to choose one of these instead, and base the rest of the set-up upon this existing file.</p></li>
+  <li>
+    <p>Create an <em>empty</em> folder for your program. All of the rest of the files needed for our program will be added here.</p>
+  </li>
+  <li>
+    <p><strong>Install Yeoman</strong>: In your command line, type: <code>$ npm install -g yo</code></p>
+  </li>
+  <li>
+    <p><strong>Install Phillip Alexander’s generator</strong>: In your command line, type: <code>npm install -g generator-test</code></p>
+  </li>
+  <li><strong>Initiate the generator</strong>:
+    <ol>
+      <li>From the command line, change directories into the folder you created earlier. For example, since I created my directory on my Desktop, I would type: <code>cd ~/Desktop/Arith-Geo-Test</code>.</li>
+      <li>Type <code>yo test</code>. This will use Yeoman to install the files you will need. At this point, your command line should look something like this:
+ <img src="../images/TDD/Yeoman1.png" alt="Generator Welcome Screen" /></li>
+    </ol>
+  </li>
+  <li>
+    <p>You now need to decide if you want to run your tests in the browser, or in Node. I recommend using the browser unless you are already comfortable with Node, and the remainder of this tutorial will make use of the browser for our tests. Use your arrow keys to make your choice, and hit enter.</p>
+  </li>
+  <li>The generator will now ask for the <em>name</em> of the algorithm you’d like to test. Enter a name for the program you want to write. We’re going to call ours <code>sequenceType</code>. Note that if you already have some JavaScript files in your directory, the generator will ask you to choose one of these instead, and base the rest of the set-up upon this existing file.</li>
 </ol>
 
-<p><img src="../images/TDD/Yeoman2.png" alt="Generator file choice"></p>
+<p><img src="../images/TDD/Yeoman2.png" alt="Generator file choice" /></p>
 
 <ol>
-<li>After entering your choice, the generator will do its thing and create all of the files you will need to run your unit tests. It will also install another package manager called <a href="http://blog.teamtreehouse.com/getting-started-bower">Bower</a> so it can install all of the <a href="http://askubuntu.com/questions/361741/what-are-dependencies">dependencies</a> you&#39;ll need&mdash;in our case, this is Mocha and Chai.
-<img src="../images/TDD/Yeoman3.png" alt="Generator install screen"></li>
+  <li>After entering your choice, the generator will do its thing and create all of the files you will need to run your unit tests. It will also install another package manager called <a href="http://blog.teamtreehouse.com/getting-started-bower">Bower</a> so it can install all of the <a href="http://askubuntu.com/questions/361741/what-are-dependencies">dependencies</a> you’ll need—in our case, this is Mocha and Chai.
+<img src="../images/TDD/Yeoman3.png" alt="Generator install screen" /></li>
 </ol>
 
-<h3>The TDD Scaffold</h3>
+<h3 id="the-tdd-scaffold">The TDD Scaffold</h3>
 
 <p>Now when we look in our previously empty directory, we should see the following file structure:</p>
 
 <ul>
-<li><code>Bower Components</code>: contains the packages for Mocha and Chai</li>
-<li><code>bower.json</code>: lists the packages downloaded by Bower&mdash;useful for installing updates if needed in the future</li>
-<li><code>index.html</code>: the html file through which we will run our tests</li>
-<li><code>sequenceType.js</code>: our JavaScript file</li>
-<li><code>spec</code>
-
-<ul>
-<li><code>sequenceType.js</code>: the JavaScript file within which we will write our tests. Also called the <strong>spec</strong> file.</li>
-</ul></li>
+  <li><code>Bower Components</code>: contains the packages for Mocha and Chai</li>
+  <li><code>bower.json</code>: lists the packages downloaded by Bower—useful for installing updates if needed in the future</li>
+  <li><code>index.html</code>: the html file through which we will run our tests</li>
+  <li><code>sequenceType.js</code>: our JavaScript file</li>
+  <li><code>spec</code>
+    <ul>
+      <li><code>sequenceType.js</code>: the JavaScript file within which we will write our tests. Also called the <strong>spec</strong> file.</li>
+    </ul>
+  </li>
 </ul>
 
-<p>Although we need the packages stored in the Bower Components, we don&#39;t need to do anything with them. If you are curious, by all means feel free to explore the contents of this folder. What we really care about is the index.html file, and the two sequenceType.js files. Note that both the spec file and our program have the same name, but are located in different places in our directory. If this is confusing, you can change the name of the spec file, but you&#39;ll need to be careful to change it every it is referenced from within the generated documents.</p>
+<p>Although we need the packages stored in the Bower Components, we don’t need to do anything with them. If you are curious, by all means feel free to explore the contents of this folder. What we really care about is the index.html file, and the two sequenceType.js files. Note that both the spec file and our program have the same name, but are located in different places in our directory. If this is confusing, you can change the name of the spec file, but you’ll need to be careful to change it every it is referenced from within the generated documents.</p>
 
-<p>Let&#39;s begin by opening the index.html file in your text editor.</p>
+<p>Let’s begin by opening the index.html file in your text editor.</p>
 
-<p><img src="../images/TDD/index_html.png" alt="The index.html file"></p>
+<p><img src="../images/TDD/index_html.png" alt="The index.html file" /></p>
 
 <p>Notice that the generator has automatically set up our index.html file for us:</p>
 
 <ul>
-<li>The meta and title elements have been created</li>
-<li>The css file from the Mocha package is referenced</li>
-<li>The Mocha, Chai, spec, and algorithm scripts are referenced</li>
-<li>Scripts needed to setup and run Mocha and Chai are embedded </li>
+  <li>The meta and title elements have been created</li>
+  <li>The css file from the Mocha package is referenced</li>
+  <li>The Mocha, Chai, spec, and algorithm scripts are referenced</li>
+  <li>Scripts needed to setup and run Mocha and Chai are embedded</li>
 </ul>
 
 <p>If we open this file in the browser, we will see a nicely formatted document with some dummy text.</p>
 
-<p><img src="../images/TDD/Mocha_Spec_Runner.png" alt="The index.html file in the browser"></p>
+<p><img src="../images/TDD/Mocha_Spec_Runner.png" alt="The index.html file in the browser" /></p>
 
-<p>Don&#39;t worry about what any of this means, or where it came from yet. We&#39;ll get there.</p>
+<p>Don’t worry about what any of this means, or where it came from yet. We’ll get there.</p>
 
-<p>Next, let&#39;s open up our program, <code>sequenceType.js</code> </p>
+<p>Next, let’s open up our program, <code>sequenceType.js</code></p>
 
-<p><img src="../images/TDD/EmptyProgram.png" alt="Our program"></p>
+<p><img src="../images/TDD/EmptyProgram.png" alt="Our program" /></p>
 
-<p>The generator has pre-populated our file for us, but we can alter it as we like. Feel free to remove the first two lines entirely if you wish. </p>
+<p>The generator has pre-populated our file for us, but we can alter it as we like. Feel free to remove the first two lines entirely if you wish.</p>
 
-<p>Finally, let&#39;s look at that spec file from <code>spec/sequenceType.js</code>. This is the one we&#39;re really interested in.</p>
+<p>Finally, let’s look at that spec file from <code>spec/sequenceType.js</code>. This is the one we’re really interested in.</p>
 
-<p><img src="../images/TDD/Spec.png" alt="The spec"></p>
+<p><img src="../images/TDD/Spec.png" alt="The spec" /></p>
 
 <p>Again, the generator has pre-populated this file for us with a small template. The lines starting with <code>describe</code> and <code>it</code> are from the Mocha framework, while the lines starting with <code>expect</code> come from Chai.</p>
 

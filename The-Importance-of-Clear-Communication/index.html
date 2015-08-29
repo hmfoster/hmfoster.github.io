@@ -9,9 +9,11 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function every would return true if all items in the collection passed the test, while the function some would return true if one or more of the items passed the test. Writing every was fairly straightforward using Javascript&#39;s reduce function, but because I was trying to use my every function in the some function to practice functional programming, it took me a while longer to write some. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the some function to one of my students, it just ended up sounding like gibberish; it sounded something like, &quot;...so if every value is not false, not every returns true, so some is true.&quot; Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example. 
+    <meta name="description" content="A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function every would return true if all items in the collection passed the test, while the function some would return true if one or more of the items passed the test. Writing every was fairly straightforward using Javascript’s reduce function, but because I was trying to use my every function in the some function to practice functional programming, it took me a while longer to write some. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the some function to one of my students, it just ended up sounding like gibberish; it sounded something like, “…so if every value is not false, not every returns true, so some is true.” Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example.
+
 " />
-    <meta property="og:description" content="A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function every would return true if all items in the collection passed the test, while the function some would return true if one or more of the items passed the test. Writing every was fairly straightforward using Javascript&#39;s reduce function, but because I was trying to use my every function in the some function to practice functional programming, it took me a while longer to write some. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the some function to one of my students, it just ended up sounding like gibberish; it sounded something like, &quot;...so if every value is not false, not every returns true, so some is true.&quot; Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example. 
+    <meta property="og:description" content="A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function every would return true if all items in the collection passed the test, while the function some would return true if one or more of the items passed the test. Writing every was fairly straightforward using Javascript’s reduce function, but because I was trying to use my every function in the some function to practice functional programming, it took me a while longer to write some. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the some function to one of my students, it just ended up sounding like gibberish; it sounded something like, “…so if every value is not false, not every returns true, so some is true.” Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example.
+
 " />
     
     <meta name="author" content="Hailey Foster" />
@@ -58,60 +60,59 @@
    <a href="/tag/javascript" title="View posts tagged with &quot;javascript&quot;" class = "tag">javascript</a>     <a href="/tag/communication" title="View posts tagged with &quot;communication&quot;" class = "tag">communication</a>     <a href="/tag/collaboration" title="View posts tagged with &quot;collaboration&quot;" class = "tag">collaboration</a>   
 
   <div class="entry">
-    <p>A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function <code>every</code> would return <code>true</code> if all items in the collection passed the test, while the function <code>some</code> would return true if one or more of the items passed the test. Writing <code>every</code> was fairly straightforward using Javascript&#39;s <code>reduce</code> function, but because I was trying to use my <code>every</code> function in the <code>some</code> function to practice functional programming, it took me a while longer to write <code>some</code>. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the <code>some</code> function to one of my students, it just ended up sounding like gibberish; it sounded something like, &quot;...so if every value is not false, not every returns true, so some is true.&quot; Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example. </p>
+    <p>A couple of weeks ago, I was working on two pieces of Javascript code that would apply a test to each item in array. The function <code>every</code> would return <code>true</code> if all items in the collection passed the test, while the function <code>some</code> would return true if one or more of the items passed the test. Writing <code>every</code> was fairly straightforward using Javascript’s <code>reduce</code> function, but because I was trying to use my <code>every</code> function in the <code>some</code> function to practice functional programming, it took me a while longer to write <code>some</code>. Worse yet, because both functions deal with many boolean values, they are a bit difficult to discuss. The first time I tried to explain my final version of the <code>some</code> function to one of my students, it just ended up sounding like gibberish; it sounded something like, “…so if every value is not false, not every returns true, so some is true.” Fortunately the students with whom I was talking is quite bright, so once I showed her how the function worked with an example.</p>
 
-<p>Since I did such a paltry job the first time I tried to explain <code>some</code>, I&#39;ve decided to try again here. As all teachers know, if you can&#39;t teach it, you don&#39;t really understand it. So, instead of simply providing my solution, here I&#39;m going to try to explain it using pseudocode. </p>
+<p>Since I did such a paltry job the first time I tried to explain <code>some</code>, I’ve decided to try again here. As all teachers know, if you can’t teach it, you don’t really understand it. So, instead of simply providing my solution, here I’m going to try to explain it using pseudocode.</p>
 
-<hr>
+<hr />
+<p>####What the code <em>should</em> do:</p>
 
-<h4>What the code <em>should</em> do:</h4>
-
-<p><code>every(collection, test)</code>: Uses javascript&#39;s <code>reduce</code> function to apply a test to each item, and  returns true if all items in the collection pass the test. </p>
+<p><code>every(collection, test)</code>: Uses javascript’s <code>reduce</code> function to apply a test to each item, and  returns true if all items in the collection pass the test.</p>
 
 <p><code>some(collection, test)</code>: Uses <code>every</code> returns true if at least one item passes the test.</p>
 
-<h4>The Logic:</h4>
+<h4 id="the-logic">The Logic:</h4>
 
 <ul>
-<li>Use <code>every</code> to determine if all of the items <strong>fail</strong> the test passed into <code>some</code>. 
+  <li>Use <code>every</code> to determine if all of the items <strong>fail</strong> the test passed into <code>some</code>. 
 This means that this <code>every</code> needs to test for the <strong>opposite</strong> of the <code>some</code> test.
-
-<ul>
-<li>If this <code>every</code> returns <code>true</code>, <strong>none</strong> of the items passed the test given to <code>some</code>, so <code>some</code> should return <code>false</code>.</li>
-<li>If this <code>every</code> returns false, <strong>at least one</strong> item passed the test given to <code>some</code>, so <code>some</code> should return <code>true</code>.</li>
-</ul></li>
+    <ul>
+      <li>If this <code>every</code> returns <code>true</code>, <strong>none</strong> of the items passed the test given to <code>some</code>, so <code>some</code> should return <code>false</code>.</li>
+      <li>If this <code>every</code> returns false, <strong>at least one</strong> item passed the test given to <code>some</code>, so <code>some</code> should return <code>true</code>.</li>
+    </ul>
+  </li>
 </ul>
 
-<h4>Example</h4>
+<h4 id="example">Example</h4>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">collection1</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">};</span>
 <a name="True-2"></a><span class="kd">var</span> <span class="nx">collection2</span> <span class="o">=</span> <span class="p">{</span><span class="mi">6</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">10</span><span class="p">};</span>
 <a name="True-3"></a>
 <a name="True-4"></a><span class="c1">//Return true if the item is odd.</span>
 <a name="True-5"></a><span class="kd">var</span> <span class="nx">isOdd</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
-<a name="True-6"></a>   <span class="k">return</span> <span class="nx">item</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
+<a name="True-6"></a>	<span class="k">return</span> <span class="nx">item</span> <span class="o">%</span> <span class="mi">2</span> <span class="o">==</span> <span class="mi">1</span><span class="p">;</span>
 <a name="True-7"></a><span class="p">}</span>
 <a name="True-8"></a><span class="nx">some</span><span class="p">(</span><span class="nx">collection1</span><span class="p">,</span> <span class="nx">isOdd</span><span class="p">);</span></code></pre></div>
 
 <ol>
-<li><code>some</code> passes <code>collection1</code> and <code>isOdd</code> to <code>every</code>. </li>
-<li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
-<li>All of the items in <code>collection1</code> are not odd, so <code>every</code> returns <code>true</code>.</li>
-<li>When <code>every</code> returns <code>true</code>, <code>some</code> returns <code>false</code>: <em>none</em> of the items in <code>collection1</code> are odd.</li>
+  <li><code>some</code> passes <code>collection1</code> and <code>isOdd</code> to <code>every</code>.</li>
+  <li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
+  <li>All of the items in <code>collection1</code> are not odd, so <code>every</code> returns <code>true</code>.</li>
+  <li>When <code>every</code> returns <code>true</code>, <code>some</code> returns <code>false</code>: <em>none</em> of the items in <code>collection1</code> are odd.</li>
 </ol>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">some</span><span class="p">(</span><span class="nx">collection2</span><span class="p">,</span> <span class="nx">isOdd</span><span class="p">);</span></code></pre></div>
 
 <ol>
-<li><code>some</code> passes <code>collection2</code> and <code>isOdd</code> to <code>every</code>.</li>
-<li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
-<li>Because <code>collection2[1]</code> <strong>is</strong> odd, <code>every</code> returns <code>false</code>.</li>
-<li>Therefore, at least one item passes the <code>isOdd</code> test, so <code>some</code> returns <code>true</code>.</li>
+  <li><code>some</code> passes <code>collection2</code> and <code>isOdd</code> to <code>every</code>.</li>
+  <li><code>every</code> tests to see if <strong>all</strong> of the items are not odd (<code>!isOdd</code>).</li>
+  <li>Because <code>collection2[1]</code> <strong>is</strong> odd, <code>every</code> returns <code>false</code>.</li>
+  <li>Therefore, at least one item passes the <code>isOdd</code> test, so <code>some</code> returns <code>true</code>.</li>
 </ol>
 
-<hr>
+<hr />
 
-<p>Whew! Let me know if this does (or doesn&#39;t!) make sense, and if you have any suggestions for how to improve it!</p>
+<p>Whew! Let me know if this does (or doesn’t!) make sense, and if you have any suggestions for how to improve it!</p>
 
   </div>
 

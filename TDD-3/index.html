@@ -10,8 +10,10 @@
 
     
     <meta name="description" content="This is the third part in a short series on applying test driven development to a JavaScript program using Mocha, Chai, and Sinon. Part 1 and Part 2 gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.
+
 " />
     <meta property="og:description" content="This is the third part in a short series on applying test driven development to a JavaScript program using Mocha, Chai, and Sinon. Part 1 and Part 2 gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.
+
 " />
     
     <meta name="author" content="Hailey Foster" />
@@ -60,63 +62,59 @@
   <div class="entry">
     <p>This is the third part in a short series on applying test driven development to a JavaScript program using <a href="www.mochajs.org">Mocha</a>, <a href="www.chaijs.org">Chai</a>, and <a href="www.sinonjs.org">Sinon</a>. <a href="http://haileyfoster.com/Test-Driven-Development/">Part 1</a> and <a href="http://haileyfoster.com/TDD-2/">Part 2</a> gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.</p>
 
-<h2>The Spec Code and Rendering</h2>
+<h2 id="the-spec-code-and-rendering">The Spec Code and Rendering</h2>
+<p>If you’ve been following along, you know that we’re designing a very simple program to identify if an array of numbers contains an arithmetic or geometric sequence. We have yet to write any code in our function, but we do have a pre-populated html file linked to both our code, and our testing spec; this will allow us to run our tests in the browser. Here is a comparison of the spec file and the rendered html:</p>
 
-<p>If you&#39;ve been following along, you know that we&#39;re designing a very simple program to identify if an array of numbers contains an arithmetic or geometric sequence. We have yet to write any code in our function, but we do have a pre-populated html file linked to both our code, and our testing spec; this will allow us to run our tests in the browser. Here is a comparison of the spec file and the rendered html: </p>
-
-<p><img src="../images/TDD/spec-to-html.png" alt="Spec to browser comparison"> </p>
+<p><img src="../images/TDD/spec-to-html.png" alt="Spec to browser comparison" /></p>
 
 <p>Again, the <code>describe</code> and <code>it</code> statements are from the Mocha framework, while the <code>expect</code> statements are from Chai. Notice how these are rendered to the browser:</p>
 
 <ul>
-<li>The text inside of the <code>describe</code> statement is rendered as a heading for a set of tests.</li>
-<li>Each <code>it</code> statement is rendered as a different test; if the test is passing, we see a green check mark, while if it is failing, we see a red &quot;x&quot;</li>
-<li>Finally, Chai provides additional information for any failing test in the form of an error. </li>
+  <li>The text inside of the <code>describe</code> statement is rendered as a heading for a set of tests.</li>
+  <li>Each <code>it</code> statement is rendered as a different test; if the test is passing, we see a green check mark, while if it is failing, we see a red “x”</li>
+  <li>Finally, Chai provides additional information for any failing test in the form of an error.</li>
 </ul>
 
-<p>Clicking on each of the tests will reveal the specific <code>expect</code> statement to which they relate; this can be quite helpful when trying to interpret the results. Of the three default tests provided by the test generator we are using, only the first provides us with any real information&mdash;that our function exists. The other two are just placeholders to get us started writing our own tests. </p>
+<p>Clicking on each of the tests will reveal the specific <code>expect</code> statement to which they relate; this can be quite helpful when trying to interpret the results. Of the three default tests provided by the test generator we are using, only the first provides us with any real information—that our function exists. The other two are just placeholders to get us started writing our own tests.</p>
 
-<h2>Creating Objectives</h2>
+<h2 id="creating-objectives">Creating Objectives</h2>
+<p>Before writing the specific tests, let’s think about the overarching goal of our little program and then break it down into smaller objectives (for those of you that read Part 1, this is analogous to <a href="https://www.mydigitalchalkboard.org/portal/default/Content/Viewer/Content?action=2&amp;sciId=829">“unpacking” local, state and national standards</a>).</p>
 
-<p>Before writing the specific tests, let&#39;s think about the overarching goal of our little program and then break it down into smaller objectives (for those of you that read Part 1, this is analogous to <a href="https://www.mydigitalchalkboard.org/portal/default/Content/Viewer/Content?action=2&amp;sciId=829">&quot;unpacking&quot; local, state and national standards</a>). </p>
-
-<p>We know we want our program to <strong>identify if a set of numbers is an arithmetic or geometric sequence</strong>. Let&#39;s think more deeply about what that means our program will need to do:</p>
+<p>We know we want our program to <strong>identify if a set of numbers is an arithmetic or geometric sequence</strong>. Let’s think more deeply about what that means our program will need to do:</p>
 
 <ol>
-<li>Accept an input of numbers in the form of an array or string</li>
-<li>Determine if the sequence of numbers has a common difference or common ratio</li>
-<li>Output the result as a string stating if the sequence was arithmetic, geometric, or neither.</li>
+  <li>Accept an input of numbers in the form of an array or string</li>
+  <li>Determine if the sequence of numbers has a common difference or common ratio</li>
+  <li>Output the result as a string stating if the sequence was arithmetic, geometric, or neither.</li>
 </ol>
 
 <p>Each of these objectives can then be translated into smaller tests that our program will either pass or fail. Because we will then working to pass just one test at a time, I feel it is best to start with the tests for the output, and then work our way backwards; this strategy will not work for all programs, but it does fit this situation nicely. Some of these tests may seem a bit contrived, but I think it is important to illustrate the fact that you want to write tests for the smallest bit of code you can test at a time.</p>
 
 <p>We will first write these tests in pseudocode, and then translate them into Mocha and Chai.</p>
 
-<h4>The Output Message</h4>
+<h4 id="the-output-message">The Output Message</h4>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should return the result as a string.</span>
 <a name="True-2"></a><span class="c1">//If the sequence is arithmetic, it should return &quot;This sequence is arithmetic&quot;</span>
 <a name="True-3"></a><span class="c1">//If the sequence is geometric, it should return &quot;This sequence is geometric&quot;</span>
 <a name="True-4"></a><span class="c1">//Otherwise, it should return &quot;This sequence is not a recognized pattern&quot;</span></code></pre></div>
 
-<h4>The Function</h4>
+<h4 id="the-function">The Function</h4>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should identify an arithmetic sequence.</span>
 <a name="True-2"></a><span class="c1">//It should identify a geometric sequence.</span>
 <a name="True-3"></a><span class="c1">//It should not identify other types of sequences</span>
 <a name="True-4"></a><span class="c1">//It should work for decreasing functions.</span></code></pre></div>
 
-<h4>The Input Data</h4>
+<h4 id="the-input-data">The Input Data</h4>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//It should accept an array of numbers</span>
 <a name="True-2"></a><span class="c1">//It should accept a string of numbers that are comma delimited</span>
 <a name="True-3"></a><span class="c1">//It should accept a string of numbers that are space delimited</span></code></pre></div>
 
-<h2>Writing the Code</h2>
-
-<h4>Describe Statements</h4>
-
-<p>Now that we know what behavior we expect our program to have, it is time to start writing the actual tests. Each section of tests lends itself nicely to a Mocha <code>describe</code> statement; let&#39;s start by writing those.</p>
+<h2 id="writing-the-code">Writing the Code</h2>
+<p>####Describe Statements
+Now that we know what behavior we expect our program to have, it is time to start writing the actual tests. Each section of tests lends itself nicely to a Mocha <code>describe</code> statement; let’s start by writing those.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//This first line was written by the test generator; we will keep it to </span>
 <a name="True-2"></a><span class="c1">//maintain the overarching focus on our sequenceType function.</span>
@@ -140,11 +138,11 @@
 
 <p>Notice each describe statement is a function that takes two parameters: a general title, and a callback function. Our individual tests will go inside of that callback function. For now, when we open this function in the browser, this is what we see:</p>
 
-<p><img src="../images/TDD/Empty-tests.png" alt="Browser render of empty tests"></p>
+<p><img src="../images/TDD/Empty-tests.png" alt="Browser render of empty tests" /></p>
 
-<p>The empty describe statements will not render until we give them some <code>it</code> statements. </p>
+<p>The empty describe statements will not render until we give them some <code>it</code> statements.</p>
 
-<h4>If statements</h4>
+<h4 id="if-statements">If statements</h4>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;sequenceType()&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
 <a name="True-2"></a>  <span class="s1">&#39;use strict&#39;</span><span class="p">;</span>
@@ -195,17 +193,16 @@
 <a name="True-47"></a><span class="p">});</span></code></pre></div>
 
 <p>The browser rendering is now starting to look more like we want it to:
-<img src="../images/TDD/All-passing.png" alt="Empty it statements; all passing"></p>
+<img src="../images/TDD/All-passing.png" alt="Empty it statements; all passing" /></p>
 
-<p>All of our tests are currently passing, because we haven&#39;t actually written any assertions. If you want to focus on any individual test, you can do so by clicking on one of the small arrows to the right. Clicking on a description heading will also allow you to focus on one set of related tests.</p>
+<p>All of our tests are currently passing, because we haven’t actually written any assertions. If you want to focus on any individual test, you can do so by clicking on one of the small arrows to the right. Clicking on a description heading will also allow you to focus on one set of related tests.</p>
 
-<h4>Assertions</h4>
-
-<p>At this point, we are finally ready to write the tests themselves. Instead of writing them all at once, we&#39;re just going to work on one section of tests at a time; this will keep our program organized and require us to maintain focus. We are going to write our tests using <a href="http://chaijs.com/api/bdd/">Chai&#39;s chainable expect style</a>. I suggest reading through their API to see all of the possible methods for constructing statements; for now, we will stick with a few basic patterns: </p>
+<h4 id="assertions">Assertions</h4>
+<p>At this point, we are finally ready to write the tests themselves. Instead of writing them all at once, we’re just going to work on one section of tests at a time; this will keep our program organized and require us to maintain focus. We are going to write our tests using <a href="http://chaijs.com/api/bdd/">Chai’s chainable expect style</a>. I suggest reading through their API to see all of the possible methods for constructing statements; for now, we will stick with a few basic patterns:</p>
 
 <ul>
-<li><code>expect(something).to.be.a(something)</code></li>
-<li><code>expect(something).to.equal(something)</code></li>
+  <li><code>expect(something).to.be.a(something)</code></li>
+  <li><code>expect(something).to.equal(something)</code></li>
 </ul>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -228,13 +225,19 @@
 <a name="True-18"></a>
 <a name="True-19"></a>  <span class="p">});</span></code></pre></div>
 
-<p>Now when we open up our spec, we see that we hae four failing tests. We can also see that the four failing tests all display the same message: </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">ReferenceError: returnValue is not defined
-</code></pre></div>
+<p>Now when we open up our spec, we see that we hae four failing tests. We can also see that the four failing tests all display the same message:</p>
+
+<p><code>
+ReferenceError: returnValue is not defined
+</code></p>
+
 <p>This is followed by information about where this error is occurring for each test. We care most about the top line of that location, which reads:</p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">at Context.&lt;anonymous&gt; (file:///Users/haileyfoster/Desktop/Arith-Geo-Test/spec/sequenceType.js:14:14)
-</code></pre></div>
-<p>We can see that our error is occurring in our spec file, at line 14, character 14. Looking at our spec, we can see this is because we are calling on a variable, <code>returnValue</code> that we haven&#39;t actually defined anywhere in our test. Let&#39;s go ahead and define this variable in the spec above all of the <code>it</code>statements in this section.</p>
+
+<p><code>
+at Context.&lt;anonymous&gt; (file:///Users/haileyfoster/Desktop/Arith-Geo-Test/spec/sequenceType.js:14:14)
+</code></p>
+
+<p>We can see that our error is occurring in our spec file, at line 14, character 14. Looking at our spec, we can see this is because we are calling on a variable, <code>returnValue</code> that we haven’t actually defined anywhere in our test. Let’s go ahead and define this variable in the spec above all of the <code>it</code>statements in this section.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
 <a name="True-2"></a>    <span class="kd">var</span> <span class="nx">returnValue</span><span class="p">;</span> <span class="c1">//defining the variable here will give the following tests access to the variable</span>
@@ -243,27 +246,29 @@
 <a name="True-5"></a>      <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>  
 <a name="True-6"></a>    <span class="p">});</span></code></pre></div>
 
-<p>Now our tests are giving us an assertion error: </p>
-<div class="highlight"><pre><code class="language-text" data-lang="text">AssertionError: expected undefined to be a string
-</code></pre></div>
-<h2>Passing the tests</h2>
+<p>Now our tests are giving us an assertion error:</p>
 
-<p>Finally, we are at the point where we can turn to our sequenceType function and write enough code there so that it passes one test at a time. Our first test tells us it should return a string. Let&#39;s make this test pass with the smallest amount of code possible:</p>
+<p><code>
+AssertionError: expected undefined to be a string
+</code></p>
+
+<h2 id="passing-the-tests">Passing the tests</h2>
+<p>Finally, we are at the point where we can turn to our sequenceType function and write enough code there so that it passes one test at a time. Our first test tells us it should return a string. Let’s make this test pass with the smallest amount of code possible:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span> <span class="p">)</span> <span class="p">{</span>
 <a name="True-2"></a>  <span class="k">return</span> <span class="s1">&#39;string&#39;</span><span class="p">;</span>
 <a name="True-3"></a><span class="p">};</span></code></pre></div>
 
-<p>Hmmm...if we run the spec, we see we&#39;re getting the same error as before. The problem is that we haven&#39;t actually called our function from the spec yet. Let&#39;s do that:</p>
+<p>Hmmm…if we run the spec, we see we’re getting the same error as before. The problem is that we haven’t actually called our function from the spec yet. Let’s do that:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return the result as a string&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
 <a name="True-2"></a>    <span class="nx">returnValue</span> <span class="o">=</span> <span class="nx">sequenceType</span><span class="p">();</span>
 <a name="True-3"></a>    <span class="nx">expect</span><span class="p">(</span><span class="nx">returnValue</span><span class="p">).</span><span class="nx">to</span><span class="p">.</span><span class="nx">be</span><span class="p">.</span><span class="nx">a</span><span class="p">(</span><span class="s1">&#39;string&#39;</span><span class="p">);</span>   
 <a name="True-4"></a><span class="p">});</span></code></pre></div>
 
-<p>Great! By giving our function a very simple return statement, our first test is passing. </p>
+<p>Great! By giving our function a very simple return statement, our first test is passing.</p>
 
-<p>From here, I&#39;m just going to present the the work necessary to get each consecutive test to pass, only commenting when necessary to clarify the thinking process. </p>
+<p>From here, I’m just going to present the the work necessary to get each consecutive test to pass, only commenting when necessary to clarify the thinking process.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Spec</span>
 <a name="True-2"></a><span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -285,7 +290,7 @@
 <a name="True-8"></a>  <span class="k">return</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
 <a name="True-9"></a><span class="p">};</span></code></pre></div>
 
-<p>Uh-oh! Now when we run our spec, we see that the third test passes, but the second test is now failing! Obviously this is because we were just changing the returned string. Time to rethink our code so that both tests will pass. </p>
+<p>Uh-oh! Now when we run our spec, we see that the third test passes, but the second test is now failing! Obviously this is because we were just changing the returned string. Time to rethink our code so that both tests will pass.</p>
 
 <p>First we will need to update our code so that it will take a parameter and return a different message depending upon the argument passed in. We also need to update our spec file to pass different arguments to the function for each test.</p>
 
@@ -305,7 +310,7 @@
 <a name="True-14"></a>  <span class="k">return</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s2">&quot;1,3,5,7&quot;</span> <span class="o">?</span> <span class="s1">&#39;This sequence is arithmetic&#39;</span><span class="o">:</span> <span class="s1">&#39;This sequence is geometric&#39;</span><span class="p">;</span>
 <a name="True-15"></a><span class="p">};</span></code></pre></div>
 
-<p>Of course this is only going to work for these exact sequences, but right now, that doesn&#39;t matter. We just want to get the specs to pass; we will use later tests to ensure that it works for any sequence passed it. Moving on...</p>
+<p>Of course this is only going to work for these exact sequences, but right now, that doesn’t matter. We just want to get the specs to pass; we will use later tests to ensure that it works for any sequence passed it. Moving on…</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Spec</span>
 <a name="True-2"></a>    <span class="nx">it</span><span class="p">(</span><span class="s1">&#39;should return &quot;This sequence is arithmetic&quot; for arithmetic sequences&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -334,7 +339,7 @@
 <a name="True-25"></a>  <span class="p">}</span>
 <a name="True-26"></a><span class="p">};</span></code></pre></div>
 
-<p>On to the next set of tests! We&#39;ll just basically rinse and repeat what we did above: Write failing tests, write code to pass the test, refactor. Because all of these tests are also going to use the variable <code>returnValue</code>, we will move this declaration to the outer <code>describe</code> function, so that all inner functions have access to it. We will also pass in our sequences as an array instead of a string so we have one less thing to deal with in our tests.</p>
+<p>On to the next set of tests! We’ll just basically rinse and repeat what we did above: Write failing tests, write code to pass the test, refactor. Because all of these tests are also going to use the variable <code>returnValue</code>, we will move this declaration to the outer <code>describe</code> function, so that all inner functions have access to it. We will also pass in our sequences as an array instead of a string so we have one less thing to deal with in our tests.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
 <a name="True-2"></a>  <span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -393,12 +398,12 @@
 <a name="True-55"></a><span class="p">};</span></code></pre></div>
 
 <p>We made our next test pass with this bit of code, but now our second test is failing. 
-<img src="../images/TDD/String-problem.png" alt="Failing test"></p>
+<img src="../images/TDD/String-problem.png" alt="Failing test" /></p>
 
 <p>Opening up the details of our spec, we see this is because this test is passing in a string, and our function can only work with arrays right now.
-<img src="../images/TDD/String-prob-reason.png" alt="Reason for failing test"></p>
+<img src="../images/TDD/String-prob-reason.png" alt="Reason for failing test" /></p>
 
-<p>The easiest way to fix this is to change our input for this test to an array instead of a string. </p>
+<p>The easiest way to fix this is to change our input for this test to an array instead of a string.</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
 <a name="True-2"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Output Message&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -409,9 +414,9 @@
 <a name="True-7"></a>    
 <a name="True-8"></a>    <span class="p">});</span></code></pre></div>
 
-<p>We&#39;ll need to remember to change the input for the other tests as well.</p>
+<p>We’ll need to remember to change the input for the other tests as well.</p>
 
-<p>Moving on...</p>
+<p>Moving on…</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//The Spec</span>
 <a name="True-2"></a><span class="nx">describe</span><span class="p">(</span><span class="s1">&#39;The Function Code&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
@@ -536,7 +541,7 @@
 <a name="True-3"></a>    <span class="nx">sequence</span> <span class="o">=</span> <span class="nx">sequence</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="sr">/[,\w/]/</span><span class="p">);</span>
 <a name="True-4"></a>  <span class="p">}</span></code></pre></div>
 
-<p>And that&#39;s it! Our function passes all of our specs and does exactly what we wanted it to do. We can now refactor our code a bit to make it cleaner and more efficient, checking our specs as we make changes to ensure they all still pass. Here is the final refactored code:</p>
+<p>And that’s it! Our function passes all of our specs and does exactly what we wanted it to do. We can now refactor our code a bit to make it cleaner and more efficient, checking our specs as we make changes to ensure they all still pass. Here is the final refactored code:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">sequenceType</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">sequence</span><span class="p">)</span> <span class="p">{</span>
 <a name="True-2"></a>  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span> <span class="nx">sequence</span> <span class="o">===</span> <span class="s1">&#39;string&#39;</span><span class="p">){</span>
@@ -567,7 +572,6 @@
 <a name="True-27"></a>    <span class="k">return</span> <span class="s1">&#39;Not a recognized pattern&#39;</span><span class="p">;</span>
 <a name="True-28"></a>  <span class="p">}</span>
 <a name="True-29"></a><span class="p">};</span></code></pre></div>
- 
 
 <p>In the final part of this series, we will look into the power Sinon can give to our tests.</p>
 
