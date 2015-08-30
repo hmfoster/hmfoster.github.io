@@ -984,3 +984,9 @@ tr:first-child td:first-child {
 tr:first-child td:last-child {
   border-width: 0px 0px 1px 1px;
 }
+
+#comments {
+  background-color: rgba(255, 255, 255, 0.75);
+  padding: 10px;
+  border-radius: 5px;
+}
