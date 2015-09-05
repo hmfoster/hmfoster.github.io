@@ -9,10 +9,10 @@
     <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
 
     
-    <meta name="description" content="Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on Synaptic.js for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.
+    <meta name="description" content="
 
 " />
-    <meta property="og:description" content="Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on Synaptic.js for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.
+    <meta property="og:description" content="
 
 " />
     
@@ -60,9 +60,9 @@
    <a href="/tag/JavaScript" title="View posts tagged with &quot;JavaScript&quot;" class = "tag">JavaScript</a>     <a href="/tag/neural networks" title="View posts tagged with &quot;neural networks&quot;" class = "tag">neural networks</a>     <a href="/tag/libraries" title="View posts tagged with &quot;libraries&quot;" class = "tag">libraries</a>   
 
   <div class="entry">
-    <p>Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on <a href="https://github.com/cazala/synaptic">Synaptic.js</a> for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.</p>
+    <p><img src="https://farm3.staticflickr.com/2505/4217696935_ef32803774_o_d.jpg =100%" alt="Image of a biological neural network" /></p>
 
-<p><img src="https://farm3.staticflickr.com/2505/4217696935_ef32803774_o_d.jpg" alt="Image of a biological neural network" /></p>
+<p>Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on <a href="https://github.com/cazala/synaptic">Synaptic.js</a> for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.</p>
 
 <p>Synaptic has five primary modules:</p>
 
@@ -74,24 +74,27 @@
 
 <p>The above named modules allow you to create custom neural network architectures to suit your needs.</p>
 
-<p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e4/Artificial_neural_network.svg/2000px-Artificial_neural_network.svg.png" alt="Diagram of an artificial neural network" /></p>
-
 <ul>
   <li><strong>Trainer</strong>: Before a network of neurons will give the output you expect for a set of inputs, you must train it will a set of known inputs and output for your data. These data must be correctly structured as an array of objects, whose values are arrays: <code>[{input: [value1], output: [value1]}, {input: [value2]: output: [value2]}]</code>. You can either use the default settings for the trainer, or use your own to manipulate the speed and accuracy with which the network learns.</li>
   <li><strong>Architect</strong>: This module allows you to quickly create a neural network by using one of the predefined architectures it provides. This is the simplest way to start using a neural network, as you can avoid almost all of the complexities involved with the network. If you use one of these architectures, you can get started using a network with just a few lines of code, and avoid using the Neuron, Network, and Layer modules entirely.</li>
 </ul>
 
-<p>Sample Code:</p>
+<p><img src="http://www.texample.net/media/tikz/examples/PNG/neural-network.png" alt="Diagram of an artificial neural network" /></p>
 
-<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//create a new network using a built in architecture</span>
-<a name="True-2"></a><span class="kd">var</span> <span class="nx">network</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Architect</span><span class="p">.</span><span class="nx">LSTM</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
-<a name="True-3"></a>
-<a name="True-4"></a><span class="c1">//train the network with your known data</span>
-<a name="True-5"></a><span class="kd">var</span> <span class="nx">trainer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trainer</span><span class="p">(</span><span class="nx">network</span><span class="p">);</span>
-<a name="True-6"></a><span class="nx">trainer</span><span class="p">.</span><span class="nx">train</span><span class="p">([{</span><span class="nx">input</span><span class="o">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">],</span> <span class="nx">output</span> <span class="p">[</span><span class="mi">6</span><span class="p">,</span><span class="mi">1</span><span class="p">]},</span> <span class="p">{</span><span class="nx">input</span><span class="o">:</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">18</span><span class="p">],</span> <span class="nx">output</span><span class="o">:</span> <span class="p">[</span><span class="mi">18</span><span class="p">,</span><span class="mi">2</span><span class="p">]}]);</span>
-<a name="True-7"></a>
-<a name="True-8"></a><span class="c1">//activate the network</span>
-<a name="True-9"></a><span class="nx">network</span><span class="p">.</span><span class="nx">activate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">])</span> <span class="c1">//output with some value</span></code></pre></div>
+<p>Sample Code to create the network shown above:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//create a new network using a built in architecture; </span>
+<a name="True-2"></a><span class="c1">// #neurons in input layer = 4</span>
+<a name="True-3"></a><span class="c1">// #neurons in hidden layer = 5</span>
+<a name="True-4"></a><span class="c1">// #neurons in output layer = 1</span>
+<a name="True-5"></a><span class="kd">var</span> <span class="nx">network</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Architect</span><span class="p">.</span><span class="nx">Perceptron</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<a name="True-6"></a>
+<a name="True-7"></a><span class="c1">//train the network with your known data</span>
+<a name="True-8"></a><span class="kd">var</span> <span class="nx">trainer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trainer</span><span class="p">(</span><span class="nx">network</span><span class="p">);</span>
+<a name="True-9"></a><span class="nx">trainer</span><span class="p">.</span><span class="nx">train</span><span class="p">([{</span><span class="nx">input</span><span class="o">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="nx">output</span> <span class="p">[</span><span class="mi">6</span><span class="p">]},</span> <span class="p">{</span><span class="nx">input</span><span class="o">:</span> <span class="p">[</span><span class="mi">9</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">18</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="nx">output</span><span class="o">:</span> <span class="p">[</span><span class="mi">18</span><span class="p">]}]);</span>
+<a name="True-10"></a>
+<a name="True-11"></a><span class="c1">//activate the network</span>
+<a name="True-12"></a><span class="nx">network</span><span class="p">.</span><span class="nx">activate</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">9</span><span class="p">])</span> <span class="c1">//output with some value as an array: [19]</span></code></pre></div>
 
 <p>The Synaptic documentation does a great job explaining how to use each of these modules, and I encourage you to read about each of them in detail. There are many more awesome functions provided by Synaptic, including functions to use web workers and to create a standalone neural network that doesn’t have any dependencies.</p>
 
