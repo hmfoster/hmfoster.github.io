@@ -1,0 +1,977 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hailey Foster</title>
+    <description>A teacher&#39;s perspective on programming.</description>
+    <link>http://hmfoster.github.io/</link>
+    <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
+    
+      <item>
+        <title>Implementing a Simple Neural Network</title>
+        <description>&lt;p&gt;Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on &lt;a href=&quot;https://github.com/cazala/synaptic&quot;&gt;Synaptic.js&lt;/a&gt; for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.&lt;/p&gt;
+
+&lt;p&gt;[Image of a biological neural network]&lt;/p&gt;
+
+&lt;p&gt;Synaptic has five primary modules:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Neurons&lt;/strong&gt;: The basic building block of a network; analogous to individual biological neurons. Neurons connect to each other to form layers, which connect to form networks. You can &lt;em&gt;activate&lt;/em&gt; a neuron, which causes it to act upon the input data you give to it and output a result. Training a neuron causes it to alter its activation function until it returns the expected output. You can either directly activate a neuron with an input parameter, or by connecting neurons together so that each output activates one or more additional neurons. This means that individual neurons can receive multiple outputs. However, each neuron will only produce one output, though it can pass this output on to many different neurons.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Layers&lt;/strong&gt;: Most neural networks combine layers of neurons to create a network, as layers of neurons provide increased processing power (much like having multiple servers for an applicaton).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Networks&lt;/strong&gt;: Combinations of neurons and/or layers of neurons. The type of network depends upon its structure–combining neurons and layers of neurons results in a variety of different structures, called &lt;em&gt;architectures&lt;/em&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The above named modules allow you to create custom neural network architectures to suit your needs.&lt;/p&gt;
+
+&lt;p&gt;[Diagram of an artificial neural network]&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Trainer&lt;/strong&gt;: Before a network of neurons will give the output you expect for a set of inputs, you must train it will a set of known inputs and output for your data. These data must be structured as an array of objects: &lt;code&gt;[{input: value1, output: value1}, {input: value2: output: value2}]&lt;/code&gt;. You can either use the default settings for the trainer, or use your own to manipulate the speed and accuracy with which the network learns.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Architect&lt;/strong&gt;: This module allows you to quickly create a neural network by using one of the predefined architectures it provides. This is the simplest way to start using a neural network, as you can avoid almost all of the complexities involved with the network. If you use one of these architectures, you can get started using a network with just a few lines of code, and avoid using the Neuron, Network, and Layer modules entirely.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;[Code for how to set up and train a network with a premade architecture]&lt;/p&gt;
+
+&lt;p&gt;The Synaptic documentation does a great job explaining how to use each of these modules, and I encourage you to read about each of them in detail.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 05 Sep 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Impleneting-Neural-Networks/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Impleneting-Neural-Networks/</guid>
+      </item>
+    
+      <item>
+        <title>Comparing JavaScript Neural Network Libraries</title>
+        <description>&lt;p&gt;This week my team and I started in on a project to build a semi-automated grocery list app. I won’t be going into the details of everything the project entails, but one of the things we wanted it to do was to predict whether or not an item should be added to a user’s shopping list. Right away, we thought about using a neural network to add this functionality…the only problem was that none of us had used a neural network before.&lt;/p&gt;
+
+&lt;p&gt;A quick Google search of “neural network javascript library” brings up four neural network libraries for JavaScript available on Github:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/harthur/brain&quot;&gt;Brain.js&lt;/a&gt; — &lt;a href=&quot;http://harthur.github.io/brain/&quot;&gt;demo&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/cazala/synaptic&quot;&gt;Synaptic.js&lt;/a&gt; — &lt;a href=&quot;http://synaptic.juancazala.com/#/&quot;&gt;demo&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/karpathy/convnetjs&quot;&gt;ConvNetJS&lt;/a&gt; — demos available in repo&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;https://github.com/stevenmiller888/mind&quot;&gt;Mind.js&lt;/a&gt; — &lt;a href=&quot;http://www.mindjs.net/&quot;&gt;demo&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;We started exploring each of these four to determine which would be the best choice for our project. All four have pretty snazzy demos, so we took a few days to explore them all; we also briefly look into Python’s &lt;a href=&quot;http://pybrain.org/&quot;&gt;Pybrain&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Brain.js&lt;/strong&gt; and &lt;strong&gt;Mind.js&lt;/strong&gt; both make it extremely simple to start building neural networks without much background knowledge. This makes them both fantastic introductions to the concepts involved with neural networking. However, compared to our other choices, they were fairly inflexible and did not have as complete documentation.&lt;/p&gt;
+
+&lt;p&gt;Both &lt;strong&gt;ConvNetJS&lt;/strong&gt; and &lt;strong&gt;Pybrain&lt;/strong&gt; were at the opposite end of the spectrum. These libraries come with a huge amount of documentation and are clearly very powerful. We first started looking into these libraries when we were researching reinforcement networks, as both of these libraries provide this type of network. Unfortunately, most of the documentation is written for those with extensive experience with neural networks, making it difficult for beginners like us to implement a functioning network.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Synaptic.js&lt;/strong&gt; was the clear winner for our project. The documentaiton for this library is both extensive and accessible for novice users. Additionally, Synaptic.js provides a nice balance between power and simplicity. Like Brain.js and Mind.js, it is possible to create a fully functioning neural network with just a few lines of code. However, this library also offers multiple pre-configured network architectures and lets you build a network from scratch if you would like.&lt;/p&gt;
+
+&lt;p&gt;Although we chose Synaptic.js for our project, each library fits into a nice niche, so I encourage you to explore them all for yourself.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 29 Aug 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Neural-Networks/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Neural-Networks/</guid>
+      </item>
+    
+      <item>
+        <title>A Visual Guide to using the Google+ API with Auth0</title>
+        <description>&lt;p&gt;This week I learned how to use &lt;a href=&quot;https://auth0.com/&quot;&gt;Auth0&lt;/a&gt; to authenticate an AngularJS/Node.js app. Auth0 provides a fairly clear tutorial for the initial front- and back-end set-up, but a few of the later steps proved a bit trickier, in part because some of the information in the Auth0 documents for the Google API is a bit out of date. Here is a quick visual guide to supplement that provided by Auth0 once you’ve finished the initial setup.&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;From your Auth0 dashboard, navigate to App/API menu and choose your app.
+&lt;img src=&quot;../images/Auth0/App-API.png&quot; alt=&quot;App/API menu&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Enter each url with which you want to use your app. Be sure to include the localhost address you use for development, your auth0 domain ending with &lt;code&gt;/login/callback&lt;/code&gt;, and the url of your deployed app.
+&lt;img src=&quot;../images/Auth0/CallbackURLs.png&quot; alt=&quot;Callback urls&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Navigate to the Connections/Social menu.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Conn-Social.png&quot; alt=&quot;Social-Connections&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Turn on Google, then click on it. This will open up a form in which you will need to enter the Client ID and Client Secret you will next retrieve from the Google API.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Social_Connections.png&quot; alt=&quot;Google-Connection&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Next, go to the &lt;a href=&quot;https://console.developers.google.com/&quot;&gt;Google Developers’ Console&lt;/a&gt;. If necessary, sign-up for an account.&lt;/li&gt;
+  &lt;li&gt;Create a new project.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Create-Proj.png&quot; alt=&quot;Create new project&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Enter a name, and then create your project.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Create-Proj2.png&quot; alt=&quot;Create new project&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Navigate to the Google+ API.
+&lt;img src=&quot;../images/Auth0/API_Library.png&quot; alt=&quot;Navigate through APIs&amp;amp;Auth, APIs, API library, Social APIs, Google+ API&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Enable Google+, then go back to the main menu.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Google__API.png&quot; alt=&quot;Enable Google+, go back&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Navigate to your credentials and add the OAuth 2.0 client ID.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Credentials.png&quot; alt=&quot;Add OAuth 2.0&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Select Web application.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Create_client_ID.png&quot; alt=&quot;Create web application&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Enter your auth0 domain into the JavaScript Origins field, and your auth0 callback url into the Redirect URI field, then create.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/Create_client_ID2.png&quot; alt=&quot;Add JS Origins and Redirect URI&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Copy/paste the given Client ID and Client Secret into your Auth0 form for the Google API from step 4.&lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/OAuth_client2.png&quot; alt=&quot;Google+ Client Id and Secret&quot; /&gt;  &lt;br /&gt;
+&lt;img src=&quot;../images/Auth0/ClientID-Key.png&quot; alt=&quot;Auth0 Form: Client Id and Secret&quot; /&gt;&lt;/li&gt;
+  &lt;li&gt;Save, and check out your app! You should now be able to log in to it using Google+.&lt;/li&gt;
+&lt;/ol&gt;
+</description>
+        <pubDate>Sat, 22 Aug 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Auth0-Google/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Auth0-Google/</guid>
+      </item>
+    
+      <item>
+        <title>How to Choose a Project Fast</title>
+        <description>&lt;h3 id=&quot;warning-you-are-now-entering-the-project-phase&quot;&gt;WARNING: You are now entering the “Project Phase”.&lt;/h3&gt;
+
+&lt;p&gt;Regardless of the field within which you work or study, one of the hardest parts of doing a project or developing a product is coming up with an initial idea. It can be difficult to think of novel ideas that will also result in something interesting, feasible, and/or useful. I’m going to briefly outline the process I like to use to come up with a viable project or product idea.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-1-brainstorm&quot;&gt;Step 1: Brainstorm&lt;/h3&gt;
+&lt;p&gt;This may seem like an obvious first step, but in my experience, most people don’t brainstorm &lt;em&gt;effectively&lt;/em&gt;. Even when working in a group, it is important to begin brainstorming silently and &lt;strong&gt;independently&lt;/strong&gt;, before sharing out ideas in a group. When moderating a brainstorming session, I like to give people about five minutes of independent, guided brainstorming. By guided, I mean that about once a minute, I provide my group with a prompt to help initiate divergent thinking. For example, I’ll say things like, “Ok, now imagine you are developing a product for five-year-olds,” or perhaps, “Actually, you’re grandma is going to be using this.” These prompts can be anything so long as they will result in a variety of diverse ideas.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-2-cull&quot;&gt;Step 2: Cull&lt;/h3&gt;
+&lt;p&gt;After the initial brainstorming session is over, you’ll want to post all of the group’s ideas anonymously in one place. This could be on a whiteboard, a google doc etc… Working through the list of ideas, briefly discuss each idea as a group; if they get to an idea and realize they absolutely do not know what they meant, they can eliminate it.&lt;/p&gt;
+
+&lt;p&gt;After hearing all ideas, quickly go through them one-by-one and eliminate or keep: if ONE person says “keep”, keep the idea on the board, otherwise, eliminate it.&lt;/p&gt;
+
+&lt;h3 id=&quot;step-3-choose&quot;&gt;Step 3: Choose&lt;/h3&gt;
+&lt;p&gt;Finally, vote on the remaining ideas. All group members to vote for multiple ideas, but the idea with the most votes wins. If there is a tie, call on someone to “stump” for each idea and then vote again on those that tied.&lt;/p&gt;
+
+&lt;h4 id=&quot;variation&quot;&gt;Variation&lt;/h4&gt;
+&lt;p&gt;Instead of only choosing one final idea, instead have the group vote for the “most inspirational” idea, “most practical” idea, and the “most profitable” idea. Take a break until the next time you meet, and then narrow down the idea to one of these three.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 08 Aug 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Choosing-A-Project/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Choosing-A-Project/</guid>
+      </item>
+    
+      <item>
+        <title>Test Driven Development, Part 3</title>
+        <description>&lt;p&gt;This is the third part in a short series on applying test driven development to a JavaScript program using &lt;a href=&quot;www.mochajs.org&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;www.chaijs.org&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;www.sinonjs.org&quot;&gt;Sinon&lt;/a&gt;. &lt;a href=&quot;http://haileyfoster.com/Test-Driven-Development/&quot;&gt;Part 1&lt;/a&gt; and &lt;a href=&quot;http://haileyfoster.com/TDD-2/&quot;&gt;Part 2&lt;/a&gt; gave a general overview of TDD and a brief walk-through of how to set up a testing environment. Part 3 will give a step-by-step example of the TDD process. I strongly recommend following along with your own code if you have yet to implement TDD at on your own, so if you have not set up your environment using the process described in Part 2, I suggest doing so before reading this post.&lt;/p&gt;
+
+&lt;h2 id=&quot;the-spec-code-and-rendering&quot;&gt;The Spec Code and Rendering&lt;/h2&gt;
+&lt;p&gt;If you’ve been following along, you know that we’re designing a very simple program to identify if an array of numbers contains an arithmetic or geometric sequence. We have yet to write any code in our function, but we do have a pre-populated html file linked to both our code, and our testing spec; this will allow us to run our tests in the browser. Here is a comparison of the spec file and the rendered html:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/spec-to-html.png&quot; alt=&quot;Spec to browser comparison&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, the &lt;code&gt;describe&lt;/code&gt; and &lt;code&gt;it&lt;/code&gt; statements are from the Mocha framework, while the &lt;code&gt;expect&lt;/code&gt; statements are from Chai. Notice how these are rendered to the browser:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The text inside of the &lt;code&gt;describe&lt;/code&gt; statement is rendered as a heading for a set of tests.&lt;/li&gt;
+  &lt;li&gt;Each &lt;code&gt;it&lt;/code&gt; statement is rendered as a different test; if the test is passing, we see a green check mark, while if it is failing, we see a red “x”&lt;/li&gt;
+  &lt;li&gt;Finally, Chai provides additional information for any failing test in the form of an error.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Clicking on each of the tests will reveal the specific &lt;code&gt;expect&lt;/code&gt; statement to which they relate; this can be quite helpful when trying to interpret the results. Of the three default tests provided by the test generator we are using, only the first provides us with any real information—that our function exists. The other two are just placeholders to get us started writing our own tests.&lt;/p&gt;
+
+&lt;h2 id=&quot;creating-objectives&quot;&gt;Creating Objectives&lt;/h2&gt;
+&lt;p&gt;Before writing the specific tests, let’s think about the overarching goal of our little program and then break it down into smaller objectives (for those of you that read Part 1, this is analogous to &lt;a href=&quot;https://www.mydigitalchalkboard.org/portal/default/Content/Viewer/Content?action=2&amp;amp;sciId=829&quot;&gt;“unpacking” local, state and national standards&lt;/a&gt;).&lt;/p&gt;
+
+&lt;p&gt;We know we want our program to &lt;strong&gt;identify if a set of numbers is an arithmetic or geometric sequence&lt;/strong&gt;. Let’s think more deeply about what that means our program will need to do:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Accept an input of numbers in the form of an array or string&lt;/li&gt;
+  &lt;li&gt;Determine if the sequence of numbers has a common difference or common ratio&lt;/li&gt;
+  &lt;li&gt;Output the result as a string stating if the sequence was arithmetic, geometric, or neither.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Each of these objectives can then be translated into smaller tests that our program will either pass or fail. Because we will then working to pass just one test at a time, I feel it is best to start with the tests for the output, and then work our way backwards; this strategy will not work for all programs, but it does fit this situation nicely. Some of these tests may seem a bit contrived, but I think it is important to illustrate the fact that you want to write tests for the smallest bit of code you can test at a time.&lt;/p&gt;
+
+&lt;p&gt;We will first write these tests in pseudocode, and then translate them into Mocha and Chai.&lt;/p&gt;
+
+&lt;h4 id=&quot;the-output-message&quot;&gt;The Output Message&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should return the result as a string.&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//If the sequence is arithmetic, it should return &amp;quot;This sequence is arithmetic&amp;quot;&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//If the sequence is geometric, it should return &amp;quot;This sequence is geometric&amp;quot;&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Otherwise, it should return &amp;quot;This sequence is not a recognized pattern&amp;quot;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;the-function&quot;&gt;The Function&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should identify an arithmetic sequence.&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should identify a geometric sequence.&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should not identify other types of sequences&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should work for decreasing functions.&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;the-input-data&quot;&gt;The Input Data&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should accept an array of numbers&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should accept a string of numbers that are comma delimited&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//It should accept a string of numbers that are space delimited&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&quot;writing-the-code&quot;&gt;Writing the Code&lt;/h2&gt;
+&lt;p&gt;####Describe Statements
+Now that we know what behavior we expect our program to have, it is time to start writing the actual tests. Each section of tests lends itself nicely to a Mocha &lt;code&gt;describe&lt;/code&gt; statement; let’s start by writing those.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//This first line was written by the test generator; we will keep it to &lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//maintain the overarching focus on our sequenceType function.&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sequenceType()&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;exists&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;function&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Output Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Function Code&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Input Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice each describe statement is a function that takes two parameters: a general title, and a callback function. Our individual tests will go inside of that callback function. For now, when we open this function in the browser, this is what we see:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Empty-tests.png&quot; alt=&quot;Browser render of empty tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The empty describe statements will not render until we give them some &lt;code&gt;it&lt;/code&gt; statements.&lt;/p&gt;
+
+&lt;h4 id=&quot;if-statements&quot;&gt;If statements&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sequenceType()&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;s1&quot;&gt;&amp;#39;use strict&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;exists&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;function&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Output Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return the result as a string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is arithmetic&amp;quot; for arithmetic sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is geometric&amp;quot; for geometric sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is not a recognized pattern&amp;quot; otherwise&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt; 
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Function Code&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify an arithmetic sequence&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify an geometric sequence&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should not identify other sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-32&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-33&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should work for decreasing functions&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-34&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-35&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-36&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Input Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-37&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept an array of numbers&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-38&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-39&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-40&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept a string of numbers that are comma delimited&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-41&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-42&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-43&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept a string of numbers that are space delimited&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-44&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-45&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-46&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-47&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The browser rendering is now starting to look more like we want it to:
+&lt;img src=&quot;../images/TDD/All-passing.png&quot; alt=&quot;Empty it statements; all passing&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;All of our tests are currently passing, because we haven’t actually written any assertions. If you want to focus on any individual test, you can do so by clicking on one of the small arrows to the right. Clicking on a description heading will also allow you to focus on one set of related tests.&lt;/p&gt;
+
+&lt;h4 id=&quot;assertions&quot;&gt;Assertions&lt;/h4&gt;
+&lt;p&gt;At this point, we are finally ready to write the tests themselves. Instead of writing them all at once, we’re just going to work on one section of tests at a time; this will keep our program organized and require us to maintain focus. We are going to write our tests using &lt;a href=&quot;http://chaijs.com/api/bdd/&quot;&gt;Chai’s chainable expect style&lt;/a&gt;. I suggest reading through their API to see all of the possible methods for constructing statements; for now, we will stick with a few basic patterns:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;expect(something).to.be.a(something)&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;expect(something).to.equal(something)&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Output Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return the result as a string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is arithmetic&amp;quot; for arithmetic sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is geometric&amp;quot; for geometric sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;Not a recognized pattern&amp;quot; otherwise&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt; 
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now when we open up our spec, we see that we hae four failing tests. We can also see that the four failing tests all display the same message:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+ReferenceError: returnValue is not defined
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;This is followed by information about where this error is occurring for each test. We care most about the top line of that location, which reads:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+at Context.&amp;lt;anonymous&amp;gt; (file:///Users/haileyfoster/Desktop/Arith-Geo-Test/spec/sequenceType.js:14:14)
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;We can see that our error is occurring in our spec file, at line 14, character 14. Looking at our spec, we can see this is because we are calling on a variable, &lt;code&gt;returnValue&lt;/code&gt; that we haven’t actually defined anywhere in our test. Let’s go ahead and define this variable in the spec above all of the &lt;code&gt;it&lt;/code&gt;statements in this section.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Output Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;c1&quot;&gt;//defining the variable here will give the following tests access to the variable&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return the result as a string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;  
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;  
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now our tests are giving us an assertion error:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;
+AssertionError: expected undefined to be a string
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;passing-the-tests&quot;&gt;Passing the tests&lt;/h2&gt;
+&lt;p&gt;Finally, we are at the point where we can turn to our sequenceType function and write enough code there so that it passes one test at a time. Our first test tells us it should return a string. Let’s make this test pass with the smallest amount of code possible:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Hmmm…if we run the spec, we see we’re getting the same error as before. The problem is that we haven’t actually called our function from the spec yet. Let’s do that:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return the result as a string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;   
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Great! By giving our function a very simple return statement, our first test is passing.&lt;/p&gt;
+
+&lt;p&gt;From here, I’m just going to present the the work necessary to get each consecutive test to pass, only commenting when necessary to clarify the thinking process.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is arithmetic&amp;quot; for arithmetic sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Passing Code&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is geometric&amp;quot; for geometric sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Passing Code&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Uh-oh! Now when we run our spec, we see that the third test passes, but the second test is now failing! Obviously this is because we were just changing the returned string. Time to rethink our code so that both tests will pass.&lt;/p&gt;
+
+&lt;p&gt;First we will need to update our code so that it will take a parameter and return a different message depending upon the argument passed in. We also need to update our spec file to pass different arguments to the function for each test.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Our updated specs&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is arithmetic&amp;quot; for arithmetic sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;1,3,5,7&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is geometric&amp;quot; for geometric sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;2,4,8,16&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The updated code&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1,3,5,7&amp;quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Of course this is only going to work for these exact sequences, but right now, that doesn’t matter. We just want to get the specs to pass; we will use later tests to ensure that it works for any sequence passed it. Moving on…&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is arithmetic&amp;quot; for arithmetic sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;1,3,5,7&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;This sequence is geometric&amp;quot; for geometric sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;2,4,8,16&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return &amp;quot;Not a recognized pattern&amp;quot; otherwise&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;1,4,2,9&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt; 
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Code&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;1,3,5,7&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;2,4,8,16&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;On to the next set of tests! We’ll just basically rinse and repeat what we did above: Write failing tests, write code to pass the test, refactor. Because all of these tests are also going to use the variable &lt;code&gt;returnValue&lt;/code&gt;, we will move this declaration to the outer &lt;code&gt;describe&lt;/code&gt; function, so that all inner functions have access to it. We will also pass in our sequences as an array instead of a string so we have one less thing to deal with in our tests.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Function Code&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify an arithmetic sequence.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify a geometric sequence.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should not identify other sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should work for decreasing functions&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;deArith&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;deGeo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;48&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//The Code&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-32&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-33&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-34&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-35&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-36&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-37&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-38&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-39&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-40&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-41&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-42&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-43&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-44&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-45&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-46&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-47&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-48&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-49&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-50&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-51&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-52&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-53&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-54&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-55&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We made our next test pass with this bit of code, but now our second test is failing. 
+&lt;img src=&quot;../images/TDD/String-problem.png&quot; alt=&quot;Failing test&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Opening up the details of our spec, we see this is because this test is passing in a string, and our function can only work with arrays right now.
+&lt;img src=&quot;../images/TDD/String-prob-reason.png&quot; alt=&quot;Reason for failing test&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The easiest way to fix this is to change our input for this test to an array instead of a string.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Output Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should return the result as a string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;be&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We’ll need to remember to change the input for the other tests as well.&lt;/p&gt;
+
+&lt;p&gt;Moving on…&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Function Code&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify an arithmetic sequence.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;7&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should identify a geometric sequence.&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;8&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should not identify other sequences&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should work for decreasing functions&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;deArith&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;9&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;deGeo&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;48&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;12&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//The Code&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-32&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-33&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-34&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-35&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-36&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-37&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-38&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-39&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-40&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-41&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-42&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-43&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-44&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-45&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-46&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-47&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-48&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-49&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-50&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-51&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-52&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-53&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-54&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-55&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-56&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-57&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-58&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-59&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-60&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now for our final set of tests&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The Spec&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;describe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;The Input Message&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept an array of numbers&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;([&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;27&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;38&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept a string of numbers that are comma delimited&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;5,16,27,38&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;it&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;should accept a string of numbers that are space delimited&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;5 16 27 38&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;expect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;returnValue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;to&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;equal&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Our function already passes the first test here, but we can see we need to add some code to deal with string inputs.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The code&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;,&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!==&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-32&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Almost there! Only the last test is failing; this is a pretty easy fix using a regex when we split the string.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//The Code&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/[,\w/]/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And that’s it! Our function passes all of our specs and does exactly what we wanted it to do. We can now refactor our code a bit to make it cleaner and more efficient, checking our specs as we make changes to ensure they all still pass. Here is the final refactored code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequenceType&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;typeof&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;string&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;split&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;sr&quot;&gt;/[,\w/]/&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;last&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sequence&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;    
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;next&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;current&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;last&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;false&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arithTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is arithmetic&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;geoTest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;This sequence is geometric&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;Not a recognized pattern&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the final part of this series, we will look into the power Sinon can give to our tests.&lt;/p&gt;
+</description>
+        <pubDate>Fri, 17 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//TDD-3/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//TDD-3/</guid>
+      </item>
+    
+      <item>
+        <title>A Beginner&#39;s Guide to Test Driven Development, Part 2</title>
+        <description>&lt;p&gt;&lt;a href=&quot;http://haileyfoster.com/Test-Driven-Development/&quot;&gt;Part 1&lt;/a&gt; of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt; and &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;. We will actually implement this environment in &lt;a href=&quot;http://haileyfoster.com/TDD-3&quot;&gt;Part 3&lt;/a&gt;, and finally, Part 4 will provide additional details about when, why, and how to use &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt; to test more complex programs.&lt;/p&gt;
+
+&lt;p&gt;Let’s say you want to write a JavaScript program that will determine if a sequence of numbers is &lt;a href=&quot;https://purplemath.com/modules/series3.htm&quot;&gt;arithmetic, geometric, or neither&lt;/a&gt;. This is a fairly straightforward task that gives us a good example with which to set-up a testing environment.&lt;/p&gt;
+
+&lt;p&gt;Remember, the main premise of TDD is to write and test small units of code at a time to minimize the chances of writing a hard-to-catch-bug. This means that we will want to set up our environment &lt;em&gt;before&lt;/em&gt; writing any code. Of course, there are many options for how to go about setting up your environment depending upon your level of experience. The goal of this post is to simplify the process so that novice programmers will be more likely to use these tools from the beginning. Therefore, we will be using &lt;a href=&quot;https://github.com/phillipalexander/generator-test&quot;&gt;a generator&lt;/a&gt; from Phillip Alexander for our initial set-up.&lt;/p&gt;
+
+&lt;hr /&gt;
+&lt;p&gt;####Before Moving On&lt;/p&gt;
+
+&lt;p&gt;In order to use the test generator, you will need to have &lt;a href=&quot;https://nodejs.org/download/&quot;&gt;Node.js&lt;/a&gt; installed and have some familiarity with your command line. If you have yet to use your command line, I recommend going through at least the first few chapters in &lt;a href=&quot;http://cli.learncodethehardway.org/book/&quot;&gt;The Command Line Crash Course&lt;/a&gt; to get over your fear of breaking your computer (which you won’t do). There are many options for installing Node; check out a clear set of directions &lt;a href=&quot;http://blog.teamtreehouse.com/install-node-js-npm-mac&quot;&gt;here&lt;/a&gt; if you use a Mac. Node will allow us to use a package manager called &lt;strong&gt;npm&lt;/strong&gt; to install the remaining tools we will need, and will allow us to run our tests from the command line if we choose.&lt;/p&gt;
+
+&lt;p&gt;We will also be installing &lt;a href=&quot;http://yeoman.io/&quot;&gt;Yeoman&lt;/a&gt; in our initial set-up, but you don’t actually need to understand what it is or how it works.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h3 id=&quot;initial-set-up&quot;&gt;Initial Set-Up&lt;/h3&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;
+    &lt;p&gt;Create an &lt;em&gt;empty&lt;/em&gt; folder for your program. All of the rest of the files needed for our program will be added here.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Install Yeoman&lt;/strong&gt;: In your command line, type: &lt;code&gt;$ npm install -g yo&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;&lt;strong&gt;Install Phillip Alexander’s generator&lt;/strong&gt;: In your command line, type: &lt;code&gt;npm install -g generator-test&lt;/code&gt;&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Initiate the generator&lt;/strong&gt;:
+    &lt;ol&gt;
+      &lt;li&gt;From the command line, change directories into the folder you created earlier. For example, since I created my directory on my Desktop, I would type: &lt;code&gt;cd ~/Desktop/Arith-Geo-Test&lt;/code&gt;.&lt;/li&gt;
+      &lt;li&gt;Type &lt;code&gt;yo test&lt;/code&gt;. This will use Yeoman to install the files you will need. At this point, your command line should look something like this:
+ &lt;img src=&quot;../images/TDD/Yeoman1.png&quot; alt=&quot;Generator Welcome Screen&quot; /&gt;&lt;/li&gt;
+    &lt;/ol&gt;
+  &lt;/li&gt;
+  &lt;li&gt;
+    &lt;p&gt;You now need to decide if you want to run your tests in the browser, or in Node. I recommend using the browser unless you are already comfortable with Node, and the remainder of this tutorial will make use of the browser for our tests. Use your arrow keys to make your choice, and hit enter.&lt;/p&gt;
+  &lt;/li&gt;
+  &lt;li&gt;The generator will now ask for the &lt;em&gt;name&lt;/em&gt; of the algorithm you’d like to test. Enter a name for the program you want to write. We’re going to call ours &lt;code&gt;sequenceType&lt;/code&gt;. Note that if you already have some JavaScript files in your directory, the generator will ask you to choose one of these instead, and base the rest of the set-up upon this existing file.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Yeoman2.png&quot; alt=&quot;Generator file choice&quot; /&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;After entering your choice, the generator will do its thing and create all of the files you will need to run your unit tests. It will also install another package manager called &lt;a href=&quot;http://blog.teamtreehouse.com/getting-started-bower&quot;&gt;Bower&lt;/a&gt; so it can install all of the &lt;a href=&quot;http://askubuntu.com/questions/361741/what-are-dependencies&quot;&gt;dependencies&lt;/a&gt; you’ll need—in our case, this is Mocha and Chai.
+&lt;img src=&quot;../images/TDD/Yeoman3.png&quot; alt=&quot;Generator install screen&quot; /&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;the-tdd-scaffold&quot;&gt;The TDD Scaffold&lt;/h3&gt;
+
+&lt;p&gt;Now when we look in our previously empty directory, we should see the following file structure:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;code&gt;Bower Components&lt;/code&gt;: contains the packages for Mocha and Chai&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;bower.json&lt;/code&gt;: lists the packages downloaded by Bower—useful for installing updates if needed in the future&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: the html file through which we will run our tests&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: our JavaScript file&lt;/li&gt;
+  &lt;li&gt;&lt;code&gt;spec&lt;/code&gt;
+    &lt;ul&gt;
+      &lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: the JavaScript file within which we will write our tests. Also called the &lt;strong&gt;spec&lt;/strong&gt; file.&lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Although we need the packages stored in the Bower Components, we don’t need to do anything with them. If you are curious, by all means feel free to explore the contents of this folder. What we really care about is the index.html file, and the two sequenceType.js files. Note that both the spec file and our program have the same name, but are located in different places in our directory. If this is confusing, you can change the name of the spec file, but you’ll need to be careful to change it every it is referenced from within the generated documents.&lt;/p&gt;
+
+&lt;p&gt;Let’s begin by opening the index.html file in your text editor.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/index_html.png&quot; alt=&quot;The index.html file&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Notice that the generator has automatically set up our index.html file for us:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;The meta and title elements have been created&lt;/li&gt;
+  &lt;li&gt;The css file from the Mocha package is referenced&lt;/li&gt;
+  &lt;li&gt;The Mocha, Chai, spec, and algorithm scripts are referenced&lt;/li&gt;
+  &lt;li&gt;Scripts needed to setup and run Mocha and Chai are embedded&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;If we open this file in the browser, we will see a nicely formatted document with some dummy text.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Mocha_Spec_Runner.png&quot; alt=&quot;The index.html file in the browser&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Don’t worry about what any of this means, or where it came from yet. We’ll get there.&lt;/p&gt;
+
+&lt;p&gt;Next, let’s open up our program, &lt;code&gt;sequenceType.js&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/EmptyProgram.png&quot; alt=&quot;Our program&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;The generator has pre-populated our file for us, but we can alter it as we like. Feel free to remove the first two lines entirely if you wish.&lt;/p&gt;
+
+&lt;p&gt;Finally, let’s look at that spec file from &lt;code&gt;spec/sequenceType.js&lt;/code&gt;. This is the one we’re really interested in.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Spec.png&quot; alt=&quot;The spec&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Again, the generator has pre-populated this file for us with a small template. The lines starting with &lt;code&gt;describe&lt;/code&gt; and &lt;code&gt;it&lt;/code&gt; are from the Mocha framework, while the lines starting with &lt;code&gt;expect&lt;/code&gt; come from Chai.&lt;/p&gt;
+
+&lt;p&gt;You should now be ready to actually start using TDD to write your program. Feel free to start playing around, or watch out for Part 3: Implementing TDD.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 12 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//TDD-2/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//TDD-2/</guid>
+      </item>
+    
+      <item>
+        <title>A Beginner&#39;s Guide to Test Driven Development, Part 1</title>
+        <description>&lt;p&gt;Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (&lt;em&gt;cough&lt;/em&gt; Internet Explorer &lt;em&gt;cough&lt;/em&gt;), determine if you were succesful, and modify your plans if you weren’t.&lt;/p&gt;
+
+&lt;p&gt;Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this &lt;a href=&quot;https://en.wikipedia.org/wiki/Backward_design&quot;&gt;backward design&lt;/a&gt;; programmers call it &lt;a href=&quot;https://en.wikipedia.org/wiki/Test-driven_development&quot;&gt;test driven development&lt;/a&gt;. Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.&lt;/p&gt;
+
+&lt;p&gt;I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;Write a failing test (one that your program/ students cannot yet pass)&lt;/li&gt;
+  &lt;li&gt;Add just enough code (or instruction) so the program/students can pass the  test.&lt;/li&gt;
+  &lt;li&gt;Refactor (or reteach) where necessary.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming.&lt;/p&gt;
+
+&lt;p&gt;One way of implementing TDD is in the browser using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt;. If you do a quick google search of each of these, you will learn that Mocha is a “testing framework”, Chai is an “expectation library,” and Sinon is a…. well, let’s call it a “virtual environment library.” Unfortunately, if you’re new to programming none of that means anything to you. If you’re like me, when you first read each of those “definitions,” you may have thought to yourself, “Ok, but what &lt;em&gt;is&lt;/em&gt; a testing framework? Actually, what’s a &lt;em&gt;framework&lt;/em&gt;?? And what is the difference between a library and a framework?”&lt;/p&gt;
+
+&lt;h3 id=&quot;defining-a-framework&quot;&gt;Defining a Framework&lt;/h3&gt;
+&lt;p&gt;&lt;a title=&quot;By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons&quot; href=&quot;https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg&quot;&gt;&lt;img width=&quot;420px&quot; style=&quot;float: left; margin-right: 10px&quot; alt=&quot;Seattle library framework inside&quot; src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;The everyday definition of &lt;strong&gt;framework&lt;/strong&gt; is &lt;a href=&quot;http://dictionary.reference.com/browse/framework&quot;&gt;a skeletal structure designed to support or enclose something&lt;/a&gt;. Many high school English teachers provide their students with essay frameworks &lt;a href=&quot;http://unilearning.uow.edu.au/essay/4bi.html&quot;&gt;like this one&lt;/a&gt; to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.&lt;/p&gt;
+
+&lt;p&gt;This is not that different from what a programming framework does; from &lt;a href=&quot;https://en.wikipedia.org/wiki/Software_framework&quot;&gt;Wikipedia&lt;/a&gt;, a software framework, “is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.” In other words, it makes it easier and faster for you to write &lt;em&gt;your&lt;/em&gt; program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.&lt;/p&gt;
+
+&lt;p&gt;Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser.&lt;/p&gt;
+
+&lt;h3 id=&quot;libraries&quot;&gt;Libraries&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&quot;../images/TDD/Library_Pengo.jpg&quot; alt=&quot;Libary books&quot; /&gt;
+“&lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg&quot;&gt;Library Pengo&lt;/a&gt;”. Licensed under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot; title=&quot;Creative Commons Attribution-Share Alike 3.0&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;&quot;&gt;CC BY-SA 3.0&lt;/a&gt; via &lt;a href=&quot;//commons.wikimedia.org/wiki/&quot;&gt;Wikimedia Commons&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;At first, it can be difficult to differentiate between a &lt;em&gt;framework&lt;/em&gt;, and a &lt;em&gt;library&lt;/em&gt;. Like a framework, a library provides us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms the teacher encourages students to use in their essay.&lt;/p&gt;
+
+&lt;p&gt;Chai and Sinon are both software libraries. Each provide a collection of related modular code that can be used from within the Mocha framework. When writing our tests, we need to be able to decide if our program is actually doing what we want. Chai essentially gives us a set of tests we can apply to our program, while Sinon allows us to trick our program into running in a fake environment so we can spy on it.&lt;/p&gt;
+
+&lt;p&gt;The tests Chai and other, &lt;a href=&quot;http://stackoverflow.com/questions/10472152/standalone-assertion-libraries&quot;&gt;similar libraries&lt;/a&gt;, use are called &lt;em&gt;assertions&lt;/em&gt;. An &lt;em&gt;assertion&lt;/em&gt; simply compares what we &lt;em&gt;want&lt;/em&gt; our program to do, to what it actually &lt;em&gt;is&lt;/em&gt; doing. As such, they return a boolean value: if our programm &lt;em&gt;is&lt;/em&gt;working correctly, the assertion evaluates to true, and it passes the test.&lt;/p&gt;
+
+&lt;p&gt;Sinon uses &lt;em&gt;spies&lt;/em&gt;, &lt;em&gt;stubs&lt;/em&gt;, and &lt;em&gt;mocks&lt;/em&gt; to keep track of everything our program is doing and allow it to run without the actual &lt;a href=&quot;https://en.wikipedia.org/wiki/Dependency&quot;&gt;dependencies&lt;/a&gt; it will need. A &lt;em&gt;spy&lt;/em&gt; records function arguments, return values and other data used and created by our program. &lt;em&gt;Stubs&lt;/em&gt; are basically spies with super powers. Not only do they keep track of the data related to our program, they also allow us to &lt;strong&gt;fake&lt;/strong&gt; functionality so the rest of our system thinks the program is running normally. Finally, a &lt;em&gt;mock&lt;/em&gt; combines the concepts of spies, stubs, and assertions all together. I will go into these ideas more in a later blog post, as they are difficult to conceptualize without detailed examples.&lt;/p&gt;
+
+&lt;p&gt;So, now we know what TDD is, why we would use it, and how our testing frameworks and libraries work together to allow us to implement it. &lt;a href=&quot;http://haileyfoster.com/TDD-2/&quot;&gt;Next up&lt;/a&gt; I’ll explain step-by-step how to actually set up a testing suite using a concrete JavaScript example.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 09 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Test-Driven-Development/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Test-Driven-Development/</guid>
+      </item>
+    
+      <item>
+        <title>Wrapping your Brain Around JavaScript&#39;s Bind Method</title>
+        <description>&lt;p&gt;I think everyone can agree that fully understanding JavaScript’s keyword &lt;code&gt;this&lt;/code&gt; is…challenging. The object to which it refers changes depending upon the context in which it is called. Fortunately, you can use JavaScript’s native &lt;code&gt;bind&lt;/code&gt; method to take control of matters. The code below demonstrates both the &lt;em&gt;need&lt;/em&gt; for the &lt;code&gt;bind&lt;/code&gt; method and works up to explain how exactly it work.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Make a new object and a related(ish) function&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appetite&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hungry&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appetite&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;full&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//attempt to call the method on the object&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This doesn’t work, because &lt;code&gt;feedCat&lt;/code&gt; isn’t a property of the cat object. Similarly, &lt;code&gt;feedCat(cat)&lt;/code&gt; won’t work, because the &lt;code&gt;this&lt;/code&gt; inside of &lt;code&gt;feedCat&lt;/code&gt; will be bound to &lt;code&gt;window&lt;/code&gt;. However, we can use JavaScript’s &lt;code&gt;call&lt;/code&gt; or &lt;code&gt;apply&lt;/code&gt; methods to manually bind &lt;code&gt;this&lt;/code&gt; to the &lt;code&gt;cat&lt;/code&gt; object:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;However, if we try to use a browser method, such as &lt;code&gt;setTimout&lt;/code&gt;, funny things start to happen:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The code above doesn’t work, because the feedCat function is invoked &lt;em&gt;immediately&lt;/em&gt; and doesn’t return a function to be invoked later. So &lt;code&gt;setTimeout&lt;/code&gt; is essentially trying to call &lt;code&gt;undefined&lt;/code&gt;, not a function.&lt;/p&gt;
+
+&lt;p&gt;It is tempting imagine that any easy fix might be simply adding the &lt;code&gt;feedCat&lt;/code&gt; function as a property of &lt;code&gt;cat&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;feedcat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Unfortunately, &lt;code&gt;setTimeout(cat.feedcat, 1000)&lt;/code&gt; &lt;strong&gt;&lt;em&gt;still won’t work&lt;/em&gt;&lt;/strong&gt; because  &lt;code&gt;setTimeout&lt;/code&gt; belongs to the &lt;code&gt;window&lt;/code&gt; object, so when we call functions with it, &lt;code&gt;this&lt;/code&gt; automatically binds to the &lt;code&gt;window&lt;/code&gt; object (or other global object)!
+One of my Hack Reactor peers wrote up a more detailed explanation of that problem &lt;a href=&quot;http://lukesavage.me/jekyll/2015/07/08/setTimeout-and-this/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We must use a wrapper function instead:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The wrapper function doesn’t get called until later, can because &lt;code&gt;feedCat.call(cat)&lt;/code&gt; is &lt;em&gt;inside&lt;/em&gt; of the wrapper function, it doesn’t get called until that function is called.&lt;/p&gt;
+
+&lt;p&gt;So now, let’s imagine that instead of using an anonymous wrapper function, we have a function called &lt;code&gt;bind&lt;/code&gt; that does essentially the same thing. It’s code would need to look something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Notice that the first parameter is the function we &lt;em&gt;really&lt;/em&gt; want to call, and the second parameter is the object to which we want to bind &lt;code&gt;this&lt;/code&gt;; any additional parameters could be passed to the interior function.&lt;/p&gt;
+
+&lt;p&gt;We could then run this code:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And that’s basically all the &lt;code&gt;bind&lt;/code&gt; function does. It essentially cements the keyword &lt;code&gt;this&lt;/code&gt; to whatever you want it to be. Instead of a rewriting &lt;code&gt;bind&lt;/code&gt; everytime we want to use it with a different function, JavaScript has attached it as a method to the Function prototype. Because all functions delegate here, all functions have access to bind, so we would actually call it like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The real source code looks something like this:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nb&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt; 
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Using &lt;code&gt;apply&lt;/code&gt; instead of &lt;code&gt;call&lt;/code&gt; accounts for slightly more complicated situations in which many parameters must be passed in to the interior function. It also uses &lt;code&gt;returns&lt;/code&gt; to account for the fact that most functions will need to return something, and not just implement a side effect like in ouf &lt;code&gt;feedCat&lt;/code&gt; function.&lt;/p&gt;
+</description>
+        <pubDate>Mon, 06 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Understanding-Bind/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Understanding-Bind/</guid>
+      </item>
+    
+      <item>
+        <title>Deciphering Javascript Instantiation Patterns</title>
+        <description>&lt;p&gt;Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
+&lt;span style=&quot;cursos:help;&quot; title=&quot;a technique for encapsulating and modularizing object creation&quot;&gt;instantiation patterns&lt;/span&gt;, which can also be considered strategies for creating new classes:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Functional&lt;/li&gt;
+  &lt;li&gt;Functional Shared&lt;/li&gt;
+  &lt;li&gt;Prototypical&lt;/li&gt;
+  &lt;li&gt;Pseudoclassical&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Much has been written about these four styles already—check out the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt; for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.&lt;/p&gt;
+
+&lt;p&gt;All four patterns accomplish the same three objectives:
+1. Declare a new object (outlined in orange)
+2. Add properties common to all members of the class (also in orange)
+3. Add methods common to all members of the class (outlined in green)&lt;/p&gt;
+
+&lt;p&gt;Below each function, I have also shown how each pattern is called upon to create new objects. Notice that functional, functional shared, and prototypical all use the same general code here, but the pseudoclassical pattern uses the keyword &lt;code&gt;new&lt;/code&gt;. Additionally, the functional shared code here uses &lt;a href=&quot;file:///Users/haileyfoster/Library/Application%20Support/Dash/DocSets/UnderscoreJS/UnderscoreJS.docset/Contents/Resources/Documents/index.html#extend&quot;&gt;Underscore’s &lt;code&gt;_.extend&lt;/code&gt; function&lt;/a&gt;.&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Pattern&lt;/th&gt;
+        &lt;th&gt;General Structure&lt;/th&gt;
+        &lt;th&gt;Example Code&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Functional&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Functional Shared&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-Shared.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional Shared-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Prototypal&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Pseudoclassical&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+
+&lt;/table&gt;
+
+&lt;p&gt;Again, each of these patterns are useful in different circumstances. In addition to the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt;, &lt;a href=&quot;http://www.hackreactor.com/blog/javascript-instantiation-patterns&quot;&gt;Brett Hoyer&lt;/a&gt; presents the advantages and disadvantages of each pattern quite clearly on Hack Reactor’s blog.&lt;/p&gt;
+
+&lt;p&gt;In addition to the instantiation patterns shown above, Javascript allows for the use of &lt;strong&gt;function decorators&lt;/strong&gt;. While these do not instantiate new objects, they are useful for modifying the properties and methods of existing objects. They &lt;em&gt;can&lt;/em&gt; also be used to instantiate a new object if an empty object is passed in as one of the arguments, but this is far less efficient that using any of the class declaration patterns above.&lt;/p&gt;
+
+&lt;p&gt;There are two decorator patterns:&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;Functional Object Decorator with Duplicate Methods&lt;/li&gt;
+  &lt;li&gt;Functional Object Decorator with Shared Methods&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;These two patterns look almost identical to the functional and functional shared patterns above, and have similar pros and cons. However, unlike the instantiation patterns, these must have an object passed in as one of their arguments.&lt;/p&gt;
+
+&lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Pattern&lt;/th&gt;
+        &lt;th&gt;General Structure&lt;/th&gt;
+        &lt;th&gt;Example Code&lt;/th&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Decorator with Duplicate Methods&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+        &lt;td&gt;Decorator with Shared Methods&lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared.png&quot; /&gt; &lt;/td&gt;
+        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared-ex.png&quot; /&gt;&lt;/td&gt;
+    &lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Much more can be said about all of these patterns — why some use &lt;code&gt;this&lt;/code&gt;and/or &lt;code&gt;new&lt;/code&gt;, which are more efficient etc…— but I hope this is enough to help clarify the structure of each pattern, and to use as a quick reference for those who are already familiar with them.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 05 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</guid>
+      </item>
+    
+      <item>
+        <title>And So It Begins</title>
+        <description>&lt;p&gt;Alright Freetime, it was fun, but we officially have to have to say our goodbyes for now. I had a great time with you over the last two weeks; we had some epic walks through Portland, ate a few fantastic meals, caught up with friends, and just lolly-gagged in general. However, I started Hack Reactor a few days ago, and it’s really time to let go.&lt;/p&gt;
+
+&lt;p&gt;Hack Reactor is a tough program to get into; before beginning, I definitely tried to do everything I could to feel prepared going into it. At the same time, I also didn’t want to “burn out” before even starting, so I took a step back from programming the week before it started. During this time, our cohort made a Slack channel so we could get to know each other and discuss the precourse work. I continued to monitor our channel even while taking a break from everything else and started to notice just how advanced some of my classmates were going to be. Even if I’d wanted to, I couldn’t really engage with many of their conversations, because I had no idea what they were talking about. So, I lurked and tried to soak up as much as possible, while trying to tell myself that it didn’t matter, and Hack Reactor wouldn’t have accepted me if it did.&lt;/p&gt;
+
+&lt;p&gt;Of course, all of this still made me a bit anxious, because I didn’t want to be behind before I’d even begun! The more I thought about it, however, the more I realized that my lack of understanding was primarily due to a language barrier. Yes, I am a native English speaker, but there is a huge amount of jargon present in computer science to which I just have not yet been exposed. In teacher terms, these words are referred to as “Tier 3”–they are low frequency, and context specific. Research also shows that the average human brain is only capable of deeply learning about seven new “chunks” of information at a time. This is a surprisingly small amount of information, so it means that I’ll need to be careful to only focus on the vetted concepts given in the curriculum. I therefore have decided it’s best not to worry about all of the random terms being thrown out by my classmates until Hack Reactor decides they are relevant.&lt;/p&gt;
+
+&lt;p&gt;This does not mean that these discussions haven’t been making me nervous! On top of that, the first few of days with Hack Reactor have been packed with activity. In addition to reviewing the precourse material, we have also been practicing our skills with git, learning how to use floobits, and working to collaborate effectively with our partners. We also had our first timed self-assessment. It was intense, and I think almost all of us were mentally and emotionally exhausted afterward. Fortunately, Hack Reactor does a fantastic job of allaying fears of failure by using the first few days to instill healthy learning attitudes. Honestly, I wish I could have shown some of their lectures to &lt;em&gt;my&lt;/em&gt; students when I was still teaching!&lt;/p&gt;
+
+&lt;p&gt;It is clear that the next few months will be far from easy, and I definitely will not be “at the top of the class.” That’s fine though! I ready to be challenged and am actually looking forward to the struggle. I just have to remember that in the end, the feeling of accomplishment will be that much sweeter.&lt;/p&gt;
+</description>
+        <pubDate>Thu, 02 Jul 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//And-So-It-Begins/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//And-So-It-Begins/</guid>
+      </item>
+    
+  </channel>
+</rss>
