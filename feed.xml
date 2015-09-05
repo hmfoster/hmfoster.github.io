@@ -16,14 +16,14 @@
 
 &lt;ul&gt;
   &lt;li&gt;&lt;strong&gt;Neurons&lt;/strong&gt;: The basic building block of a network; analogous to individual biological neurons. Neurons connect to each other to form layers, which connect to form networks. You can &lt;em&gt;activate&lt;/em&gt; a neuron, which causes it to act upon the input data you give to it and output a result. Training a neuron causes it to alter its activation function until it returns the expected output. You can either directly activate a neuron with an input parameter, or by connecting neurons together so that each output activates one or more additional neurons. This means that individual neurons can receive multiple outputs. However, each neuron will only produce one output, though it can pass this output on to many different neurons.&lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Layers&lt;/strong&gt;: Most neural networks combine layers of neurons to create a network, as layers of neurons provide increased processing power (much like having multiple servers for an applicaton).&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Layers&lt;/strong&gt;: Most neural networks combine layers of neurons to create a network, as layers of neurons provide increased processing power (much like having multiple servers for an application).&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Networks&lt;/strong&gt;: Combinations of neurons and/or layers of neurons. The type of network depends upon its structure–combining neurons and layers of neurons results in a variety of different structures, called &lt;em&gt;architectures&lt;/em&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The above named modules allow you to create custom neural network architectures to suit your needs.&lt;/p&gt;
 
 &lt;ul&gt;
-  &lt;li&gt;&lt;strong&gt;Trainer&lt;/strong&gt;: Before a network of neurons will give the output you expect for a set of inputs, you must train it will a set of known inputs and output for your data. These data must be correctly structured as an array of objects, whose values are arrays (see exmaple below). You can either use the default settings for the trainer, or use your own to manipulate the speed and accuracy with which the network learns.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Trainer&lt;/strong&gt;: Before a network of neurons will give the output you expect for a set of inputs, you must train it will a set of known inputs and output for your data. These data must be correctly structured as an array of objects, whose values are arrays (see example below). You can either use the default settings for the trainer, or use your own to manipulate the speed and accuracy with which the network learns.&lt;/li&gt;
   &lt;li&gt;&lt;strong&gt;Architect&lt;/strong&gt;: This module allows you to quickly create a neural network by using one of the predefined architectures it provides. This is the simplest way to start using a neural network, as you can avoid almost all of the complexities involved with the network. If you use one of these architectures, you can get started using a network with just a few lines of code, and avoid using the Neuron, Network, and Layer modules entirely.&lt;/li&gt;
 &lt;/ul&gt;
 
