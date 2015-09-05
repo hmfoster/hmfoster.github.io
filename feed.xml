@@ -7,6 +7,35 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Implementing a Simple Neural Network</title>
+        <description>&lt;p&gt;Last week I compared a few different JavaScript neural network libraries my team was considering to create an automated grocery list generator. We settled on &lt;a href=&quot;https://github.com/cazala/synaptic&quot;&gt;Synaptic.js&lt;/a&gt; for its combined power and ease of use. Here, I will briefly describe how to get started with Synaptic to create your own neural networks.&lt;/p&gt;
+
+&lt;p&gt;[Image of a biological neural network]&lt;/p&gt;
+
+&lt;p&gt;Synaptic has five primary modules: 
+- &lt;strong&gt;Neurons&lt;/strong&gt;: The basic building block of a network; analogous to individual biological neurons. Neurons connect to each other to form layers, which connect to form networks. You can &lt;em&gt;activate&lt;/em&gt; a neuron, which causes it to act upon the input data you give to it and output a result. Training a neuron causes it to alter the its activation function until it returns the expected output. You can either directly activate a neuron with an input parameter, or by connecting neurons together so that each output activates one or more additional neurons. This means that individual neurons can receive multiple outputs. However, each neuron will only produce one output, though it can pass this output on to many different neurons.
+- &lt;strong&gt;Layers&lt;/strong&gt;: Most neural networks combine layers of neurons to create a network, as layers of neurons provide increased processing power (much like having multiple servers for an applicaton). 
+- &lt;strong&gt;Networks&lt;/strong&gt;: Combinations of neurons and/or layers of neurons. The type of network depends upon its structure–combining neurons and layers of neurons results in a variety of different structures, called &lt;em&gt;architectures&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;The above named modules allow you to create custom neural network architectures to suit your needs.&lt;/p&gt;
+
+&lt;p&gt;[Diagram of an artificial neural network]&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;Trainer&lt;/strong&gt;: Before a network of neurons will give the output you expect for a set of inputs, you must train it will a set of known inputs and output for your data. These data must be structured as an array of objects: &lt;code&gt;[{input: value1, output: value1}, {input: value2: output: value2}]&lt;/code&gt;. You can either use the default settings for the trainer, or use your own to manipulate the speed and accuracy with which the network learns.&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Architect&lt;/strong&gt;: This module allows you to quickly create a neural network by using one of the predefined architectures it provides. This is the simplest way to start using a neural network, as you can avoid almost all of the complexities involved with the network. If you use one of these architectures, you can get started using a network with just a few lines of code, and avoid using the Neuron, Network, and Layer modules entirely.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;[Code for how to set up and train a network with a premade architecture]&lt;/p&gt;
+
+&lt;p&gt;The Synaptic documentation does a great job explaining how to use each of these modules, and I encourage you to read about each of them in detail.&lt;/p&gt;
+</description>
+        <pubDate>Sat, 05 Sep 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Impleneting-Neural-Networks/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Impleneting-Neural-Networks/</guid>
+      </item>
+    
+      <item>
         <title>Comparing JavaScript Neural Network Libraries</title>
         <description>&lt;p&gt;This week my team and I started in on a project to build a semi-automated grocery list app. I won’t be going into the details of everything the project entails, but one of the things we wanted it to do was to predict whether or not an item should be added to a user’s shopping list. Right away, we thought about using a neural network to add this functionality…the only problem was that none of us had used a neural network before.&lt;/p&gt;
 
@@ -939,21 +968,6 @@ One of my Hack Reactor peers wrote up a more detailed explanation of that proble
         <pubDate>Thu, 02 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//And-So-It-Begins/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//And-So-It-Begins/</guid>
-      </item>
-    
-      <item>
-        <title>The End of Year Hustle</title>
-        <description>&lt;p&gt;I am so glad I decided to power through as much of the precourse work for Hack Reactor as possible when I first got it, because the last couple of weeks have been so packed with other things that I’ve barely had a chance to glance back at any of it. Today was my last “normal” teaching day; finals start tomorrow, and next Thursday is the last day of school.&lt;/p&gt;
-
-&lt;p&gt;Each year I have taught, I’ve tried to tweak this part of the year to make it flow better, but the kids (I call them kids–they’re all at least 16) and I are all so ready for the end that it never quite works out like I’d like. This year I had my chemistry students complete a final project in place of a traditional final. They had three weeks to work on it, including about 5 class periods to plan, research, and ask questions. As one would expect, some of the kids took advantage of this time, and others procrastinated as much as they could. Consequently, some of their presentations were vastly more entertaining than others; guess which ones I enjoyed grading more!&lt;/p&gt;
-
-&lt;p&gt;Because cheating is so prevalent among our students, I also changed up the precalculus final this year. It is completely open note and students have access to their calculator for the entire exam if they’d like. However, none of the questions involve calculations. I figure that I’ve seen enough of their basic skills during the year, so instead I’m asking a variety of critical thinking questions. For example, several of the problems involve error analysis, one asks students to decide which method of proving a trigonometric identity is “better”, and one just asks them to “tell me everything [they] know about conic sections.” I’m also having students write and solve three of their own problems, and to justify what grade they believe they have earned in my class. Because all of these problems have more than one “right” answer, I’m hoping that it will be virtually cheat-proof.&lt;/p&gt;
-
-&lt;p&gt;Because I’ve almost finished grading the chemistry projects, I only have a few more school related tasks left this year (grading finals, updating the inventory, clearing out &lt;em&gt;my&lt;/em&gt; stuff). I should have more time to refocus on programming within the next couple of days, and they it will be clear sailing until June 29th!&lt;/p&gt;
-</description>
-        <pubDate>Thu, 04 Jun 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//End-of-Year-Hustle/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//End-of-Year-Hustle/</guid>
       </item>
     
   </channel>
