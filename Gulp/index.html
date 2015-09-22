@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Let Gulp Take the Tedium out of Tasks – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="If you’ve spent any time writing JavaScript in the last couple of years, you’ve likely at least heard of Gulp.js. Smashing Magazine has an excellent introduction to Gulp that I strongly recommend reading if you are new to this build tool.
+
+" />
+    <meta property="og:description" content="If you’ve spent any time writing JavaScript in the last couple of years, you’ve likely at least heard of Gulp.js. Smashing Magazine has an excellent introduction to Gulp that I strongly recommend reading if you are new to this build tool.
+
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="Let Gulp Take the Tedium out of Tasks" />
+    <meta property="twitter:title" content="Let Gulp Take the Tedium out of Tasks" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Let Gulp Take the Tedium out of Tasks</h1>
+  
+   <a href="/tag/JavaScript" title="View posts tagged with &quot;JavaScript&quot;" class = "tag">JavaScript</a>     <a href="/tag/automation" title="View posts tagged with &quot;automation&quot;" class = "tag">automation</a>   
+
+  <div class="entry">
+    <p>If you’ve spent any time writing JavaScript in the last couple of years, you’ve likely at least heard of <a href="http://gulpjs.com/">Gulp.js</a>. Smashing Magazine has an <a href="http://www.smashingmagazine.com/2014/06/building-with-gulp/">excellent introduction to Gulp</a> that I strongly recommend reading if you are new to this build tool.</p>
+
+<p>Here, I will describe the latest Gulp file I built for a <a href="https://en.wikipedia.org/wiki/MEAN_(software_bundle)">MEAN stack</a> app, explaining and justifying each section of the code. Originally our team simply wanted to automate the process of linting, minifying, and concatenating our client-side code and assets. Because we wanted to store the built files in a separate <code>public</code> folder, we also wanted to clean out this folder before each complete build.</p>
+
+<h3 id="in-the-beginning">In the Beginning</h3>
+<p>We first require the following into our <code>gulpfile.js</code>:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp&#39;</span><span class="p">),</span>
+<a name="True-2"></a>  
+<a name="True-3"></a>  <span class="c1">//to lint our code</span>
+<a name="True-4"></a>  <span class="nx">jshint</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-jshint&#39;</span><span class="p">),</span> 
+<a name="True-5"></a>
+<a name="True-6"></a>  <span class="c1">//to clean the public folder</span>
+<a name="True-7"></a>  <span class="nx">del</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;del&#39;</span><span class="p">),</span>
+<a name="True-8"></a>
+<a name="True-9"></a>  <span class="c1">//to minify our javascript</span>
+<a name="True-10"></a>  <span class="nx">uglify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-uglify&#39;</span><span class="p">),</span>
+<a name="True-11"></a>
+<a name="True-12"></a>  <span class="c1">//to concatenate files together</span>
+<a name="True-13"></a>  <span class="nx">concat</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-concat&#39;</span><span class="p">),</span>
+<a name="True-14"></a>
+<a name="True-15"></a>  <span class="c1">//to minify css</span>
+<a name="True-16"></a>  <span class="nx">cssmin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-cssmin&#39;</span><span class="p">),</span>
+<a name="True-17"></a>
+<a name="True-18"></a>  <span class="c1">//to minify images</span>
+<a name="True-19"></a>  <span class="nx">imagemin</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-imagemin&#39;</span><span class="p">),</span>
+<a name="True-20"></a>  <span class="nx">pngquant</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;imagemin-pngquant&#39;</span><span class="p">);</span></code></pre></div>
+
+<p>Next, we install everything via npm and save to the dev-dependencies of our package.json file:</p>
+
+<p><code>npm install --save-dev gulp gulp-jshint gulp-uglify gulp-concat gulp-cssmin gulp-imagemin gulp-imagemin-pngquant</code></p>
+
+<p>We also created an object by which to refer to common file paths:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">paths</span> <span class="o">=</span> <span class="p">{</span>
+<a name="True-2"></a>  <span class="nx">scripts</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./client/app/**/*.js&#39;</span><span class="p">,</span><span class="s1">&#39;./server/**/*.js&#39;</span><span class="p">,</span> <span class="s1">&#39;./index.js&#39;</span><span class="p">,</span><span class="s1">&#39;./spec/**/*.js&#39;</span><span class="p">,</span><span class="s1">&#39;./gulpfile.js&#39;</span><span class="p">],</span>
+<a name="True-3"></a>  <span class="nx">clientScripts</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./client/app/**/*.js&#39;</span><span class="p">,</span> <span class="s1">&#39;!./client/app/spec/**/*.js&#39;</span><span class="p">],</span>
+<a name="True-4"></a>  <span class="nx">styles</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./client/assets/**/*.css&#39;</span><span class="p">],</span>
+<a name="True-5"></a>  <span class="nx">partials</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;client/app/**/*.html&#39;</span><span class="p">],</span>
+<a name="True-6"></a>  <span class="nx">images</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;client/assets/**/*.png&#39;</span><span class="p">,</span> <span class="s1">&#39;client/assets/**/*.jpg&#39;</span><span class="p">,</span> <span class="s1">&#39;client/assets/**/*.jpeg&#39;</span><span class="p">,</span> <span class="s1">&#39;client/assets/**/*.gif&#39;</span><span class="p">,</span> <span class="s1">&#39;client/assets/**/*.svg&#39;</span><span class="p">,</span> <span class="s1">&#39;client/**/*.ico&#39;</span><span class="p">],</span>
+<a name="True-7"></a>  <span class="nx">backendTests</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;specs/server/**/*.js&#39;</span><span class="p">]</span>
+<a name="True-8"></a><span class="p">};</span></code></pre></div>
+
+<p>And now the main code:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">// JSHint task</span>
+<a name="True-2"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-3"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">scripts</span><span class="p">)</span>
+<a name="True-4"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">jshint</span><span class="p">())</span>
+<a name="True-5"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">jshint</span><span class="p">.</span><span class="nx">reporter</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">));</span>
+<a name="True-6"></a><span class="p">});</span>
+<a name="True-7"></a>
+<a name="True-8"></a><span class="c1">// Clean task — cleans the contents of the public folder</span>
+<a name="True-9"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;clean&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-10"></a>  <span class="nx">del</span><span class="p">([</span>
+<a name="True-11"></a>    <span class="s1">&#39;public/**/*&#39;</span>
+<a name="True-12"></a>  <span class="p">],</span> <span class="nx">callback</span><span class="p">);</span>
+<a name="True-13"></a>  
+<a name="True-14"></a><span class="p">});</span>
+<a name="True-15"></a>
+<a name="True-16"></a><span class="c1">//Concatentate and minify client-side js files</span>
+<a name="True-17"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;js&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-18"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">clientScripts</span><span class="p">)</span>
+<a name="True-19"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="s1">&#39;app.min.js&#39;</span><span class="p">))</span>
+<a name="True-20"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">())</span>
+<a name="True-21"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/&#39;</span><span class="p">));</span>
+<a name="True-22"></a><span class="p">});</span>
+<a name="True-23"></a>
+<a name="True-24"></a><span class="c1">//minify html files</span>
+<a name="True-25"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-26"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">partials</span><span class="p">)</span>
+<a name="True-27"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minifyHTML</span><span class="p">())</span>
+<a name="True-28"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/&#39;</span><span class="p">));</span>
+<a name="True-29"></a><span class="p">});</span>
+<a name="True-30"></a>
+<a name="True-31"></a><span class="c1">// Images task — copy all images to public folder and minify</span>
+<a name="True-32"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-33"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;client/assets/favicon.ico&#39;</span><span class="p">)</span>
+<a name="True-34"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-35"></a>  
+<a name="True-36"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">images</span><span class="p">)</span>
+<a name="True-37"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">imagemin</span><span class="p">({</span>
+<a name="True-38"></a>      <span class="nx">progressive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<a name="True-39"></a>      <span class="nx">svgoPlugins</span><span class="o">:</span> <span class="p">[{</span><span class="nx">removeViewBox</span><span class="o">:</span> <span class="kc">false</span><span class="p">}],</span>
+<a name="True-40"></a>      <span class="nx">use</span><span class="o">:</span> <span class="p">[</span><span class="nx">pngquant</span><span class="p">()]</span>
+<a name="True-41"></a>  <span class="p">}))</span>
+<a name="True-42"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-43"></a><span class="p">});</span>
+<a name="True-44"></a>
+<a name="True-45"></a><span class="c1">// Copy and minify css files from the client folder to public/assets folder</span>
+<a name="True-46"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-47"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">styles</span><span class="p">)</span>
+<a name="True-48"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">autoprefixer</span><span class="p">(</span><span class="s2">&quot;last 2 versions&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt; 1%&quot;</span><span class="p">,</span> <span class="s2">&quot;ie 8&quot;</span><span class="p">))</span>
+<a name="True-49"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">cssmin</span><span class="p">())</span>
+<a name="True-50"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="s1">&#39;styles.min.css&#39;</span><span class="p">))</span>
+<a name="True-51"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-52"></a><span class="p">});</span>
+<a name="True-53"></a>
+<a name="True-54"></a><span class="c1">//Put it all together</span>
+<a name="True-55"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;production&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;clean&#39;</span><span class="p">,</span> <span class="s1">&#39;lint&#39;</span><span class="p">,</span> <span class="s1">&#39;js&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="s1">&#39;images&#39;</span><span class="p">]);</span></code></pre></div>
+
+<p>Unfortunately, this simple build task did not work quite as we had hoped. Firstly, some of our Angular dependencies were not injected correctly after concatenating and minifying the javascript files. To fix this, we used a plugin called <code>gulp-ng-annotate</code>. We also realized that all of the production tasks were running synchronously, resulting in some generated files being cleaned out. We used <code>run-sequence</code> to deal with this issue; notice we had to return something from each gulp task for this to work.</p>
+
+<p><code>npm install --save-dev gulp-ng-annotate run-sequence</code></p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//add additional requirements</span>
+<a name="True-2"></a>  <span class="nx">ngAnnotate</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-ng-annotate&#39;</span><span class="p">),</span>
+<a name="True-3"></a>  <span class="nx">runSequence</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;run-sequence&#39;</span><span class="p">);</span>
+<a name="True-4"></a>
+<a name="True-5"></a><span class="c1">//add return statements to all build functions</span>
+<a name="True-6"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;clean&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">callback</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-7"></a>  <span class="k">return</span> <span class="nx">del</span><span class="p">([</span>
+<a name="True-8"></a>    <span class="s1">&#39;public/**/*&#39;</span>
+<a name="True-9"></a>  <span class="p">],</span> <span class="nx">callback</span><span class="p">);</span>
+<a name="True-10"></a><span class="p">});</span>
+<a name="True-11"></a>
+<a name="True-12"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;js&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-13"></a>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">clientScripts</span><span class="p">)</span>
+<a name="True-14"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="s1">&#39;app.min.js&#39;</span><span class="p">))</span>
+<a name="True-15"></a>    <span class="c1">//to ensure Angular dependencies are injected correctly</span>
+<a name="True-16"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">ngAnnotate</span><span class="p">())</span>
+<a name="True-17"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">uglify</span><span class="p">())</span>
+<a name="True-18"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/&#39;</span><span class="p">));</span>
+<a name="True-19"></a><span class="p">});</span>
+<a name="True-20"></a>
+<a name="True-21"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-22"></a>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">partials</span><span class="p">)</span>
+<a name="True-23"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minifyHTML</span><span class="p">())</span>
+<a name="True-24"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/&#39;</span><span class="p">));</span>
+<a name="True-25"></a><span class="p">});</span>
+<a name="True-26"></a>
+<a name="True-27"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;images&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-28"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;client/assets/favicon.ico&#39;</span><span class="p">)</span>
+<a name="True-29"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-30"></a>  
+<a name="True-31"></a>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">images</span><span class="p">)</span>
+<a name="True-32"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">imagemin</span><span class="p">({</span>
+<a name="True-33"></a>      <span class="nx">progressive</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<a name="True-34"></a>      <span class="nx">svgoPlugins</span><span class="o">:</span> <span class="p">[{</span><span class="nx">removeViewBox</span><span class="o">:</span> <span class="kc">false</span><span class="p">}],</span>
+<a name="True-35"></a>      <span class="nx">use</span><span class="o">:</span> <span class="p">[</span><span class="nx">pngquant</span><span class="p">()]</span>
+<a name="True-36"></a>  <span class="p">}))</span>
+<a name="True-37"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-38"></a><span class="p">});</span>
+<a name="True-39"></a>
+<a name="True-40"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-41"></a>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">styles</span><span class="p">)</span>
+<a name="True-42"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">autoprefixer</span><span class="p">(</span><span class="s2">&quot;last 2 versions&quot;</span><span class="p">,</span> <span class="s2">&quot;&gt; 1%&quot;</span><span class="p">,</span> <span class="s2">&quot;ie 8&quot;</span><span class="p">))</span>
+<a name="True-43"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">cssmin</span><span class="p">())</span>
+<a name="True-44"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">concat</span><span class="p">(</span><span class="s1">&#39;styles.min.css&#39;</span><span class="p">))</span>
+<a name="True-45"></a>  <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/assets/&#39;</span><span class="p">));</span>
+<a name="True-46"></a><span class="p">});</span>
+<a name="True-47"></a>
+<a name="True-48"></a><span class="c1">//Refactored production task that uses runSequence</span>
+<a name="True-49"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;production&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">callback</span><span class="p">){</span>
+<a name="True-50"></a>  <span class="c1">//Any tasks in brackets are run synchronously with each other, but wait for all tasks prior</span>
+<a name="True-51"></a>  <span class="nx">runSequence</span><span class="p">(</span><span class="s1">&#39;clean&#39;</span><span class="p">,</span>
+<a name="True-52"></a>    <span class="s1">&#39;lint&#39;</span><span class="p">,</span> 
+<a name="True-53"></a>    <span class="p">[</span><span class="s1">&#39;js&#39;</span><span class="p">,</span> <span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="s1">&#39;styles&#39;</span><span class="p">,</span> <span class="s1">&#39;images&#39;</span><span class="p">],</span>
+<a name="True-54"></a>    <span class="nx">callback</span><span class="p">);</span> 
+<a name="True-55"></a><span class="p">});</span></code></pre></div>
+
+<h3 id="build-tasks-20">Build Tasks 2.0</h3>
+<p>After making those minor fixes, we realized we needed to change the source paths for any script files or other dependencies, as well as the <code>base href</code> (for using Angular’s html5 mode) in our <code>index.html</code> file. We began by replacing any local library dependencies with those hosted on a cdn. We then used <code>gulp-html-replace</code> to update the <code>index.html</code> with the correct source paths in the <code>'html'</code> task. We also had to add a few key comments to the <code>index.html</code> file.</p>
+
+<p><code>npm install --save-dev gulp-html-replace</code></p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//require statements</span>
+<a name="True-2"></a>  <span class="nx">htmlreplace</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-html-replace&#39;</span><span class="p">);</span>
+<a name="True-3"></a>
+<a name="True-4"></a>  <span class="c1">// Update index.html to use built js and css files and use correct base href; </span>
+<a name="True-5"></a>  <span class="c1">//minify html files</span>
+<a name="True-6"></a>  <span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;html&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-7"></a>    <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">paths</span><span class="p">.</span><span class="nx">partials</span><span class="p">)</span>
+<a name="True-8"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">htmlreplace</span><span class="p">({</span>
+<a name="True-9"></a>        <span class="s1">&#39;css&#39;</span><span class="o">:</span> <span class="s1">&#39;assets/styles.min.css&#39;</span><span class="p">,</span>
+<a name="True-10"></a>        <span class="s1">&#39;js&#39;</span><span class="o">:</span> <span class="s1">&#39;app.min.js&#39;</span><span class="p">,</span> 
+<a name="True-11"></a>        <span class="s1">&#39;base&#39;</span><span class="o">:</span> <span class="s1">&#39;&lt;base href=&quot;/&quot;&gt;&#39;</span>
+<a name="True-12"></a>    <span class="p">}))</span>
+<a name="True-13"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">minifyHTML</span><span class="p">())</span>
+<a name="True-14"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;public/&#39;</span><span class="p">));</span>
+<a name="True-15"></a>  <span class="p">});</span></code></pre></div>
+
+<p>The <code>gulp-html-replace</code> plugin searches html files for comments in the form of:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><a name="True-1"></a><span class="c">&lt;!-- build:[name] --&gt;</span>
+<a name="True-2"></a><span class="nt">&lt;unbuilt</span> <span class="na">html</span><span class="nt">&gt;</span>Stuff<span class="nt">&lt;/endtag&gt;</span>
+<a name="True-3"></a><span class="c">&lt;!-- endbuilt --&gt;</span></code></pre></div>
+
+<p>It then replaces anything from within the comments with the text specified in the guilp task. Here is what ours looked like:</p>
+
+<div class="highlight"><pre><code class="language-html" data-lang="html"><a name="True-1"></a><span class="c">&lt;!-- build:base--&gt;</span>
+<a name="True-2"></a><span class="nt">&lt;base</span> <span class="na">href=</span><span class="s">&quot;/app/&quot;</span><span class="nt">&gt;</span>
+<a name="True-3"></a><span class="c">&lt;!-- endbuild --&gt;</span>
+<a name="True-4"></a>
+<a name="True-5"></a><span class="c">&lt;!-- build:css --&gt;</span>
+<a name="True-6"></a><span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">&quot;stylesheet&quot;</span> <span class="na">href=</span><span class="s">&quot;../assets/styles.css&quot;</span><span class="nt">&gt;</span>
+<a name="True-7"></a><span class="c">&lt;!-- endbuild --&gt;</span>
+<a name="True-8"></a>
+<a name="True-9"></a><span class="c">&lt;!-- build:js --&gt;</span>
+<a name="True-10"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;app.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-11"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;user/loginController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-12"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;ui/menuController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-13"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;lists/listController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-14"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;lists/pantryController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-15"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;general/landingController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-16"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;general/seasonalFactory.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-17"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;household/householdController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-18"></a><span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;recipes/recipeController.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<a name="True-19"></a><span class="c">&lt;!-- endbuild --&gt;</span></code></pre></div>
+
+<p>Notice the build names in the html match the keys in the object passed to html replace. The values in that object are what replace the source paths for the <code>css</code> and <code>script</code> tags. Note that the entire <code>base</code> tag is replaced.</p>
+
+<h3 id="the-real-fun">The Real Fun</h3>
+<p>So far, we have a convenient little build task that concatenates, minifies, and replaces code for us. But we wanted to do more. For example, to view our app in the browser, we first had to start the server with <a href="http://nodemon.io/">nodemon</a>, start mongod to access our database, and open the browser with the correct address. All of this can be automated with Gulp.</p>
+
+<p><code>npm install --save-dev child_process gulp-nodemon gulp-open</code></p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//add to our requirements</span>
+<a name="True-2"></a>  <span class="nx">exec</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;child_process&#39;</span><span class="p">).</span><span class="nx">exec</span><span class="p">,</span>
+<a name="True-3"></a>  <span class="nx">nodemon</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-nodemon&#39;</span><span class="p">),</span>
+<a name="True-4"></a>  <span class="nx">open</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-open&#39;</span><span class="p">);</span>
+<a name="True-5"></a>
+<a name="True-6"></a><span class="c1">//Set up function to allow running scripts</span>
+<a name="True-7"></a><span class="kd">function</span> <span class="nx">runCommand</span><span class="p">(</span><span class="nx">command</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-8"></a>  <span class="k">return</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">cb</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-9"></a>    <span class="nx">exec</span><span class="p">(</span><span class="nx">command</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">stdout</span><span class="p">,</span> <span class="nx">stderr</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-10"></a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">stdout</span><span class="p">);</span>
+<a name="True-11"></a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">stderr</span><span class="p">);</span>
+<a name="True-12"></a>      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+<a name="True-13"></a>    <span class="p">});</span>
+<a name="True-14"></a>  <span class="p">};</span>
+<a name="True-15"></a><span class="p">}</span>
+<a name="True-16"></a>
+<a name="True-17"></a><span class="c1">//Start mongodb</span>
+<a name="True-18"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;mongo&#39;</span><span class="p">,</span> <span class="nx">runCommand</span><span class="p">(</span><span class="s1">&#39;mongod&#39;</span><span class="p">));</span>
+<a name="True-19"></a>
+<a name="True-20"></a><span class="c1">//Start nodemon</span>
+<a name="True-21"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;nodemon&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-22"></a>  <span class="nx">nodemon</span><span class="p">({</span> <span class="nx">script</span><span class="o">:</span> <span class="s1">&#39;index.js&#39;</span> <span class="p">})</span>
+<a name="True-23"></a>    <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;restart&#39;</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+<a name="True-24"></a>      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;restarted!&#39;</span><span class="p">);</span>
+<a name="True-25"></a>    <span class="p">});</span>
+<a name="True-26"></a><span class="p">});</span>
+<a name="True-27"></a>
+<a name="True-28"></a><span class="c1">//Open the correct url for the app</span>
+<a name="True-29"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;open-dev&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-30"></a>  <span class="c1">//use setTimeout to decrease chance of opening app</span>
+<a name="True-31"></a>  <span class="c1">//before mongod and server are up and running</span>
+<a name="True-32"></a>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<a name="True-33"></a>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">__filename</span><span class="p">)</span>
+<a name="True-34"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">open</span><span class="p">({</span><span class="nx">uri</span><span class="o">:</span> <span class="s1">&#39;http://localhost:1337/app/&#39;</span><span class="p">}));</span>
+<a name="True-35"></a>  <span class="p">},</span> <span class="mi">1500</span><span class="p">);</span>
+<a name="True-36"></a><span class="p">});</span>
+<a name="True-37"></a>
+<a name="True-38"></a><span class="c1">//put it all together--toss in the &quot;watch&quot; task for good measure</span>
+<a name="True-39"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;run-app&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;mongo&#39;</span><span class="p">,</span><span class="s1">&#39;nodemon&#39;</span><span class="p">,</span><span class="s1">&#39;watch&#39;</span><span class="p">,</span> <span class="s1">&#39;open-dev&#39;</span><span class="p">],</span><span class="kd">function</span><span class="p">(){</span>
+<a name="True-40"></a><span class="p">});</span></code></pre></div>
+
+<h4 id="a-quick-note-about-mongod">A quick note about mongod</h4>
+<p>If you currently have to run <code>sudo mongod</code>, this won’t work for you. You need to get that situation figured out, because you really shouldn’t need to use <code>sudo</code> for this task anyway.</p>
+
+<p>Additionally, when you are done and want to stop the nodemon and mongod processes, you <em>should</em> be able to simply use <code>^C</code>. <strong><em>However</em></strong> sometimes this will not stop mongod if you use this gulp task. You’ll know, because the next time you try to start mongod it will give you angry messages. To solve this, you’ll first need to find the mongod process id and then kill it:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><a name="True-1"></a><span class="c">#retrieve the id</span>
+<a name="True-2"></a>ps ax <span class="p">|</span> grep mongo
+<a name="True-3"></a>
+<a name="True-4"></a><span class="c">#kill the process</span>
+<a name="True-5"></a><span class="nb">kill</span> <span class="o">[</span>id<span class="o">]</span></code></pre></div>
+
+<h3 id="the-cherry-on-top">The Cherry On Top</h3>
+<p>We can now run <code>gulp production</code> to compile everything and <code>gulp run-app</code> to view our app in the browser with the unbuilt files…but sometimes it might be necessary to view the app from the <em>built</em> files–especially in the beginning when you want to make sure the build worked. However, this requires serving these files instead of the unbuilt versions as if we were running in the production environment. Easy enough—we just create a task that changes the value of <code>process.env.NODE_ENV</code> to fit our needs. The nice thing about this is that we don’t even need to install any additional plugins!</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Set environment variables for production or development</span>
+<a name="True-2"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;set-dev-node-env&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-3"></a>    <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">=</span> <span class="s1">&#39;development&#39;</span><span class="p">;</span>
+<a name="True-4"></a><span class="p">});</span>
+<a name="True-5"></a>
+<a name="True-6"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;set-prod-node-env&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-7"></a>    <span class="nx">process</span><span class="p">.</span><span class="nx">env</span><span class="p">.</span><span class="nx">NODE_ENV</span> <span class="o">=</span> <span class="s1">&#39;production&#39;</span><span class="p">;</span>
+<a name="True-8"></a><span class="p">});</span>
+<a name="True-9"></a>
+<a name="True-10"></a><span class="c1">//Open the correct url for production environment</span>
+<a name="True-11"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;open-prod&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+<a name="True-12"></a>  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<a name="True-13"></a>    <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="nx">__filename</span><span class="p">)</span>
+<a name="True-14"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">open</span><span class="p">({</span><span class="nx">uri</span><span class="o">:</span> <span class="s1">&#39;http://localhost:1337/&#39;</span><span class="p">}));</span>
+<a name="True-15"></a>  <span class="p">},</span> <span class="mi">1500</span><span class="p">);</span>
+<a name="True-16"></a><span class="p">});</span>
+<a name="True-17"></a>
+<a name="True-18"></a><span class="c1">//Run development environment</span>
+<a name="True-19"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;run-dev&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;set-dev-node-env&#39;</span><span class="p">,</span><span class="s1">&#39;mongo&#39;</span><span class="p">,</span><span class="s1">&#39;nodemon&#39;</span><span class="p">,</span><span class="s1">&#39;watch&#39;</span><span class="p">,</span> <span class="s1">&#39;open-dev&#39;</span><span class="p">],</span><span class="kd">function</span><span class="p">(){</span>
+<a name="True-20"></a><span class="p">});</span>
+<a name="True-21"></a>
+<a name="True-22"></a><span class="c1">//Run production environment</span>
+<a name="True-23"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;run-prod&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;set-prod-node-env&#39;</span><span class="p">,</span> <span class="s1">&#39;production&#39;</span><span class="p">,</span> <span class="s1">&#39;mongo&#39;</span><span class="p">,</span><span class="s1">&#39;nodemon&#39;</span><span class="p">,</span> <span class="s1">&#39;watch&#39;</span><span class="p">,</span> <span class="s1">&#39;open-prod&#39;</span><span class="p">]);</span></code></pre></div>
+
+<p>And that’s it! We now have a set of gulp tasks that let us quickly and easily switch between our production and development environments while linting our code! See the complete file <a href="https://gist.github.com/hmfoster/a9f2d5ae0d5625c72b99">here</a>.</p>
+
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on September 20, 2015
+  </div>
+  <p id="post-meta"></p>
+  <div id="comments">
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:haileyhasmail@gmail.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/Gulp/',
+		  'title': 'Let Gulp Take the Tedium out of Tasks'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>
