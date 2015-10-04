@@ -199,8 +199,8 @@
 <a name="True-13"></a>  <span class="nx">content</span><span class="o">:</span> <span class="nx">content</span>
 <a name="True-14"></a><span class="p">};</span>
 <a name="True-15"></a>
-<a name="True-16"></a><span class="c1">//build the tests and store as a string</span>
-<a name="True-17"></a><span class="kd">var</span> <span class="nx">tests</span> <span class="o">=</span> <span class="nx">speck</span><span class="p">.</span><span class="nx">build</span><span class="p">(</span><span class="nx">file</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+<a name="True-16"></a><span class="c1">//build the tests</span>
+<a name="True-17"></a><span class="kd">var</span> <span class="nx">tests</span> <span class="o">=</span> <span class="nx">speck</span><span class="p">.</span><span class="nx">build</span><span class="p">(</span><span class="nx">file</span><span class="p">);</span>
 <a name="True-18"></a>
 <a name="True-19"></a><span class="c1">//write the built tests to a new file</span>
 <a name="True-20"></a><span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="s1">&#39;./tests.js&#39;</span><span class="p">,</span> <span class="nx">tests</span><span class="p">);</span></code></pre></div>
