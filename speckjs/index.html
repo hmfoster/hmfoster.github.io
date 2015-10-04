@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Using SpeckJS to Simplify Unit Testing – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="SpeckJS is “an npm module that parses JavaScript comments and outputs unit-tests.” It allows you to implement TDD into your projects quickly and efficiently from within you main js files.
+
+" />
+    <meta property="og:description" content="SpeckJS is “an npm module that parses JavaScript comments and outputs unit-tests.” It allows you to implement TDD into your projects quickly and efficiently from within you main js files.
+
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="Using SpeckJS to Simplify Unit Testing" />
+    <meta property="twitter:title" content="Using SpeckJS to Simplify Unit Testing" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Using SpeckJS to Simplify Unit Testing</h1>
+  
+   <a href="/tag/javascript" title="View posts tagged with &quot;javascript&quot;" class = "tag">javascript</a>     <a href="/tag/tdd" title="View posts tagged with &quot;tdd&quot;" class = "tag">tdd</a>   
+
+  <div class="entry">
+    <p><a href="https://speckjs.github.io/">SpeckJS</a> is “an npm module that parses JavaScript comments and outputs unit-tests.” It allows you to implement TDD into your projects quickly and efficiently from within you main js files.</p>
+
+<p>Here, I’ll briefly describe how to set-up and use SpeckJS with a vanilla install, and with their Gulp.js plugin. SpeckJS also has plugins for GruntJS and Atom if those are more your style. SpeckJS can be used to build tests in Tape, Mocha and Jasmine; we’ll just use the default settings to create tests build in Tape for now.</p>
+
+<p>Take a peek at the code below to briefly compare the structure of the “testing” comments to the Tape tests built by SpeckJS from those comments. Also notice that we need to <strong><em>export</em></strong> any functions we want to test so that they can be <em>required</em> into our testing file.</p>
+
+<h4 id="from-functionsjs">From <code>functions.js</code></h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//-----Comments parsed by SpeckJS to build tests-----//</span>
+<a name="True-2"></a><span class="c1">//test &gt; fizzBuzzMod</span>
+<a name="True-3"></a><span class="c1">// # fizzBuzzMod(0,16)[0] === 0 (does not replace 0)</span>
+<a name="True-4"></a><span class="c1">// # fizzBuzzMod(0,16)[4] === 4 (does not replace 4)</span>
+<a name="True-5"></a><span class="c1">// # fizzBuzzMod(0,16)[3] === &#39;Fizz&#39; (replaces values divisible by 3 with Fizz)</span>
+<a name="True-6"></a><span class="c1">// # fizzBuzzMod(0,16)[5] === &#39;Buzz&#39; (replaces values divisible by 5 with Buzz)</span>
+<a name="True-7"></a><span class="c1">// # fizzBuzzMod(0,16)[15] === &#39;FizzBuzz&#39; (replaces value divisible by 3 and 5 with FizzBuzz)</span>
+<a name="True-8"></a><span class="c1">// # fizzBuzzMod(10,20) === [&#39;Buzz&#39;,11,&#39;Fizz&#39;,13,14,&#39;FizzBuzz&#39;,16,17,&#39;Fizz&#39;,19,&#39;Buzz&#39;] (returns array with correct values)</span>
+<a name="True-9"></a>
+<a name="True-10"></a><span class="c1">//-----Function tested by above comments-----//</span>
+<a name="True-11"></a><span class="nx">exports</span><span class="p">.</span><span class="nx">fizzBuzzMod</span> <span class="o">=</span> <span class="nx">fizzBuzzMod</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">start</span><span class="p">,</span> <span class="nx">end</span><span class="p">){</span>
+<a name="True-12"></a>  <span class="kd">var</span> <span class="nx">result</span> <span class="o">=</span> <span class="p">[];</span>
+<a name="True-13"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="nx">start</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span> <span class="nx">end</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-14"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+<a name="True-15"></a>      <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+<a name="True-16"></a>      <span class="k">continue</span><span class="p">;</span>
+<a name="True-17"></a>    <span class="p">}</span>
+<a name="True-18"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">5</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+<a name="True-19"></a>      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">3</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+<a name="True-20"></a>        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;FizzBuzz&quot;</span><span class="p">);</span>
+<a name="True-21"></a>      <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-22"></a>        <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;Buzz&quot;</span><span class="p">);</span>
+<a name="True-23"></a>      <span class="p">}</span>
+<a name="True-24"></a>    <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">i</span><span class="o">%</span><span class="mi">3</span> <span class="o">===</span> <span class="mi">0</span><span class="p">){</span>
+<a name="True-25"></a>      <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;Fizz&quot;</span><span class="p">);</span>
+<a name="True-26"></a>    <span class="p">}</span> <span class="k">else</span><span class="p">{</span>
+<a name="True-27"></a>      <span class="nx">result</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">i</span><span class="p">);</span>
+<a name="True-28"></a>    <span class="p">}</span>
+<a name="True-29"></a>  <span class="p">}</span> <span class="k">return</span> <span class="nx">result</span><span class="p">;</span>
+<a name="True-30"></a><span class="p">};</span>
+<a name="True-31"></a>
+<a name="True-32"></a>
+<a name="True-33"></a><span class="c1">//-----Comments parsed by SpeckJS to build tests-----//</span>
+<a name="True-34"></a><span class="c1">//test &gt; sum</span>
+<a name="True-35"></a><span class="c1">// # sum(1) === 1 (returns sum of 1 input number)</span>
+<a name="True-36"></a><span class="c1">// # sum(1,2) === 3 (returns sum of 2 input numbers)</span>
+<a name="True-37"></a><span class="c1">// # sum(1,2,3) === 6 (returns sum of 3 input numbers)</span>
+<a name="True-38"></a><span class="c1">// # sum() === 0 (return 0 if no input given)</span>
+<a name="True-39"></a><span class="c1">// # sum(-1, 4, -3) === 0 (correctly adds negative values)</span>
+<a name="True-40"></a>
+<a name="True-41"></a><span class="c1">//-----Function tested by above comments-----//</span>
+<a name="True-42"></a><span class="nx">exports</span><span class="p">.</span><span class="nx">sum</span> <span class="o">=</span> <span class="nx">sum</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+<a name="True-43"></a>  <span class="k">if</span> <span class="p">(</span><span class="nx">arguments</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="kc">undefined</span><span class="p">){</span>
+<a name="True-44"></a>    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<a name="True-45"></a>  <span class="p">}</span>
+<a name="True-46"></a>  <span class="kd">var</span> <span class="nx">args</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">slice</span><span class="p">.</span><span class="nx">call</span><span class="p">(</span><span class="nx">arguments</span><span class="p">);</span>
+<a name="True-47"></a>  <span class="k">return</span> <span class="nx">args</span><span class="p">.</span><span class="nx">reduce</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+<a name="True-48"></a>    <span class="k">return</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">;</span>
+<a name="True-49"></a>  <span class="p">});</span>
+<a name="True-50"></a><span class="p">};</span></code></pre></div>
+
+<h4 id="tests-built-by-speckjs">Tests built by SpeckJS</h4>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tape&#39;</span><span class="p">);</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;./functions.js&#39;</span><span class="p">);</span>
+<a name="True-3"></a>
+<a name="True-4"></a><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;fizzBuzzMod&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span> 
+<a name="True-5"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">plan</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<a name="True-6"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">fizzBuzzMod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;does not replace 0&#39;</span><span class="p">);</span>
+<a name="True-7"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">fizzBuzzMod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)[</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;does not replace 4&#39;</span><span class="p">);</span>
+<a name="True-8"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="s1">&#39;Fizz&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">fizzBuzzMod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;replaces values divisible by 3 with Fizz&#39;</span><span class="p">);</span>
+<a name="True-9"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="s1">&#39;Buzz&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">fizzBuzzMod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)[</span><span class="mi">5</span><span class="p">],</span> <span class="s1">&#39;replaces values divisible by 5 with Buzz&#39;</span><span class="p">);</span>
+<a name="True-10"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="s1">&#39;FizzBuzz&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">fizzBuzzMod</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">16</span><span class="p">)[</span><span class="mi">15</span><span class="p">],</span> <span class="s1">&#39;replaces value divisible by 3 and 5 with FizzBuzz&#39;</span><span class="p">);</span>
+<a name="True-11"></a><span class="p">});</span>
+<a name="True-12"></a>
+<a name="True-13"></a><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;sum&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span> 
+<a name="True-14"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">plan</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<a name="True-15"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span> <span class="s1">&#39;returns sum of 1 input number&#39;</span><span class="p">);</span>
+<a name="True-16"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">),</span> <span class="s1">&#39;returns sum of 2 input numbers&#39;</span><span class="p">);</span>
+<a name="True-17"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;returns sum of 3 input numbers&#39;</span><span class="p">);</span>
+<a name="True-18"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">sum</span><span class="p">(),</span> <span class="s1">&#39;return 0 if no input given&#39;</span><span class="p">);</span>
+<a name="True-19"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="o">-</span><span class="mi">3</span><span class="p">),</span> <span class="s1">&#39;correctly adds negative values&#39;</span><span class="p">);</span>
+<a name="True-20"></a><span class="p">});</span></code></pre></div>
+
+<p><strong>Notice the set of comments parsed by SpeckJS has a very particular structure:</strong></p>
+
+<p>First, we:</p>
+
+<ol>
+  <li>tell SpeckJS we have a set of tests coming up and</li>
+  <li>name the function we are testing</li>
+</ol>
+
+<p><img src="../images/speckJS/initialize.png" alt="intialize tests" /></p>
+
+<p>Next, we:</p>
+
+<ol>
+  <li>tell SpeckJS we’re writing an assertion,</li>
+  <li>write the assertion and</li>
+  <li>include a description of that test</li>
+</ol>
+
+<p><img src="../images/speckJS/assertion.png" alt="assertion" /></p>
+
+<p>Because the SpeckJS project is still in its infancy, we must be very careful with our syntax for it to be parsed correctly and pay very close attention to the spacing we use:</p>
+
+<p><img src="../images/speckJS/spacing.png" alt="spacing" /></p>
+
+<p><img src="../images/speckJS/arraySpaces.png" alt="array spacing" /></p>
+
+<h2 id="vanilla-set-up">Vanilla set-up</h2>
+<p>Before we can begin using SpeckJS to build our tests, we need to set up a small project with which to use it. My project has the following, very simple, file structure:</p>
+
+<pre><code>.
+|--package.json
+|--functions.js
+|--makeTests.js
+</code></pre>
+
+<p>Initialize your <code>package.json</code> file as you normally would, then install SpeckJS from your commandline using npm:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><a name="True-1"></a>npm install speckjs --save-dev</code></pre></div>
+
+<p>All of the functions we want to test (as shown above) are in <code>functions.js</code>, and the code necessary to build our tests with SpeckJS and save them to another file is in <code>makeTests.js</code>. Essentially all we do in <code>makeTests.js</code> is convert our functions into a format the vanilla SpeckJS can use, build the tests, and write them to a new file from which we can run them.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//require Node&#39;s fs module so we can write our built tests to a new file</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">fs</span>  <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;fs&quot;</span><span class="p">);</span>
+<a name="True-3"></a>
+<a name="True-4"></a><span class="c1">//require speckjs</span>
+<a name="True-5"></a><span class="kd">var</span> <span class="nx">speck</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;speckjs&#39;</span><span class="p">);</span>
+<a name="True-6"></a>
+<a name="True-7"></a><span class="c1">//get the contents of functions.js as a string</span>
+<a name="True-8"></a><span class="kd">var</span> <span class="nx">content</span> <span class="o">=</span> <span class="nx">fs</span><span class="p">.</span><span class="nx">readFileSync</span><span class="p">(</span><span class="s1">&#39;./functions.js&#39;</span><span class="p">,</span> <span class="s1">&#39;utf8&#39;</span><span class="p">);</span>
+<a name="True-9"></a>
+<a name="True-10"></a><span class="c1">//create the file object speckjs will use to build the tests</span>
+<a name="True-11"></a><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="p">{</span>
+<a name="True-12"></a>  <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;./functions.js&#39;</span><span class="p">,</span>
+<a name="True-13"></a>  <span class="nx">content</span><span class="o">:</span> <span class="nx">content</span>
+<a name="True-14"></a><span class="p">};</span>
+<a name="True-15"></a>
+<a name="True-16"></a><span class="c1">//build the tests and store as a string</span>
+<a name="True-17"></a><span class="kd">var</span> <span class="nx">tests</span> <span class="o">=</span> <span class="nx">speck</span><span class="p">.</span><span class="nx">build</span><span class="p">(</span><span class="nx">file</span><span class="p">).</span><span class="nx">toString</span><span class="p">();</span>
+<a name="True-18"></a>
+<a name="True-19"></a><span class="c1">//write the built tests to a new file</span>
+<a name="True-20"></a><span class="nx">fs</span><span class="p">.</span><span class="nx">writeFile</span><span class="p">(</span><span class="s1">&#39;./tests.js&#39;</span><span class="p">,</span> <span class="nx">tests</span><span class="p">);</span></code></pre></div>
+
+<p>That’s really all there is to it! You now just need to run <code>makeTests.js</code> (using <code>node makeTests.js</code> for example), and SpeckJS will build the test file shown in the example above!</p>
+
+<p>This option is nice if you have a very simple file structure and only a few functions you want to test. For example, if you are just solving toy problems, and want to quickly test your solutions, it makes sense to use vanilla SpeckJS. However, it is not practical for larger projects or a more complex file structure because of the necessity to create a <code>makeTests.js</code> file for each file containing your functions.</p>
+
+<h2 id="gulpjs-set-up">Gulp.js set-up</h2>
+<p>Let’s assume that we’ve been solving more and more toy problems, and now we have a more complicated file structure:</p>
+
+<pre><code>.
+|--package.json
+|--problems
+|  |--arrays
+|  |  |--findMissing.js
+|  |--numbers
+|  |--strings
+|  |  |--palindrome.js
+|  |  |--noRepeats.js
+</code></pre>
+
+<p>Now, our problems are stored in different folders by category. We need a more robust way to build all of the tests for all of our functions…enter GULPJS.</p>
+
+<p>The first thing we need to do is install the various plugins we will need:</p>
+
+<div class="highlight"><pre><code class="language-bash" data-lang="bash"><a name="True-1"></a>npm install --save-dev gulp gulp-speckjs gulp-foreach gulp-rename</code></pre></div>
+
+<p>We then set-up our <code>gulpfile.js</code>:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">gulp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp&#39;</span><span class="p">);</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">speck</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-speckjs&#39;</span><span class="p">);</span>
+<a name="True-3"></a><span class="kd">var</span> <span class="nx">foreach</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;gulp-foreach&#39;</span><span class="p">);</span>
+<a name="True-4"></a><span class="kd">var</span> <span class="nx">path</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">);</span>
+<a name="True-5"></a><span class="kd">var</span> <span class="nx">rename</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s2">&quot;gulp-rename&quot;</span><span class="p">);</span>
+<a name="True-6"></a>
+<a name="True-7"></a><span class="nx">gulp</span><span class="p">.</span><span class="nx">task</span><span class="p">(</span><span class="s1">&#39;speck&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+<a name="True-8"></a>  <span class="k">return</span> <span class="nx">gulp</span><span class="p">.</span><span class="nx">src</span><span class="p">(</span><span class="s1">&#39;./problems/**/*.js&#39;</span><span class="p">)</span>
+<a name="True-9"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">foreach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">,</span> <span class="nx">file</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-10"></a>      <span class="k">return</span> <span class="nx">stream</span>
+<a name="True-11"></a>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">speck</span><span class="p">({</span>
+<a name="True-12"></a>          <span class="nx">testFW</span><span class="o">:</span> <span class="s1">&#39;tape&#39;</span><span class="p">,</span>
+<a name="True-13"></a>          <span class="nx">logs</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span>
+<a name="True-14"></a>          <span class="nx">relPath</span><span class="o">:</span> <span class="nx">path</span><span class="p">.</span><span class="nx">relative</span><span class="p">(</span><span class="s1">&#39;./specs/*/&#39;</span><span class="p">,</span><span class="nx">file</span><span class="p">.</span><span class="nx">path</span><span class="p">)</span>
+<a name="True-15"></a>        <span class="p">}))</span>
+<a name="True-16"></a>        <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">rename</span><span class="p">({</span>
+<a name="True-17"></a>          <span class="nx">suffix</span> <span class="o">:</span> <span class="s1">&#39;_tapeSpec&#39;</span>
+<a name="True-18"></a>        <span class="p">}));</span>
+<a name="True-19"></a>    <span class="p">}))</span>
+<a name="True-20"></a>    <span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">gulp</span><span class="p">.</span><span class="nx">dest</span><span class="p">(</span><span class="s1">&#39;./specs&#39;</span><span class="p">));</span>
+<a name="True-21"></a><span class="p">});</span></code></pre></div>
+
+<p>Running <code>gulp speck</code> now searches for any and all JavaScript files inside of the <code>problems</code> folder, builds tests for them using SpeckJS, and stores the tests inside of a <code>speck</code> folder. It will create the following file structure:</p>
+
+<pre><code>.
+|--package.json
+|--problems
+|  |--arrays
+|  |  |--findMissing.js
+|  |--strings
+|  |  |--palindrome.js
+|  |  |--noRepeats.js
+|--specs
+|  |--arrays
+|  |  |--findMissing_tapeSpeck.js
+|  |--strings
+|  |  |--palindrome_tapeSpeck.js
+|  |  |--noRepeats_tapeSpeck.js
+</code></pre>
+
+<p>Note that the <code>gulp-foreach</code> allows us to call <code>speck()</code> on each file and build a test for it. We use <code>path.relative</code> to set the path needed to access the original file (and the functions it contains) and require them into the built tests.</p>
+
+<p>This means that if this is one of our original files (<code>noRepeat.js</code>):</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">// test &gt; noRepeat</span>
+<a name="True-2"></a><span class="c1">// # noRepeat(&#39;abccdabe&#39;) === &#39;d&#39; (returns the first non-repeated character)</span>
+<a name="True-3"></a><span class="c1">// # noRepeat(&#39;abccdabd&#39;) === null (returns null if all characters are repeated)</span>
+<a name="True-4"></a><span class="nx">exports</span><span class="p">.</span><span class="nx">noRepeat</span> <span class="o">=</span> <span class="nx">noRepeat</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">string</span><span class="p">){</span>
+<a name="True-5"></a>  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+<a name="True-6"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">string</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-7"></a>    <span class="nx">obj</span><span class="p">[</span><span class="nx">string</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">=</span> <span class="o">++</span><span class="nx">obj</span><span class="p">[</span><span class="nx">string</span><span class="p">[</span><span class="nx">i</span><span class="p">]]</span> <span class="o">||</span> <span class="mi">1</span><span class="p">;</span>
+<a name="True-8"></a>  <span class="p">}</span>
+<a name="True-9"></a>  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">j</span> <span class="o">&lt;</span> <span class="nx">string</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">j</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-10"></a>    <span class="k">if</span> <span class="p">(</span><span class="nx">obj</span><span class="p">[</span><span class="nx">string</span><span class="p">[</span><span class="nx">j</span><span class="p">]]</span> <span class="o">===</span> <span class="mi">1</span><span class="p">){</span>
+<a name="True-11"></a>      <span class="k">return</span> <span class="nx">string</span><span class="p">[</span><span class="nx">j</span><span class="p">];</span>
+<a name="True-12"></a>    <span class="p">}</span>
+<a name="True-13"></a>  <span class="p">}</span>
+<a name="True-14"></a>  <span class="k">return</span> <span class="kc">null</span><span class="p">;</span>
+<a name="True-15"></a><span class="p">};</span></code></pre></div>
+
+<p>The test built by SpeckJS will be <code>noRepeat_tapeSpec.js</code>:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">test</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;tape&#39;</span><span class="p">);</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;../../problems/strings/norepeat.js&#39;</span><span class="p">);</span>
+<a name="True-3"></a>
+<a name="True-4"></a><span class="nx">test</span><span class="p">(</span><span class="s1">&#39;noRepeat&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="p">{</span> 
+<a name="True-5"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">plan</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<a name="True-6"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="s1">&#39;d&#39;</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">noRepeat</span><span class="p">(</span><span class="s1">&#39;abccdabe&#39;</span><span class="p">),</span> <span class="s1">&#39;returns the first non-repeated character&#39;</span><span class="p">);</span>
+<a name="True-7"></a>  <span class="nx">t</span><span class="p">.</span><span class="nx">deepEqual</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">file</span><span class="p">.</span><span class="nx">noRepeat</span><span class="p">(</span><span class="s1">&#39;abccdabd&#39;</span><span class="p">),</span> <span class="s1">&#39;returns null if all characters are repeated&#39;</span><span class="p">);</span>
+<a name="True-8"></a><span class="p">});</span></code></pre></div>
+
+<p>I expect SpeckJS to continue to grow, become more flexible, and add support for additional testing suites. Let me know in the comments if there are any features you’d be especially happy to see–or go <a href="https://github.com/speckjs/speckjs">directly to their GitHub</a> and submit an issue or pull request!</p>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on September 28, 2015
+  </div>
+  <p id="post-meta"></p>
+  <div id="comments">
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:haileyhasmail@gmail.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/speckjs/',
+		  'title': 'Using SpeckJS to Simplify Unit Testing'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>

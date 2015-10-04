@@ -7,6 +7,257 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Using SpeckJS to Simplify Unit Testing</title>
+        <description>&lt;p&gt;&lt;a href=&quot;https://speckjs.github.io/&quot;&gt;SpeckJS&lt;/a&gt; is “an npm module that parses JavaScript comments and outputs unit-tests.” It allows you to implement TDD into your projects quickly and efficiently from within you main js files.&lt;/p&gt;
+
+&lt;p&gt;Here, I’ll briefly describe how to set-up and use SpeckJS with a vanilla install, and with their Gulp.js plugin. SpeckJS also has plugins for GruntJS and Atom if those are more your style. SpeckJS can be used to build tests in Tape, Mocha and Jasmine; we’ll just use the default settings to create tests build in Tape for now.&lt;/p&gt;
+
+&lt;p&gt;Take a peek at the code below to briefly compare the structure of the “testing” comments to the Tape tests built by SpeckJS from those comments. Also notice that we need to &lt;strong&gt;&lt;em&gt;export&lt;/em&gt;&lt;/strong&gt; any functions we want to test so that they can be &lt;em&gt;required&lt;/em&gt; into our testing file.&lt;/p&gt;
+
+&lt;h4 id=&quot;from-functionsjs&quot;&gt;From &lt;code&gt;functions.js&lt;/code&gt;&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//-----Comments parsed by SpeckJS to build tests-----//&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//test &amp;gt; fizzBuzzMod&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(0,16)[0] === 0 (does not replace 0)&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(0,16)[4] === 4 (does not replace 4)&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(0,16)[3] === &amp;#39;Fizz&amp;#39; (replaces values divisible by 3 with Fizz)&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(0,16)[5] === &amp;#39;Buzz&amp;#39; (replaces values divisible by 5 with Buzz)&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(0,16)[15] === &amp;#39;FizzBuzz&amp;#39; (replaces value divisible by 3 and 5 with FizzBuzz)&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # fizzBuzzMod(10,20) === [&amp;#39;Buzz&amp;#39;,11,&amp;#39;Fizz&amp;#39;,13,14,&amp;#39;FizzBuzz&amp;#39;,16,17,&amp;#39;Fizz&amp;#39;,19,&amp;#39;Buzz&amp;#39;] (returns array with correct values)&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//-----Function tested by above comments-----//&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;start&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;end&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;k&quot;&gt;continue&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;FizzBuzz&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Buzz&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;%&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;Fizz&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;push&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;result&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-32&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-33&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//-----Comments parsed by SpeckJS to build tests-----//&lt;/span&gt;
+&lt;a name=&quot;True-34&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//test &amp;gt; sum&lt;/span&gt;
+&lt;a name=&quot;True-35&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # sum(1) === 1 (returns sum of 1 input number)&lt;/span&gt;
+&lt;a name=&quot;True-36&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # sum(1,2) === 3 (returns sum of 2 input numbers)&lt;/span&gt;
+&lt;a name=&quot;True-37&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # sum(1,2,3) === 6 (returns sum of 3 input numbers)&lt;/span&gt;
+&lt;a name=&quot;True-38&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # sum() === 0 (return 0 if no input given)&lt;/span&gt;
+&lt;a name=&quot;True-39&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # sum(-1, 4, -3) === 0 (correctly adds negative values)&lt;/span&gt;
+&lt;a name=&quot;True-40&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-41&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//-----Function tested by above comments-----//&lt;/span&gt;
+&lt;a name=&quot;True-42&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-43&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;undefined&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-44&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-45&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-46&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Array&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;slice&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-47&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;reduce&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-48&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-49&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-50&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h4 id=&quot;tests-built-by-speckjs&quot;&gt;Tests built by SpeckJS&lt;/h4&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tape&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./functions.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;fizzBuzzMod&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;plan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;does not replace 0&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;does not replace 4&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Fizz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;replaces values divisible by 3 with Fizz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;Buzz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;replaces values divisible by 5 with Buzz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;FizzBuzz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;fizzBuzzMod&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;16&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;15&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;],&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;replaces value divisible by 3 and 5 with FizzBuzz&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;sum&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;plan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns sum of 1 input number&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns sum of 2 input numbers&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;6&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns sum of 3 input numbers&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;return 0 if no input given&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;4&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;3&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;correctly adds negative values&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&lt;strong&gt;Notice the set of comments parsed by SpeckJS has a very particular structure:&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;First, we:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;tell SpeckJS we have a set of tests coming up and&lt;/li&gt;
+  &lt;li&gt;name the function we are testing&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/speckJS/initialize.png&quot; alt=&quot;intialize tests&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Next, we:&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;tell SpeckJS we’re writing an assertion,&lt;/li&gt;
+  &lt;li&gt;write the assertion and&lt;/li&gt;
+  &lt;li&gt;include a description of that test&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/speckJS/assertion.png&quot; alt=&quot;assertion&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Because the SpeckJS project is still in its infancy, we must be very careful with our syntax for it to be parsed correctly and pay very close attention to the spacing we use:&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/speckJS/spacing.png&quot; alt=&quot;spacing&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/speckJS/arraySpaces.png&quot; alt=&quot;array spacing&quot; /&gt;&lt;/p&gt;
+
+&lt;h2 id=&quot;vanilla-set-up&quot;&gt;Vanilla set-up&lt;/h2&gt;
+&lt;p&gt;Before we can begin using SpeckJS to build our tests, we need to set up a small project with which to use it. My project has the following, very simple, file structure:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.
+|--package.json
+|--functions.js
+|--makeTests.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Initialize your &lt;code&gt;package.json&lt;/code&gt; file as you normally would, then install SpeckJS from your commandline using npm:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;npm install speckjs --save-dev&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;All of the functions we want to test (as shown above) are in &lt;code&gt;functions.js&lt;/code&gt;, and the code necessary to build our tests with SpeckJS and save them to another file is in &lt;code&gt;makeTests.js&lt;/code&gt;. Essentially all we do in &lt;code&gt;makeTests.js&lt;/code&gt; is convert our functions into a format the vanilla SpeckJS can use, build the tests, and write them to a new file from which we can run them.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//require Node&amp;#39;s fs module so we can write our built tests to a new file&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;  &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;fs&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//require speckjs&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;speck&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;speckjs&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//get the contents of functions.js as a string&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;readFileSync&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./functions.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;utf8&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//create the file object speckjs will use to build the tests&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;./functions.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;content&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//build the tests and store as a string&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tests&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;speck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;build&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;).&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//write the built tests to a new file&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;fs&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;writeFile&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./tests.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;tests&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That’s really all there is to it! You now just need to run &lt;code&gt;makeTests.js&lt;/code&gt; (using &lt;code&gt;node makeTests.js&lt;/code&gt; for example), and SpeckJS will build the test file shown in the example above!&lt;/p&gt;
+
+&lt;p&gt;This option is nice if you have a very simple file structure and only a few functions you want to test. For example, if you are just solving toy problems, and want to quickly test your solutions, it makes sense to use vanilla SpeckJS. However, it is not practical for larger projects or a more complex file structure because of the necessity to create a &lt;code&gt;makeTests.js&lt;/code&gt; file for each file containing your functions.&lt;/p&gt;
+
+&lt;h2 id=&quot;gulpjs-set-up&quot;&gt;Gulp.js set-up&lt;/h2&gt;
+&lt;p&gt;Let’s assume that we’ve been solving more and more toy problems, and now we have a more complicated file structure:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.
+|--package.json
+|--problems
+|  |--arrays
+|  |  |--findMissing.js
+|  |--numbers
+|  |--strings
+|  |  |--palindrome.js
+|  |  |--noRepeats.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Now, our problems are stored in different folders by category. We need a more robust way to build all of the tests for all of our functions…enter GULPJS.&lt;/p&gt;
+
+&lt;p&gt;The first thing we need to do is install the various plugins we will need:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-bash&quot; data-lang=&quot;bash&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;npm install --save-dev gulp gulp-speckjs gulp-foreach gulp-rename&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We then set-up our &lt;code&gt;gulpfile.js&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;gulp&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;speck&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;gulp-speckjs&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;foreach&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;gulp-foreach&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;path&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rename&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;gulp-rename&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;task&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;speck&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;src&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./problems/**/*.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;foreach&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;stream&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;stream&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;speck&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;          &lt;span class=&quot;nx&quot;&gt;testFW&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;tape&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;          &lt;span class=&quot;nx&quot;&gt;logs&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;true&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;          &lt;span class=&quot;nx&quot;&gt;relPath&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;relative&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./specs/*/&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;path&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;rename&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;({&lt;/span&gt;
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;          &lt;span class=&quot;nx&quot;&gt;suffix&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;_tapeSpec&amp;#39;&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;}));&lt;/span&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}))&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pipe&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;gulp&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;dest&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;./specs&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;));&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Running &lt;code&gt;gulp speck&lt;/code&gt; now searches for any and all JavaScript files inside of the &lt;code&gt;problems&lt;/code&gt; folder, builds tests for them using SpeckJS, and stores the tests inside of a &lt;code&gt;speck&lt;/code&gt; folder. It will create the following file structure:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;.
+|--package.json
+|--problems
+|  |--arrays
+|  |  |--findMissing.js
+|  |--strings
+|  |  |--palindrome.js
+|  |  |--noRepeats.js
+|--specs
+|  |--arrays
+|  |  |--findMissing_tapeSpeck.js
+|  |--strings
+|  |  |--palindrome_tapeSpeck.js
+|  |  |--noRepeats_tapeSpeck.js
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Note that the &lt;code&gt;gulp-foreach&lt;/code&gt; allows us to call &lt;code&gt;speck()&lt;/code&gt; on each file and build a test for it. We use &lt;code&gt;path.relative&lt;/code&gt; to set the path needed to access the original file (and the functions it contains) and require them into the built tests.&lt;/p&gt;
+
+&lt;p&gt;This means that if this is one of our original files (&lt;code&gt;noRepeat.js&lt;/code&gt;):&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// test &amp;gt; noRepeat&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # noRepeat(&amp;#39;abccdabe&amp;#39;) === &amp;#39;d&amp;#39; (returns the first non-repeated character)&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;// # noRepeat(&amp;#39;abccdabd&amp;#39;) === null (returns null if all characters are repeated)&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;exports&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;noRepeat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;noRepeat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{};&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;||&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;length&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;obj&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;===&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;string&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;j&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The test built by SpeckJS will be &lt;code&gt;noRepeat_tapeSpec.js&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;tape&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;require&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;../../problems/strings/norepeat.js&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;test&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;noRepeat&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt; 
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;plan&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;d&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;noRepeat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;abccdabe&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns the first non-repeated character&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;nx&quot;&gt;t&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;deepEqual&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;file&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;noRepeat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s1&quot;&gt;&amp;#39;abccdabd&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;&amp;#39;returns null if all characters are repeated&amp;#39;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;});&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I expect SpeckJS to continue to grow, become more flexible, and add support for additional testing suites. Let me know in the comments if there are any features you’d be especially happy to see–or go &lt;a href=&quot;https://github.com/speckjs/speckjs&quot;&gt;directly to their GitHub&lt;/a&gt; and submit an issue or pull request!&lt;/p&gt;
+</description>
+        <pubDate>Mon, 28 Sep 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//speckjs/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//speckjs/</guid>
+      </item>
+    
+      <item>
         <title>Let Gulp Take the Tedium out of Tasks</title>
         <description>&lt;p&gt;If you’ve spent any time writing JavaScript in the last couple of years, you’ve likely at least heard of &lt;a href=&quot;http://gulpjs.com/&quot;&gt;Gulp.js&lt;/a&gt;. Smashing Magazine has an &lt;a href=&quot;http://www.smashingmagazine.com/2014/06/building-with-gulp/&quot;&gt;excellent introduction to Gulp&lt;/a&gt; that I strongly recommend reading if you are new to this build tool.&lt;/p&gt;
 
@@ -1185,94 +1436,6 @@ One of my Hack Reactor peers wrote up a more detailed explanation of that proble
         <pubDate>Mon, 06 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//Understanding-Bind/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//Understanding-Bind/</guid>
-      </item>
-    
-      <item>
-        <title>Deciphering Javascript Instantiation Patterns</title>
-        <description>&lt;p&gt;Sometimes it seems like Javascript has about a hundred different options for doing just about anything. While this flexibility can be powerful, it can also lead to confusion as it is sometimes unclear that several different constructs all essentially do the same thing. For example, Javascript has a variety of 
-&lt;span style=&quot;cursos:help;&quot; title=&quot;a technique for encapsulating and modularizing object creation&quot;&gt;instantiation patterns&lt;/span&gt;, which can also be considered strategies for creating new classes:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Functional&lt;/li&gt;
-  &lt;li&gt;Functional Shared&lt;/li&gt;
-  &lt;li&gt;Prototypical&lt;/li&gt;
-  &lt;li&gt;Pseudoclassical&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Much has been written about these four styles already—check out the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt; for a couple of particularly clear explanations. Here, I want to briefly compare and contrast the basic structure of each pattern for use as a quick reference and/or refresher for people who already know how and when to use each pattern.&lt;/p&gt;
-
-&lt;p&gt;All four patterns accomplish the same three objectives:
-1. Declare a new object (outlined in orange)
-2. Add properties common to all members of the class (also in orange)
-3. Add methods common to all members of the class (outlined in green)&lt;/p&gt;
-
-&lt;p&gt;Below each function, I have also shown how each pattern is called upon to create new objects. Notice that functional, functional shared, and prototypical all use the same general code here, but the pseudoclassical pattern uses the keyword &lt;code&gt;new&lt;/code&gt;. Additionally, the functional shared code here uses &lt;a href=&quot;file:///Users/haileyfoster/Library/Application%20Support/Dash/DocSets/UnderscoreJS/UnderscoreJS.docset/Contents/Resources/Documents/index.html#extend&quot;&gt;Underscore’s &lt;code&gt;_.extend&lt;/code&gt; function&lt;/a&gt;.&lt;/p&gt;
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;th&gt;Pattern&lt;/th&gt;
-        &lt;th&gt;General Structure&lt;/th&gt;
-        &lt;th&gt;Example Code&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Functional&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Functional Shared&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional-Shared.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Functional Shared-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Prototypal&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Prototypal-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Pseudoclassical&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Pseudoclassical-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-
-&lt;/table&gt;
-
-&lt;p&gt;Again, each of these patterns are useful in different circumstances. In addition to the posts by &lt;a href=&quot;http://tylermcginnis.com/object-creation-in-javascript-functional-instantiation-vs-prototypal-instantiation-vs-pseudo-classical-instantiation/&quot;&gt;Tyler McGinnis&lt;/a&gt; and &lt;a href=&quot;http://blog.lyyons.com/javascript-instantiation-patterns-and-why-you-need-to-know-them/&quot;&gt;Ian Lynon&lt;/a&gt;, &lt;a href=&quot;http://www.hackreactor.com/blog/javascript-instantiation-patterns&quot;&gt;Brett Hoyer&lt;/a&gt; presents the advantages and disadvantages of each pattern quite clearly on Hack Reactor’s blog.&lt;/p&gt;
-
-&lt;p&gt;In addition to the instantiation patterns shown above, Javascript allows for the use of &lt;strong&gt;function decorators&lt;/strong&gt;. While these do not instantiate new objects, they are useful for modifying the properties and methods of existing objects. They &lt;em&gt;can&lt;/em&gt; also be used to instantiate a new object if an empty object is passed in as one of the arguments, but this is far less efficient that using any of the class declaration patterns above.&lt;/p&gt;
-
-&lt;p&gt;There are two decorator patterns:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;Functional Object Decorator with Duplicate Methods&lt;/li&gt;
-  &lt;li&gt;Functional Object Decorator with Shared Methods&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;These two patterns look almost identical to the functional and functional shared patterns above, and have similar pros and cons. However, unlike the instantiation patterns, these must have an object passed in as one of their arguments.&lt;/p&gt;
-
-&lt;table&gt;
-    &lt;tr&gt;
-        &lt;th&gt;Pattern&lt;/th&gt;
-        &lt;th&gt;General Structure&lt;/th&gt;
-        &lt;th&gt;Example Code&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Decorator with Duplicate Methods&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Duplicate-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;Decorator with Shared Methods&lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared.png&quot; /&gt; &lt;/td&gt;
-        &lt;td&gt;&lt;img src=&quot;../images/Instatiation/Decorator-Shared-ex.png&quot; /&gt;&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-&lt;p&gt;Much more can be said about all of these patterns — why some use &lt;code&gt;this&lt;/code&gt;and/or &lt;code&gt;new&lt;/code&gt;, which are more efficient etc…— but I hope this is enough to help clarify the structure of each pattern, and to use as a quick reference for those who are already familiar with them.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 05 Jul 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Deciphering-Javascript-Instantiation-Patterns/</guid>
       </item>
     
   </channel>
