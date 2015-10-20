@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Analyzing nth Fibbonacci Solutions – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Calculating the Fibonnaci sequence is one of the first programs many people learn to write once they’re past Hello World. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the nth Fibonnaci number and put them to the test.
+
+" />
+    <meta property="og:description" content="Calculating the Fibonnaci sequence is one of the first programs many people learn to write once they’re past Hello World. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the nth Fibonnaci number and put them to the test.
+
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="Analyzing nth Fibbonacci Solutions" />
+    <meta property="twitter:title" content="Analyzing nth Fibbonacci Solutions" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Analyzing nth Fibbonacci Solutions</h1>
+  
+   <a href="/tag/javascript" title="View posts tagged with &quot;javascript&quot;" class = "tag">javascript</a>     <a href="/tag/recursion" title="View posts tagged with &quot;recursion&quot;" class = "tag">recursion</a>   
+
+  <div class="entry">
+    <p>Calculating the <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonnaci sequence</a> is one of the first programs many people learn to write once they’re past <code>Hello World</code>. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the <em>nth</em> Fibonnaci number and put them to the test.</p>
+
+<p>I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used by 2013 Mac with an i7 processor running Yosemite.</p>
+
+<h3 id="basic-recursion">Basic Recursion</h3>
+<p>First up, I tried out a basic recursive function. Notice how simple this functions is (only one line!)–it reads almost the same as the definition of the sequence: The next value in the sequence is found by summing the previous two values–except for when <code>n = 0</code> and <code>n = 1</code>; these values are equal to <em>n</em>.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Basic Recursive</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">rFib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="k">return</span> <span class="nx">n</span><span class="o">&lt;</span><span class="mi">2</span> <span class="o">?</span> <span class="nx">n</span> <span class="o">:</span> <span class="nx">rFib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">rFib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+<a name="True-4"></a><span class="p">};</span></code></pre></div>
+
+<p>Unfortunately, this simple program can only handle small values of <code>n</code>. When <code>n = 45</code>, it average 21.5s before returning. I ran out of patience trying to test it for values greater than 45. This makes sense, as this program has a time complexity of O(2<sup>n</sup>)–not good. Incidentally, it has a space complexity of O(n). Also, notice in the figure below how many redundant computations this methods uses! Blech. We can do better.</p>
+
+<p><img src="../images/Fibonnaci/recursion-tree.png" alt="Recursion Tree" /></p>
+
+<h3 id="iterative-recursion">Iterative Recursion</h3>
+
+<p>Next up, let’s check out an iterative approach that uses recursion to iterate (this is quite a bit different that the approach above). This time, we’re using a recursive helper function that allows us to iterate n times, passing in the previous two values and decrementing n each time. We return the last value when <code>n === 0</code>.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Iterative by recursion</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">iterRFib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="kd">var</span> <span class="nx">helper</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">n</span><span class="p">){</span>
+<a name="True-4"></a>    <span class="k">return</span> <span class="nx">n</span><span class="o">&lt;</span><span class="mi">2</span><span class="o">?</span> <span class="nx">b</span> <span class="o">:</span> <span class="nx">helper</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="nx">a</span><span class="o">+</span><span class="nx">b</span><span class="p">,</span> <span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<a name="True-5"></a>  <span class="p">};</span>
+<a name="True-6"></a>  <span class="k">return</span> <span class="nx">helper</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">n</span><span class="p">);</span>
+<a name="True-7"></a><span class="p">};</span></code></pre></div>
+
+<p>We get a big performance jump using this approach. I got up to <code>n = 13974</code> before reaching the max call size, and the function still returned in less than 0.1s. This time our time complexity is just O(n). Our space complexity is still O(n), as we must store each call to <code>helper</code> in our stack. This is why this function performs so much more quickly, but still runs into the call stack max.</p>
+
+<p><img src="../images/Fibonnaci/iter-recursive-fib.png" alt="Iterative Recursion" /></p>
+
+<h3 id="true-iteration">True Iteration</h3>
+
+<p>Unlike the approach above, the approach using JavaScript’s built in loop functionality does not rely on any recursive calls, and there for does not need to store all previous calls in memory.  The code below stores the previous two values in an array (note, this could have been done in two separate variables as well), then enters a for loop that decrements from <code>n</code> to <code>n === 2</code>. Inside of the loop, we are setting the second value to the sum of the previous two values, and the first value to the previous second value. When <code>n === 1</code>, we exit the loop and return the second value.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Truly iterative</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">trueIterFib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="kd">var</span> <span class="nx">cache</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+<a name="True-4"></a>  <span class="k">for</span> <span class="p">(</span><span class="nx">n</span><span class="p">;</span> <span class="nx">n</span><span class="o">&gt;</span><span class="mi">1</span><span class="p">;</span> <span class="nx">n</span><span class="o">--</span><span class="p">){</span>
+<a name="True-5"></a>    <span class="nx">cache</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cache</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+<a name="True-6"></a>    <span class="nx">cache</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="nx">cache</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<a name="True-7"></a>    <span class="nx">cache</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nx">cache</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<a name="True-8"></a>  <span class="p">}</span>
+<a name="True-9"></a>  <span class="k">return</span> <span class="nx">cache</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+<a name="True-10"></a><span class="p">};</span></code></pre></div>
+
+<div style="float: right">
+    <img src="../images/Fibonnaci/iter-fib.png" alt="True Iteration" />
+</div>
+
+<p>Like the iterative recursion approach, this function performs small(ish) numbers blazingly fast compared to the true recursive approach (<code>trueIterFib(14000)</code> took less than 0.1s). However, it can also handle extremely large values without hitting the max call stack, because it has a space complexity of O(1)—it only needs to store the last two values at any given time, leaving a much smaller footprint. I was able to calculate the value of <code>n = 1000000000</code> using the function with no problems–it took 4.2s though, which makes sense given that the time complexity is O(n).</p>
+
+<p>This is the clear winner so far in terms of performance: O(n) time complexity and O(1) space complexity. But for argument’s sake, let’s say you were to write a program that repeatedly calcualted large Fibonnaci numbers. Even our <code>trueIterFib</code> function would prove unweildy for this situation. This is where <em>memoization</em> comes in.</p>
+
+<h3 id="recursion-with-memoization">Recursion with memoization</h3>
+
+<p>Let’s return to our original recursive solution, but add on three key lines of code. This time, we’re attaching the property <code>memRFib</code> to our function object, which we will use to cache previously computed values. This will allow us to “trim” a bunch of branches off of the recursion tree represented above. When we enter our function, we first check to see if we already have the value for n stored in our cache (<code>memRFib</code>); if we do, we simply return it. Otherwise, we enter our recursion the same as before, but store the results in the cache instead of returning them. Finally, we return the value of <code>memRFib.mem[n]</code>.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Recursive with memoization</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">memRFib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">memRFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">n</span><span class="p">]){</span>
+<a name="True-4"></a>    <span class="nx">memRFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">n</span><span class="p">]</span> <span class="o">=</span> <span class="nx">n</span><span class="o">&lt;</span><span class="mi">2</span> <span class="o">?</span> <span class="nx">n</span> <span class="o">:</span> <span class="nx">memRFib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="nx">memRFib</span><span class="p">(</span><span class="nx">n</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>
+<a name="True-5"></a>  <span class="p">}</span>
+<a name="True-6"></a>  <span class="k">return</span> <span class="nx">memRFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+<a name="True-7"></a><span class="p">};</span>
+<a name="True-8"></a><span class="nx">memRFib</span><span class="p">.</span><span class="nx">mem</span> <span class="o">=</span> <span class="p">[];</span></code></pre></div>
+
+<p>Although we are still using recursion, both our time and space complexities are now O(n). The function must only calculate the value for each <code>n</code> <strong>once</strong>, which gives us a huge speed boost. Interestingly, we have the same space and time complexity as our iterative recursive strategy, and the performance of the two functions is almost identical (big asterisk asterisk!!! see below): I was able to calculate the value for <code>n = 13962</code> before hitting the max call stack, and it took less than 0.1s. I would imagine that the small decrease in performance is likely due to the fact that we must store both the function calls <em>and</em> the memRFib.mem array here.</p>
+
+<p><img src="../images/Fibonnaci/mem-recurse.png" alt="Recursion with memoization" /></p>
+
+<p>Another interesting thing about this function is that while it will run into call stack issues if you try a large number at the beginning, once you’ve memoized, the limit increases. This means that theoretically the call stack max could be avoided with clever function calls.</p>
+
+<h3 id="iteration-with-memoization">Iteration with memoization</h3>
+<p>Alright, so how about we do something similar with our truly iterative function–it had the best performance before, will this improve it even more?</p>
+
+<p>As with the recursion with memoization, here we add a property with which to store our results. We then check to see if we have already calculation the value, and if so, return that value. Otherwise, we enter our for loop, where we do something a bit more curious. We check <em>again</em> to see if the value has already been calculated before doing so. I’ll leave it to you to figure out why.</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//Iterative memoization</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">memIterFib</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">n</span><span class="p">]){</span>
+<a name="True-4"></a>    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;=</span><span class="nx">n</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+<a name="True-5"></a>      <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">i</span><span class="p">]){</span>
+<a name="True-6"></a>        <span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">i</span><span class="o">-</span><span class="mi">2</span><span class="p">];</span>
+<a name="True-7"></a>      <span class="p">}</span>
+<a name="True-8"></a>    <span class="p">}</span>
+<a name="True-9"></a>  <span class="p">}</span>
+<a name="True-10"></a>  <span class="k">return</span> <span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span><span class="p">[</span><span class="nx">n</span><span class="p">];</span>
+<a name="True-11"></a><span class="p">};</span>
+<a name="True-12"></a><span class="nx">memIterFib</span><span class="p">.</span><span class="nx">mem</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span></code></pre></div>
+
+<div style="float: right">
+    <img src="../images/Fibonnaci/mem-iter.png" alt="Iteration with memoization" />
+</div>
+
+<p>Notably, thought we don’t run into any call stack errors, this version of our function actually performs much more slowly than the <code>trueIter</code> function. It took 4.2s to calculate the value of <code>n = 17000000</code>; I’m guessing this is because of the addition of the conditionals and lookups in this function. Additionally, while <code>trueIter</code> has a space complexity of O(1), this version has a space complexity of O(n) because we store all of our values in <code>memIterFib.mem</code>. So why on earth would we ever want to use this version? Keep reading for the answer.</p>
+
+<h3 id="formula">Formula</h3>
+<p>Incidentally, there is also a formula one can use to calculate the <em>nth</em> Fibonnaci number:</p>
+
+<p>a<sub>n</sub> = (Phi<sup>n</sup> - phi<sup>n</sup>)/Sqrt(5)</p>
+
+<p>where
+Phi = (1+Sqrt(5))/2 and phi = (1-Sqrt(5))/2</p>
+
+<p>We can write this in code like so:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="kd">var</span> <span class="nx">fibEquation</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">n</span><span class="p">){</span>
+<a name="True-2"></a>  <span class="kd">var</span> <span class="nx">Phi</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+<a name="True-3"></a>  <span class="kd">var</span> <span class="nx">phi</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">))</span><span class="o">/</span><span class="mi">2</span><span class="p">;</span>
+<a name="True-4"></a>  <span class="k">return</span> <span class="p">(</span><span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">Phi</span><span class="p">,</span> <span class="nx">n</span><span class="p">)</span> <span class="o">-</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">pow</span><span class="p">(</span><span class="nx">phi</span><span class="p">,</span> <span class="nx">n</span><span class="p">))</span><span class="o">/</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<a name="True-5"></a><span class="p">};</span></code></pre></div>
+
+<p>This option gives us O(1) for both the time and space complexity. Pretty sweet!
+It was able to calculate the value when <code>n = 100000000000000000</code> in less 0.1s (I didn’t bother testing anything larger than this).</p>
+
+<h2 id="summing-it-all-up">Summing it all up</h2>
+<p>So far, our functions rank in the following order based on their space and time complexities, as well as their actual performance:
+<code>rFib &lt; iterRFib ~ memRFib &lt; memIterFib &lt; trueIterFib</code></p>
+
+<p>However, our tests have not taken into account situations in which you might want to repeatedly calculate various Fibonnaci numbers <em>many</em> times—this is where our memoized functions shine. To test this out, I modified this online tool and got the follow results.</p>
+
+<p><img src="../images/Fibonnaci/results.png" alt="Test specs" /></p>
+
+<p>Whoa! A few interesting things are happening here.
+1.) As before, <code>rFib</code> performs <em>significantly</em> slower than the rest of our functions.
+2.) <code>trueIterFib</code> and <code>iterRFib</code> are comparable in these tests. This is exactly what we would guess would happen, given that these tests only use <code>n = 20</code>; this is far below the maximum <code>n</code> I was able to test before hitting the call stack max for <code>iterRFib</code>.
+3.) Both memoized functions vastly outperform the rest of the functions, and are almost identical in their outcomes.This is because as soon as we test <code>n = 20</code> once, this value is stored in the cache, so the function simply looks up the previously calculated value on each successive test.
+4.) Though still fast, the formula was actually significantly slower than the memoized functions. This is because even though this function has a time complexity of O(1), it still requires more calculations each time than the memoized versions do after they calculate the value once.</p>
+
+<p>So what does this mean? Well, we should take into account both the worst and best case scenarios when considering space and time complexity and choosing which function is “best” for our needs.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Approach</th>
+      <th style="text-align: center">Best Case</th>
+      <th style="text-align: center">Worst Case</th>
+      <th style="text-align: center">Notes</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td style="text-align: center">Time          Space</td>
+      <td style="text-align: center">TimeSpace</td>
+      <td style="text-align: center"> </td>
+    </tr>
+    <tr>
+      <td>Basic Recursion</td>
+      <td style="text-align: center">O(2<sup>n</sup>) O(n)</td>
+      <td style="text-align: center">O(2<sup>n</sup>) O(n)</td>
+      <td style="text-align: center">Easy to read. Very resource intensive</td>
+    </tr>
+    <tr>
+      <td>Iterative Recursion</td>
+      <td style="text-align: center">O(n) O(n)</td>
+      <td style="text-align: center">O(n) O(n)</td>
+      <td style="text-align: center">Uses a helper function Quick, but runs into call stack max</td>
+    </tr>
+    <tr>
+      <td>True Iteration</td>
+      <td style="text-align: center">O(n) O(1)</td>
+      <td style="text-align: center">O(n) O(1)</td>
+      <td style="text-align: center">Quick, even with very large values</td>
+    </tr>
+    <tr>
+      <td>Recursion with Memoization</td>
+      <td style="text-align: center">O(n) O(n)</td>
+      <td style="text-align: center">O(1) O(n)</td>
+      <td style="text-align: center">Quick, but can run into call stack max</td>
+    </tr>
+    <tr>
+      <td>Iteration with Memoization</td>
+      <td style="text-align: center">O(n) O(n)</td>
+      <td style="text-align: center">O(1) O(n)</td>
+      <td style="text-align: center">Fast for previously memoized values</td>
+    </tr>
+    <tr>
+      <td>Formula</td>
+      <td style="text-align: center">O(1) O(1)</td>
+      <td style="text-align: center">O(1) O(1)</td>
+      <td style="text-align: center">Extremely fast at calculating large values</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>And that. Is that.</p>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on October 18, 2015
+  </div>
+  <p id="post-meta"></p>
+  <div id="comments">
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:hailey@haileyfoster.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/Comparing-nFib-Programs/',
+		  'title': 'Analyzing nth Fibbonacci Solutions'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>

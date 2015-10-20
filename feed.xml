@@ -7,6 +7,203 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Analyzing nth Fibbonacci Solutions</title>
+        <description>&lt;p&gt;Calculating the &lt;a href=&quot;https://en.wikipedia.org/wiki/Fibonacci_number&quot;&gt;Fibonnaci sequence&lt;/a&gt; is one of the first programs many people learn to write once they’re past &lt;code&gt;Hello World&lt;/code&gt;. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the &lt;em&gt;nth&lt;/em&gt; Fibonnaci number and put them to the test.&lt;/p&gt;
+
+&lt;p&gt;I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used by 2013 Mac with an i7 processor running Yosemite.&lt;/p&gt;
+
+&lt;h3 id=&quot;basic-recursion&quot;&gt;Basic Recursion&lt;/h3&gt;
+&lt;p&gt;First up, I tried out a basic recursive function. Notice how simple this functions is (only one line!)–it reads almost the same as the definition of the sequence: The next value in the sequence is found by summing the previous two values–except for when &lt;code&gt;n = 0&lt;/code&gt; and &lt;code&gt;n = 1&lt;/code&gt;; these values are equal to &lt;em&gt;n&lt;/em&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Basic Recursive&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rFib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;rFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Unfortunately, this simple program can only handle small values of &lt;code&gt;n&lt;/code&gt;. When &lt;code&gt;n = 45&lt;/code&gt;, it average 21.5s before returning. I ran out of patience trying to test it for values greater than 45. This makes sense, as this program has a time complexity of O(2&lt;sup&gt;n&lt;/sup&gt;)–not good. Incidentally, it has a space complexity of O(n). Also, notice in the figure below how many redundant computations this methods uses! Blech. We can do better.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/Fibonnaci/recursion-tree.png&quot; alt=&quot;Recursion Tree&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;iterative-recursion&quot;&gt;Iterative Recursion&lt;/h3&gt;
+
+&lt;p&gt;Next up, let’s check out an iterative approach that uses recursion to iterate (this is quite a bit different that the approach above). This time, we’re using a recursive helper function that allows us to iterate n times, passing in the previous two values and decrementing n each time. We return the last value when &lt;code&gt;n === 0&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Iterative by recursion&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;iterRFib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;helper&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;helper&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We get a big performance jump using this approach. I got up to &lt;code&gt;n = 13974&lt;/code&gt; before reaching the max call size, and the function still returned in less than 0.1s. This time our time complexity is just O(n). Our space complexity is still O(n), as we must store each call to &lt;code&gt;helper&lt;/code&gt; in our stack. This is why this function performs so much more quickly, but still runs into the call stack max.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/Fibonnaci/iter-recursive-fib.png&quot; alt=&quot;Iterative Recursion&quot; /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;true-iteration&quot;&gt;True Iteration&lt;/h3&gt;
+
+&lt;p&gt;Unlike the approach above, the approach using JavaScript’s built in loop functionality does not rely on any recursive calls, and there for does not need to store all previous calls in memory.  The code below stores the previous two values in an array (note, this could have been done in two separate variables as well), then enters a for loop that decrements from &lt;code&gt;n&lt;/code&gt; to &lt;code&gt;n === 2&lt;/code&gt;. Inside of the loop, we are setting the second value to the sum of the previous two values, and the first value to the previous second value. When &lt;code&gt;n === 1&lt;/code&gt;, we exit the loop and return the second value.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Truly iterative&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;trueIterFib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;gt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;--&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cache&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div style=&quot;float: right&quot;&gt;
+    &lt;img src=&quot;../images/Fibonnaci/iter-fib.png&quot; alt=&quot;True Iteration&quot; /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Like the iterative recursion approach, this function performs small(ish) numbers blazingly fast compared to the true recursive approach (&lt;code&gt;trueIterFib(14000)&lt;/code&gt; took less than 0.1s). However, it can also handle extremely large values without hitting the max call stack, because it has a space complexity of O(1)—it only needs to store the last two values at any given time, leaving a much smaller footprint. I was able to calculate the value of &lt;code&gt;n = 1000000000&lt;/code&gt; using the function with no problems–it took 4.2s though, which makes sense given that the time complexity is O(n).&lt;/p&gt;
+
+&lt;p&gt;This is the clear winner so far in terms of performance: O(n) time complexity and O(1) space complexity. But for argument’s sake, let’s say you were to write a program that repeatedly calcualted large Fibonnaci numbers. Even our &lt;code&gt;trueIterFib&lt;/code&gt; function would prove unweildy for this situation. This is where &lt;em&gt;memoization&lt;/em&gt; comes in.&lt;/p&gt;
+
+&lt;h3 id=&quot;recursion-with-memoization&quot;&gt;Recursion with memoization&lt;/h3&gt;
+
+&lt;p&gt;Let’s return to our original recursive solution, but add on three key lines of code. This time, we’re attaching the property &lt;code&gt;memRFib&lt;/code&gt; to our function object, which we will use to cache previously computed values. This will allow us to “trim” a bunch of branches off of the recursion tree represented above. When we enter our function, we first check to see if we already have the value for n stored in our cache (&lt;code&gt;memRFib&lt;/code&gt;); if we do, we simply return it. Otherwise, we enter our recursion the same as before, but store the results in the cache instead of returning them. Finally, we return the value of &lt;code&gt;memRFib.mem[n]&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Recursive with memoization&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;?&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;memRFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Although we are still using recursion, both our time and space complexities are now O(n). The function must only calculate the value for each &lt;code&gt;n&lt;/code&gt; &lt;strong&gt;once&lt;/strong&gt;, which gives us a huge speed boost. Interestingly, we have the same space and time complexity as our iterative recursive strategy, and the performance of the two functions is almost identical (big asterisk asterisk!!! see below): I was able to calculate the value for &lt;code&gt;n = 13962&lt;/code&gt; before hitting the max call stack, and it took less than 0.1s. I would imagine that the small decrease in performance is likely due to the fact that we must store both the function calls &lt;em&gt;and&lt;/em&gt; the memRFib.mem array here.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/Fibonnaci/mem-recurse.png&quot; alt=&quot;Recursion with memoization&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Another interesting thing about this function is that while it will run into call stack issues if you try a large number at the beginning, once you’ve memoized, the limit increases. This means that theoretically the call stack max could be avoided with clever function calls.&lt;/p&gt;
+
+&lt;h3 id=&quot;iteration-with-memoization&quot;&gt;Iteration with memoization&lt;/h3&gt;
+&lt;p&gt;Alright, so how about we do something similar with our truly iterative function–it had the best performance before, will this improve it even more?&lt;/p&gt;
+
+&lt;p&gt;As with the recursion with memoization, here we add a property with which to store our results. We then check to see if we have already calculation the value, and if so, return that value. Otherwise, we enter our for loop, where we do something a bit more curious. We check &lt;em&gt;again&lt;/em&gt; to see if the value has already been calculated before doing so. I’ll leave it to you to figure out why.&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Iterative memoization&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;lt;=&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;++&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]){&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;i&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;-&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;      &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;memIterFib&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;mem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;];&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div style=&quot;float: right&quot;&gt;
+    &lt;img src=&quot;../images/Fibonnaci/mem-iter.png&quot; alt=&quot;Iteration with memoization&quot; /&gt;
+&lt;/div&gt;
+
+&lt;p&gt;Notably, thought we don’t run into any call stack errors, this version of our function actually performs much more slowly than the &lt;code&gt;trueIter&lt;/code&gt; function. It took 4.2s to calculate the value of &lt;code&gt;n = 17000000&lt;/code&gt;; I’m guessing this is because of the addition of the conditionals and lookups in this function. Additionally, while &lt;code&gt;trueIter&lt;/code&gt; has a space complexity of O(1), this version has a space complexity of O(n) because we store all of our values in &lt;code&gt;memIterFib.mem&lt;/code&gt;. So why on earth would we ever want to use this version? Keep reading for the answer.&lt;/p&gt;
+
+&lt;h3 id=&quot;formula&quot;&gt;Formula&lt;/h3&gt;
+&lt;p&gt;Incidentally, there is also a formula one can use to calculate the &lt;em&gt;nth&lt;/em&gt; Fibonnaci number:&lt;/p&gt;
+
+&lt;p&gt;a&lt;sub&gt;n&lt;/sub&gt; = (Phi&lt;sup&gt;n&lt;/sup&gt; - phi&lt;sup&gt;n&lt;/sup&gt;)/Sqrt(5)&lt;/p&gt;
+
+&lt;p&gt;where
+Phi = (1+Sqrt(5))/2 and phi = (1-Sqrt(5))/2&lt;/p&gt;
+
+&lt;p&gt;We can write this in code like so:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fibEquation&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Phi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;phi&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;Phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;-&lt;/span&gt; &lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pow&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;phi&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;n&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;))&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;/&lt;/span&gt;&lt;span class=&quot;nb&quot;&gt;Math&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;sqrt&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;5&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This option gives us O(1) for both the time and space complexity. Pretty sweet!
+It was able to calculate the value when &lt;code&gt;n = 100000000000000000&lt;/code&gt; in less 0.1s (I didn’t bother testing anything larger than this).&lt;/p&gt;
+
+&lt;h2 id=&quot;summing-it-all-up&quot;&gt;Summing it all up&lt;/h2&gt;
+&lt;p&gt;So far, our functions rank in the following order based on their space and time complexities, as well as their actual performance:
+&lt;code&gt;rFib &amp;lt; iterRFib ~ memRFib &amp;lt; memIterFib &amp;lt; trueIterFib&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;However, our tests have not taken into account situations in which you might want to repeatedly calculate various Fibonnaci numbers &lt;em&gt;many&lt;/em&gt; times—this is where our memoized functions shine. To test this out, I modified this online tool and got the follow results.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;../images/Fibonnaci/results.png&quot; alt=&quot;Test specs&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Whoa! A few interesting things are happening here.
+1.) As before, &lt;code&gt;rFib&lt;/code&gt; performs &lt;em&gt;significantly&lt;/em&gt; slower than the rest of our functions.
+2.) &lt;code&gt;trueIterFib&lt;/code&gt; and &lt;code&gt;iterRFib&lt;/code&gt; are comparable in these tests. This is exactly what we would guess would happen, given that these tests only use &lt;code&gt;n = 20&lt;/code&gt;; this is far below the maximum &lt;code&gt;n&lt;/code&gt; I was able to test before hitting the call stack max for &lt;code&gt;iterRFib&lt;/code&gt;.
+3.) Both memoized functions vastly outperform the rest of the functions, and are almost identical in their outcomes.This is because as soon as we test &lt;code&gt;n = 20&lt;/code&gt; once, this value is stored in the cache, so the function simply looks up the previously calculated value on each successive test.
+4.) Though still fast, the formula was actually significantly slower than the memoized functions. This is because even though this function has a time complexity of O(1), it still requires more calculations each time than the memoized versions do after they calculate the value once.&lt;/p&gt;
+
+&lt;p&gt;So what does this mean? Well, we should take into account both the worst and best case scenarios when considering space and time complexity and choosing which function is “best” for our needs.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;Approach&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Best Case&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Worst Case&lt;/th&gt;
+      &lt;th style=&quot;text-align: center&quot;&gt;Notes&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt; &lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Time          Space&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;TimeSpace&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Basic Recursion&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(2&lt;sup&gt;n&lt;/sup&gt;) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(2&lt;sup&gt;n&lt;/sup&gt;) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Easy to read. Very resource intensive&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Iterative Recursion&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Uses a helper function Quick, but runs into call stack max&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;True Iteration&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(1)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(1)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Quick, even with very large values&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Recursion with Memoization&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(1) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Quick, but can run into call stack max&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Iteration with Memoization&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(n) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(1) O(n)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Fast for previously memoized values&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;Formula&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(1) O(1)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;O(1) O(1)&lt;/td&gt;
+      &lt;td style=&quot;text-align: center&quot;&gt;Extremely fast at calculating large values&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;And that. Is that.&lt;/p&gt;
+</description>
+        <pubDate>Sun, 18 Oct 2015 00:00:00 -0700</pubDate>
+        <link>http://hmfoster.github.io//Comparing-nFib-Programs/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//Comparing-nFib-Programs/</guid>
+      </item>
+    
+      <item>
         <title>Using SpeckJS to Simplify Unit Testing</title>
         <description>&lt;p&gt;&lt;a href=&quot;https://speckjs.github.io/&quot;&gt;SpeckJS&lt;/a&gt; is “an npm module that parses JavaScript comments and outputs unit-tests.” It allows you to implement TDD into your projects quickly and efficiently from within you main js files.&lt;/p&gt;
 
@@ -1371,71 +1568,6 @@ AssertionError: expected undefined to be a string
         <pubDate>Thu, 09 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//Test-Driven-Development/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//Test-Driven-Development/</guid>
-      </item>
-    
-      <item>
-        <title>Wrapping your Brain Around JavaScript&#39;s Bind Method</title>
-        <description>&lt;p&gt;I think everyone can agree that fully understanding JavaScript’s keyword &lt;code&gt;this&lt;/code&gt; is…challenging. The object to which it refers changes depending upon the context in which it is called. Fortunately, you can use JavaScript’s native &lt;code&gt;bind&lt;/code&gt; method to take control of matters. The code below demonstrates both the &lt;em&gt;need&lt;/em&gt; for the &lt;code&gt;bind&lt;/code&gt; method and works up to explain how exactly it work.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Make a new object and a related(ish) function&lt;/span&gt;
-&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appetite&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;hungry&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
-&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;appetite&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&amp;quot;full&amp;quot;&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
-&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;
-&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//attempt to call the method on the object&lt;/span&gt;
-&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This doesn’t work, because &lt;code&gt;feedCat&lt;/code&gt; isn’t a property of the cat object. Similarly, &lt;code&gt;feedCat(cat)&lt;/code&gt; won’t work, because the &lt;code&gt;this&lt;/code&gt; inside of &lt;code&gt;feedCat&lt;/code&gt; will be bound to &lt;code&gt;window&lt;/code&gt;. However, we can use JavaScript’s &lt;code&gt;call&lt;/code&gt; or &lt;code&gt;apply&lt;/code&gt; methods to manually bind &lt;code&gt;this&lt;/code&gt; to the &lt;code&gt;cat&lt;/code&gt; object:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;However, if we try to use a browser method, such as &lt;code&gt;setTimout&lt;/code&gt;, funny things start to happen:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The code above doesn’t work, because the feedCat function is invoked &lt;em&gt;immediately&lt;/em&gt; and doesn’t return a function to be invoked later. So &lt;code&gt;setTimeout&lt;/code&gt; is essentially trying to call &lt;code&gt;undefined&lt;/code&gt;, not a function.&lt;/p&gt;
-
-&lt;p&gt;It is tempting imagine that any easy fix might be simply adding the &lt;code&gt;feedCat&lt;/code&gt; function as a property of &lt;code&gt;cat&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;feedcat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Unfortunately, &lt;code&gt;setTimeout(cat.feedcat, 1000)&lt;/code&gt; &lt;strong&gt;&lt;em&gt;still won’t work&lt;/em&gt;&lt;/strong&gt; because  &lt;code&gt;setTimeout&lt;/code&gt; belongs to the &lt;code&gt;window&lt;/code&gt; object, so when we call functions with it, &lt;code&gt;this&lt;/code&gt; automatically binds to the &lt;code&gt;window&lt;/code&gt; object (or other global object)!
-One of my Hack Reactor peers wrote up a more detailed explanation of that problem &lt;a href=&quot;http://lukesavage.me/jekyll/2015/07/08/setTimeout-and-this/&quot;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;We must use a wrapper function instead:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);},&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The wrapper function doesn’t get called until later, can because &lt;code&gt;feedCat.call(cat)&lt;/code&gt; is &lt;em&gt;inside&lt;/em&gt; of the wrapper function, it doesn’t get called until that function is called.&lt;/p&gt;
-
-&lt;p&gt;So now, let’s imagine that instead of using an anonymous wrapper function, we have a function called &lt;code&gt;bind&lt;/code&gt; that does essentially the same thing. It’s code would need to look something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
-&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;func&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;call&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
-&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt; &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Notice that the first parameter is the function we &lt;em&gt;really&lt;/em&gt; want to call, and the second parameter is the object to which we want to bind &lt;code&gt;this&lt;/code&gt;; any additional parameters could be passed to the interior function.&lt;/p&gt;
-
-&lt;p&gt;We could then run this code:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;And that’s basically all the &lt;code&gt;bind&lt;/code&gt; function does. It essentially cements the keyword &lt;code&gt;this&lt;/code&gt; to whatever you want it to be. Instead of a rewriting &lt;code&gt;bind&lt;/code&gt; everytime we want to use it with a different function, JavaScript has attached it as a method to the Function prototype. Because all functions delegate here, all functions have access to bind, so we would actually call it like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;setTimeout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;feedCat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;cat&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;),&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;10000&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The real source code looks something like this:&lt;/p&gt;
-
-&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nb&quot;&gt;Function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;bind&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt; 
-&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fn&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;;&lt;/span&gt; 
-&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(){&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;fn&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;apply&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;context&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;arguments&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt; 
-&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;        &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt; 
-&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Using &lt;code&gt;apply&lt;/code&gt; instead of &lt;code&gt;call&lt;/code&gt; accounts for slightly more complicated situations in which many parameters must be passed in to the interior function. It also uses &lt;code&gt;returns&lt;/code&gt; to account for the fact that most functions will need to return something, and not just implement a side effect like in ouf &lt;code&gt;feedCat&lt;/code&gt; function.&lt;/p&gt;
-</description>
-        <pubDate>Mon, 06 Jul 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Understanding-Bind/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Understanding-Bind/</guid>
       </item>
     
   </channel>
