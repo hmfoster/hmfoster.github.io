@@ -26,8 +26,9 @@
 &lt;p&gt;Enter &lt;strong&gt;&lt;a href=&quot;https://github.com/hmfoster/popsicle-sticks&quot;&gt;Popsicle Sticks&lt;/a&gt;&lt;/strong&gt;—a ridiculously simple app that allows me to choose a name at random. I didn’t have a lot of spare time to create this app, so I &lt;em&gt;had&lt;/em&gt; to stay focused on the bare minimum I wanted the program to do—pick a name at random from a list of students.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-process&quot;&gt;The Process&lt;/h3&gt;
-&lt;p&gt;####MVP
-The project began with three files:
+
+&lt;h4 id=&quot;mvp&quot;&gt;MVP&lt;/h4&gt;
+&lt;p&gt;The project began with three files:
 - A text file containing the names of my students (each name on a newline): &lt;code&gt;students.txt&lt;/code&gt;
 - A script that read the text file, formatted the list of names as an array, and wrote the array to a new javascript file: &lt;code&gt;students.js&lt;/code&gt;
 - A javascript file containing the core functions for the app—shuffling the names, picking a name, and storing the names that have yet to be chosen: &lt;code&gt;popsicleSticks.js&lt;/code&gt;&lt;/p&gt;
@@ -65,7 +66,7 @@ sticks = {
 
 &lt;p&gt;Whamo! Version 3 done within another hour, for a total of 2.5 hours work on the app.&lt;/p&gt;
 
-&lt;h5 id=&quot;note&quot;&gt;Note&lt;/h5&gt;
+&lt;h4 id=&quot;note&quot;&gt;Note&lt;/h4&gt;
 &lt;p&gt;I also added a &lt;code&gt;clearMemory&lt;/code&gt; function so that I can more easily update my class lists and reset &lt;code&gt;localStorage&lt;/code&gt;, but I consider this to be beyond MVP.&lt;/p&gt;
 
 &lt;h3 id=&quot;the-takeaway&quot;&gt;The Takeaway&lt;/h3&gt;
