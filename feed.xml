@@ -7,6 +7,78 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>The KISS Principle, or How I Made an App in Half a Day</title>
+        <description>&lt;h3 id=&quot;rabbit-holes&quot;&gt;Rabbit Holes&lt;/h3&gt;
+&lt;p&gt;One day you come up with a great idea for a little project. You figure you already have all the tools and knowledge you need to get it done in a few hours, settle in with some snacks, and get started.&lt;/p&gt;
+
+&lt;p&gt;Things progress nicely and everything is going as planned. While working, you get an idea for a small improvement—maybe a way to make your process more “efficient”, or to make the final product “cooler.” Two days later you realize you haven’t made any more progress than you had before your “brilliant” idea and you’ve ran out of food to eat.&lt;/p&gt;
+
+&lt;p&gt;You fell into a &lt;strong&gt;&lt;a href=&quot;http://www.newyorker.com/culture/cultural-comment/the-rabbit-hole-rabbit-hole&quot;&gt;rabbit hole&lt;/a&gt;&lt;/strong&gt;. It can happen to anyone, anywhere, but given the abundance of open source tools available now, programmers are particularly susceptible to this sort of accident.&lt;/p&gt;
+
+&lt;p&gt;The one sure way of avoiding them is to keep a laser focus on your key objectives and MVP. Let’s see an example….&lt;/p&gt;
+
+&lt;h3 id=&quot;the-need&quot;&gt;The Need&lt;/h3&gt;
+&lt;p&gt;A couple of months ago I started working for Hack Reactor as a Class Lead—a position that allows me to implement my teaching skills in a software engineering environment. Some of my duties involve working with large groups of students, during which I employ a common teaching strategy—&lt;a href=&quot;http://teachlikeachampionch4.blogspot.com/p/technique-22-cold-call.html&quot;&gt;the Cold Call&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;I tried to call on everyone randomly, but it’s extremely difficult to ensure that all students are called upon equally—especially from a virtual classroom. There are a few apps already in existence that allow you to enter a list of names and then randomly “draw” a name (or create groups etc…). However, most of these either required more set-up than I wanted, or were buggy.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
+&lt;p&gt;Enter &lt;strong&gt;&lt;a href=&quot;https://github.com/hmfoster/popsicle-sticks&quot;&gt;Popsicle Sticks&lt;/a&gt;&lt;/strong&gt;—a ridiculously simple app that allows me to choose a name at random. I didn’t have a lot of spare time to create this app, so I &lt;em&gt;had&lt;/em&gt; to stay focused on the bare minimum I wanted the program to do—pick a name at random from a list of students.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-process&quot;&gt;The Process&lt;/h3&gt;
+&lt;p&gt;####MVP
+The project began with three files:
+- A text file containing the names of my students (each name on a newline): &lt;code&gt;students.txt&lt;/code&gt;
+- A script that read the text file, formatted the list of names as an array, and wrote the array to a new javascript file: &lt;code&gt;students.js&lt;/code&gt;
+- A javascript file containing the core functions for the app—shuffling the names, picking a name, and storing the names that have yet to be chosen: &lt;code&gt;popsicleSticks.js&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;BAM! MVP done in less than 30 minutes.&lt;/p&gt;
+
+&lt;h4 id=&quot;v20&quot;&gt;v2.0&lt;/h4&gt;
+&lt;p&gt;&lt;em&gt;However&lt;/em&gt;, it wasn’t particularly easy to use while teaching, as it required working within the terminal. So I decided to make an interface in the browser. Time for file #4: &lt;code&gt;index.html&lt;/code&gt;. After including my script tags, I added a button that calls the &lt;code&gt;pickName&lt;/code&gt; function and appends the chosen name to the html using vanilla javascript.&lt;/p&gt;
+
+&lt;p&gt;I also realized I needed a way to store the names that had yet to be chosen in memory, so that if I closed the app, I’d still ensure I interacted with every single student. Due to time constraints, I really didn’t want to have to set up a server and database. Local Storage to the rescue!&lt;/p&gt;
+
+&lt;p&gt;I added one more file, &lt;code&gt;setup.js&lt;/code&gt; to configure the app using &lt;code&gt;localStorage&lt;/code&gt;. This file added the property &lt;code&gt;sticks&lt;/code&gt; to local storage if it didn’t already exist. The &lt;code&gt;sticks&lt;/code&gt; property was itself an object containing the full roster of names, and the array of yet-to-be-picked shuffled names. Because localStorage only stores string values, I also had to make use of &lt;code&gt;JSON.stringify&lt;/code&gt; and &lt;code&gt;JSON.parse&lt;/code&gt; in the core functions.&lt;/p&gt;
+
+&lt;p&gt;Version 2.0 complete with less than another hour of work. 
+(Honestly, I probably could have completed this stage in less time if I had been more familiar with localStorage before).&lt;/p&gt;
+
+&lt;h4 id=&quot;v30&quot;&gt;v3.0&lt;/h4&gt;
+&lt;p&gt;Finally, I wanted to be able to quickly switch between different groups of students. I added a dropdown menu to &lt;code&gt;index.html&lt;/code&gt; with which to pick a class, but then had to do a bit of refactoring to be able to access different groups of names from localStorage.&lt;/p&gt;
+
+&lt;p&gt;First, I changed the script that converts the text file list of names to a javascript array. Instead of grabbing all of the names and converting them to an array, this file now splits the file over the word ‘CLASS’, and then creates an object with the class names as keys and an array of all students as values. The following data structure is then stored in localStorage:
+&lt;code&gt;
+sticks = {
+    class1 : {
+        fullRoster: [student1, student2, student3],
+        toPick: [student2, student1, student3]
+    }, 
+    class2 : {
+        fullRoster: [student8, student9, student10],
+        toPick: [student10, student8, student9]
+    }
+}
+&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Once this was in place, I simply pulled each key from this object to use as the options in my dropdown menu and added a function that uses the dropdown choice to grab the correct set of students.&lt;/p&gt;
+
+&lt;p&gt;Whamo! Version 3 done within another hour, for a total of 2.5 hours work on the app.&lt;/p&gt;
+
+&lt;h5 id=&quot;note&quot;&gt;Note&lt;/h5&gt;
+&lt;p&gt;I also added a &lt;code&gt;clearMemory&lt;/code&gt; function so that I can more easily update my class lists and reset &lt;code&gt;localStorage&lt;/code&gt;, but I consider this to be beyond MVP.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-takeaway&quot;&gt;The Takeaway&lt;/h3&gt;
+&lt;p&gt;Of course I could have made something prettier, and snappier, and just…cooler if I’d used JQuery, or React, or Angular, or Mongo. But I didn’t &lt;em&gt;need&lt;/em&gt; any of that. My app &lt;strong&gt;doesn’t need to look nice&lt;/strong&gt;. It just needs to work–and this one does. Not only that, but it’s incredibly easy for someone else to set up and use too!&lt;/p&gt;
+
+&lt;h4 id=&quot;tell-me-what-do-you-think-about-the-process-i-used-would-you-have-done-something-differently&quot;&gt;Tell me, what do you think about the process I used? Would you have done something differently?&lt;/h4&gt;
+</description>
+        <pubDate>Mon, 23 Nov 2015 00:00:00 -0800</pubDate>
+        <link>http://hmfoster.github.io//ez-app-local-storage/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//ez-app-local-storage/</guid>
+      </item>
+    
+      <item>
         <title>Analyzing nth Fibonacci Solutions</title>
         <description>&lt;p&gt;Calculating the &lt;a href=&quot;https://en.wikipedia.org/wiki/Fibonacci_number&quot;&gt;Fibonacci sequence&lt;/a&gt; is one of the first programs many people learn to write once they’re past &lt;code&gt;Hello World&lt;/code&gt;. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the &lt;em&gt;nth&lt;/em&gt; Fibonacci number and put them to the test.&lt;/p&gt;
 
@@ -1522,52 +1594,6 @@ AssertionError: expected undefined to be a string
         <pubDate>Sun, 12 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//TDD-2/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//TDD-2/</guid>
-      </item>
-    
-      <item>
-        <title>A Beginner&#39;s Guide to Test Driven Development, Part 1</title>
-        <description>&lt;p&gt;Programming and teaching have a lot in common. In some ways, teaching students how to balance chemical equations is a lot like teaching a computer to do so: you have to have a clearly defined goal, create a basic plan, differentiate to account for differing strengths and weaknesses (&lt;em&gt;cough&lt;/em&gt; Internet Explorer &lt;em&gt;cough&lt;/em&gt;), determine if you were succesful, and modify your plans if you weren’t.&lt;/p&gt;
-
-&lt;p&gt;Professionals in both fields have also devised outcome-focused frameworks for developing high-quality products. Teachers call this &lt;a href=&quot;https://en.wikipedia.org/wiki/Backward_design&quot;&gt;backward design&lt;/a&gt;; programmers call it &lt;a href=&quot;https://en.wikipedia.org/wiki/Test-driven_development&quot;&gt;test driven development&lt;/a&gt;. Both strategies require one to have a clear idea of their overarching goal, as well as their intermediate objectives. This allows teachers and programmers to then create a series of assessments, or test, to determine if their plans are working as they implement them, and change course if they are not.&lt;/p&gt;
-
-&lt;p&gt;I had been using backwards design for years as a teacher, so I am already quite familiar with the basic premises of test driven development:&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;Write a failing test (one that your program/ students cannot yet pass)&lt;/li&gt;
-  &lt;li&gt;Add just enough code (or instruction) so the program/students can pass the  test.&lt;/li&gt;
-  &lt;li&gt;Refactor (or reteach) where necessary.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;However, while I had collected a wide array of tools with which to implement backwards design as a teacher, I am just beginning to become familiar with those available to programming.&lt;/p&gt;
-
-&lt;p&gt;One way of implementing TDD is in the browser using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt;, &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;, and &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt;. If you do a quick google search of each of these, you will learn that Mocha is a “testing framework”, Chai is an “expectation library,” and Sinon is a…. well, let’s call it a “virtual environment library.” Unfortunately, if you’re new to programming none of that means anything to you. If you’re like me, when you first read each of those “definitions,” you may have thought to yourself, “Ok, but what &lt;em&gt;is&lt;/em&gt; a testing framework? Actually, what’s a &lt;em&gt;framework&lt;/em&gt;?? And what is the difference between a library and a framework?”&lt;/p&gt;
-
-&lt;h3 id=&quot;defining-a-framework&quot;&gt;Defining a Framework&lt;/h3&gt;
-&lt;p&gt;&lt;a title=&quot;By Jan Tik (Flickr) [CC BY 2.0 (http://creativecommons.org/licenses/by/2.0)], via Wikimedia Commons&quot; href=&quot;https://commons.wikimedia.org/wiki/File%3ASeattle_library_framework_inside.jpg&quot;&gt;&lt;img width=&quot;420px&quot; style=&quot;float: left; margin-right: 10px&quot; alt=&quot;Seattle library framework inside&quot; src=&quot;https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/Seattle_library_framework_inside.jpg/512px-Seattle_library_framework_inside.jpg&quot; /&gt;&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;The everyday definition of &lt;strong&gt;framework&lt;/strong&gt; is &lt;a href=&quot;http://dictionary.reference.com/browse/framework&quot;&gt;a skeletal structure designed to support or enclose something&lt;/a&gt;. Many high school English teachers provide their students with essay frameworks &lt;a href=&quot;http://unilearning.uow.edu.au/essay/4bi.html&quot;&gt;like this one&lt;/a&gt; to help students organize their thoughts into a coherent structure. Most essay frameworks specify that the student should include an introductory paragraph, three to five body paragraphs, and a conluding paragraphs. In earlier grades, these frameworks may be even more specific and enforce additional organizational elements within individual paragraphs. Students then simply fill in the template with their content. Most teachers will mark down students who do not follow this structure until the student is advanced enough to write an organized essay without the provided framework.&lt;/p&gt;
-
-&lt;p&gt;This is not that different from what a programming framework does; from &lt;a href=&quot;https://en.wikipedia.org/wiki/Software_framework&quot;&gt;Wikipedia&lt;/a&gt;, a software framework, “is a universal, reusable software environment that provides particular functionality as part of a larger software platform to facilitate development of software applications, products and solutions.” In other words, it makes it easier and faster for you to write &lt;em&gt;your&lt;/em&gt; program by doing a lot of the work for you by providing one or more libraries, scripts, reference documentation, and other related resources. Not only that, but it also enforces a standard structure to follow that helps keep your code organized. Users can extend the functionality of the framework, but should not modify its code.&lt;/p&gt;
-
-&lt;p&gt;Because testing is such a fundamental part of programming, Mocha sets up the environments within when you will be completing your tests. For example, it will generate an html reporter that renders in an easy-to-read format in the browser.&lt;/p&gt;
-
-&lt;h3 id=&quot;libraries&quot;&gt;Libraries&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&quot;../images/TDD/Library_Pengo.jpg&quot; alt=&quot;Libary books&quot; /&gt;
-“&lt;a href=&quot;https://commons.wikimedia.org/wiki/File:Library_Pengo.jpg#/media/File:Library_Pengo.jpg&quot;&gt;Library Pengo&lt;/a&gt;”. Licensed under &lt;a href=&quot;http://creativecommons.org/licenses/by-sa/3.0/&quot; title=&quot;Creative Commons Attribution-Share Alike 3.0&amp;lt;p&amp;gt;&amp;lt;/p&amp;gt;&quot;&gt;CC BY-SA 3.0&lt;/a&gt; via &lt;a href=&quot;//commons.wikimedia.org/wiki/&quot;&gt;Wikimedia Commons&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;At first, it can be difficult to differentiate between a &lt;em&gt;framework&lt;/em&gt;, and a &lt;em&gt;library&lt;/em&gt;. Like a framework, a library provides us with a set of reusable code structures to take some of the redundancy out of coding. However, libraries only provide a collection of modular code with which to write our own programs. They do not dictate the overall structure of the program itself. Going back to our essay analogy, a software library is more like the set of high level vocabulary terms the teacher encourages students to use in their essay.&lt;/p&gt;
-
-&lt;p&gt;Chai and Sinon are both software libraries. Each provide a collection of related modular code that can be used from within the Mocha framework. When writing our tests, we need to be able to decide if our program is actually doing what we want. Chai essentially gives us a set of tests we can apply to our program, while Sinon allows us to trick our program into running in a fake environment so we can spy on it.&lt;/p&gt;
-
-&lt;p&gt;The tests Chai and other, &lt;a href=&quot;http://stackoverflow.com/questions/10472152/standalone-assertion-libraries&quot;&gt;similar libraries&lt;/a&gt;, use are called &lt;em&gt;assertions&lt;/em&gt;. An &lt;em&gt;assertion&lt;/em&gt; simply compares what we &lt;em&gt;want&lt;/em&gt; our program to do, to what it actually &lt;em&gt;is&lt;/em&gt; doing. As such, they return a boolean value: if our programm &lt;em&gt;is&lt;/em&gt;working correctly, the assertion evaluates to true, and it passes the test.&lt;/p&gt;
-
-&lt;p&gt;Sinon uses &lt;em&gt;spies&lt;/em&gt;, &lt;em&gt;stubs&lt;/em&gt;, and &lt;em&gt;mocks&lt;/em&gt; to keep track of everything our program is doing and allow it to run without the actual &lt;a href=&quot;https://en.wikipedia.org/wiki/Dependency&quot;&gt;dependencies&lt;/a&gt; it will need. A &lt;em&gt;spy&lt;/em&gt; records function arguments, return values and other data used and created by our program. &lt;em&gt;Stubs&lt;/em&gt; are basically spies with super powers. Not only do they keep track of the data related to our program, they also allow us to &lt;strong&gt;fake&lt;/strong&gt; functionality so the rest of our system thinks the program is running normally. Finally, a &lt;em&gt;mock&lt;/em&gt; combines the concepts of spies, stubs, and assertions all together. I will go into these ideas more in a later blog post, as they are difficult to conceptualize without detailed examples.&lt;/p&gt;
-
-&lt;p&gt;So, now we know what TDD is, why we would use it, and how our testing frameworks and libraries work together to allow us to implement it. &lt;a href=&quot;http://haileyfoster.com/TDD-2/&quot;&gt;Next up&lt;/a&gt; I’ll explain step-by-step how to actually set up a testing suite using a concrete JavaScript example.&lt;/p&gt;
-</description>
-        <pubDate>Thu, 09 Jul 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//Test-Driven-Development/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//Test-Driven-Development/</guid>
       </item>
     
   </channel>

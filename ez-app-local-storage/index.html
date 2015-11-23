@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>The KISS Principle, or How I Made an App in Half a Day – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="Rabbit Holes
+One day you come up with a great idea for a little project. You figure you already have all the tools and knowledge you need to get it done in a few hours, settle in with some snacks, and get started.
+
+" />
+    <meta property="og:description" content="Rabbit Holes
+One day you come up with a great idea for a little project. You figure you already have all the tools and knowledge you need to get it done in a few hours, settle in with some snacks, and get started.
+
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="The KISS Principle, or How I Made an App in Half a Day" />
+    <meta property="twitter:title" content="The KISS Principle, or How I Made an App in Half a Day" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>The KISS Principle, or How I Made an App in Half a Day</h1>
+  
+   <a href="/tag/hack-reactor" title="View posts tagged with &quot;hack-reactor&quot;" class = "tag">hack-reactor</a>     <a href="/tag/javascript" title="View posts tagged with &quot;javascript&quot;" class = "tag">javascript</a>     <a href="/tag/development" title="View posts tagged with &quot;development&quot;" class = "tag">development</a>   
+
+  <div class="entry">
+    <h3 id="rabbit-holes">Rabbit Holes</h3>
+<p>One day you come up with a great idea for a little project. You figure you already have all the tools and knowledge you need to get it done in a few hours, settle in with some snacks, and get started.</p>
+
+<p>Things progress nicely and everything is going as planned. While working, you get an idea for a small improvement—maybe a way to make your process more “efficient”, or to make the final product “cooler.” Two days later you realize you haven’t made any more progress than you had before your “brilliant” idea and you’ve ran out of food to eat.</p>
+
+<p>You fell into a <strong><a href="http://www.newyorker.com/culture/cultural-comment/the-rabbit-hole-rabbit-hole">rabbit hole</a></strong>. It can happen to anyone, anywhere, but given the abundance of open source tools available now, programmers are particularly susceptible to this sort of accident.</p>
+
+<p>The one sure way of avoiding them is to keep a laser focus on your key objectives and MVP. Let’s see an example….</p>
+
+<h3 id="the-need">The Need</h3>
+<p>A couple of months ago I started working for Hack Reactor as a Class Lead—a position that allows me to implement my teaching skills in a software engineering environment. Some of my duties involve working with large groups of students, during which I employ a common teaching strategy—<a href="http://teachlikeachampionch4.blogspot.com/p/technique-22-cold-call.html">the Cold Call</a>.</p>
+
+<p>I tried to call on everyone randomly, but it’s extremely difficult to ensure that all students are called upon equally—especially from a virtual classroom. There are a few apps already in existence that allow you to enter a list of names and then randomly “draw” a name (or create groups etc…). However, most of these either required more set-up than I wanted, or were buggy.</p>
+
+<h3 id="the-solution">The Solution</h3>
+<p>Enter <strong><a href="https://github.com/hmfoster/popsicle-sticks">Popsicle Sticks</a></strong>—a ridiculously simple app that allows me to choose a name at random. I didn’t have a lot of spare time to create this app, so I <em>had</em> to stay focused on the bare minimum I wanted the program to do—pick a name at random from a list of students.</p>
+
+<h3 id="the-process">The Process</h3>
+<p>####MVP
+The project began with three files:
+- A text file containing the names of my students (each name on a newline): <code>students.txt</code>
+- A script that read the text file, formatted the list of names as an array, and wrote the array to a new javascript file: <code>students.js</code>
+- A javascript file containing the core functions for the app—shuffling the names, picking a name, and storing the names that have yet to be chosen: <code>popsicleSticks.js</code></p>
+
+<p>BAM! MVP done in less than 30 minutes.</p>
+
+<h4 id="v20">v2.0</h4>
+<p><em>However</em>, it wasn’t particularly easy to use while teaching, as it required working within the terminal. So I decided to make an interface in the browser. Time for file #4: <code>index.html</code>. After including my script tags, I added a button that calls the <code>pickName</code> function and appends the chosen name to the html using vanilla javascript.</p>
+
+<p>I also realized I needed a way to store the names that had yet to be chosen in memory, so that if I closed the app, I’d still ensure I interacted with every single student. Due to time constraints, I really didn’t want to have to set up a server and database. Local Storage to the rescue!</p>
+
+<p>I added one more file, <code>setup.js</code> to configure the app using <code>localStorage</code>. This file added the property <code>sticks</code> to local storage if it didn’t already exist. The <code>sticks</code> property was itself an object containing the full roster of names, and the array of yet-to-be-picked shuffled names. Because localStorage only stores string values, I also had to make use of <code>JSON.stringify</code> and <code>JSON.parse</code> in the core functions.</p>
+
+<p>Version 2.0 complete with less than another hour of work. 
+(Honestly, I probably could have completed this stage in less time if I had been more familiar with localStorage before).</p>
+
+<h4 id="v30">v3.0</h4>
+<p>Finally, I wanted to be able to quickly switch between different groups of students. I added a dropdown menu to <code>index.html</code> with which to pick a class, but then had to do a bit of refactoring to be able to access different groups of names from localStorage.</p>
+
+<p>First, I changed the script that converts the text file list of names to a javascript array. Instead of grabbing all of the names and converting them to an array, this file now splits the file over the word ‘CLASS’, and then creates an object with the class names as keys and an array of all students as values. The following data structure is then stored in localStorage:
+<code>
+sticks = {
+    class1 : {
+        fullRoster: [student1, student2, student3],
+        toPick: [student2, student1, student3]
+    }, 
+    class2 : {
+        fullRoster: [student8, student9, student10],
+        toPick: [student10, student8, student9]
+    }
+}
+</code></p>
+
+<p>Once this was in place, I simply pulled each key from this object to use as the options in my dropdown menu and added a function that uses the dropdown choice to grab the correct set of students.</p>
+
+<p>Whamo! Version 3 done within another hour, for a total of 2.5 hours work on the app.</p>
+
+<h5 id="note">Note</h5>
+<p>I also added a <code>clearMemory</code> function so that I can more easily update my class lists and reset <code>localStorage</code>, but I consider this to be beyond MVP.</p>
+
+<h3 id="the-takeaway">The Takeaway</h3>
+<p>Of course I could have made something prettier, and snappier, and just…cooler if I’d used JQuery, or React, or Angular, or Mongo. But I didn’t <em>need</em> any of that. My app <strong>doesn’t need to look nice</strong>. It just needs to work–and this one does. Not only that, but it’s incredibly easy for someone else to set up and use too!</p>
+
+<h4 id="tell-me-what-do-you-think-about-the-process-i-used-would-you-have-done-something-differently">Tell me, what do you think about the process I used? Would you have done something differently?</h4>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on November 23, 2015
+  </div>
+  <p id="post-meta"></p>
+  <div id="comments">
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:hailey@haileyfoster.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/ez-app-local-storage/',
+		  'title': 'The KISS Principle, or How I Made an App in Half a Day'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>
