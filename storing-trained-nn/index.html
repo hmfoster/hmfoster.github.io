@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Storing a Trained Neural Network- How I Beat Mongo's Limitations – Hailey Foster – A teacher's perspective on programming.</title>
+
+        <meta charset="utf-8" />
+    <meta content='text/html; charset=utf-8' http-equiv='Content-Type'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>
+
+    
+    <meta name="description" content="The Problem
+We wrote an app that needed a personalized neural network for different users.
+Training a neural network with user data takes a long time.
+A trained neural network is a function.
+Most databases won’t store functions.
+
+" />
+    <meta property="og:description" content="The Problem
+We wrote an app that needed a personalized neural network for different users.
+Training a neural network with user data takes a long time.
+A trained neural network is a function.
+Most databases won’t store functions.
+
+" />
+    
+    <meta name="author" content="Hailey Foster" />
+
+    
+    <meta property="og:title" content="Storing a Trained Neural Network- How I Beat Mongo's Limitations" />
+    <meta property="twitter:title" content="Storing a Trained Neural Network- How I Beat Mongo's Limitations" />
+    
+
+    <!--[if lt IE 9]>
+      <script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="/style.css" />
+    <link rel="alternate" type="application/rss+xml" title="Hailey Foster - A teacher's perspective on programming." href="/feed.xml" />
+    <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
+    <!-- Created with Jekyll Now - http://github.com/barryclark/jekyll-now -->
+  </head>
+
+  <body>
+    <div class="wrapper-masthead">
+      <div class="container">
+        <header class="masthead clearfix">
+          <a href="/" class="site-avatar"><img src="https://avatars0.githubusercontent.com/u/10890292?v=3&s=460" /></a>
+
+          <div class="site-info">
+            <h1 class="site-name"><a href="/">Hailey Foster</a></h1>
+            <p class="site-description">A teacher's perspective on programming.</p>
+          </div>
+
+          <nav>
+            <a href="/">Blog</a>
+            <a href="/about">About</a>
+            <a href="/archive">Archive</a>
+          </nav>
+        </header>
+      </div>
+    </div>
+
+    <div id="main" role="main" class="container">
+      <article class="post">
+  <h1>Storing a Trained Neural Network- How I Beat Mongo's Limitations</h1>
+  
+   <a href="/tag/javascript" title="View posts tagged with &quot;javascript&quot;" class = "tag">javascript</a>     <a href="/tag/neural networks" title="View posts tagged with &quot;neural networks&quot;" class = "tag">neural networks</a>     <a href="/tag/databases" title="View posts tagged with &quot;databases&quot;" class = "tag">databases</a>   
+
+  <div class="entry">
+    <h3 id="the-problem">The Problem</h3>
+<p>We wrote an app that needed a personalized neural network for different users.
+Training a neural network with user data takes a long time.
+A trained neural network is a function.
+Most databases won’t store functions.</p>
+
+<h3 id="the-solution">The Solution</h3>
+<p>The neural network library we were using—<a href="http://synaptic.juancazala.com/#/">Synaptic.js</a>— provides a function that allows you to store a trained network as a standalone function. This allows you to repeatedly use the trained function, as opposed to continuously training the network each time it is used.</p>
+
+<p>We then called <code>toString()</code> on the resulting function so we could store it in MongoDB, and then used <code>eval()</code> when we wanted to use it later:</p>
+
+<div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//First, we create a PantryItem class and a train function</span>
+<a name="True-2"></a><span class="kd">var</span> <span class="nx">PantryItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
+<a name="True-3"></a>  <span class="c1">//create the network using a long short term memory architecture</span>
+<a name="True-4"></a>  <span class="c1">// that has one input neuron, one hidden neuron, and one output neuron</span>
+<a name="True-5"></a>  <span class="k">this</span><span class="p">.</span><span class="nx">network</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Architect</span><span class="p">.</span><span class="nx">LSTM</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+<a name="True-6"></a>
+<a name="True-7"></a>  <span class="c1">//create a trainer for the network</span>
+<a name="True-8"></a>  <span class="k">this</span><span class="p">.</span><span class="nx">trainer</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Trainer</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">network</span><span class="p">);</span>
+<a name="True-9"></a><span class="p">};</span>
+<a name="True-10"></a>
+<a name="True-11"></a><span class="nx">PantryItem</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">train</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">trainingSet</span><span class="p">){</span>
+<a name="True-12"></a>  <span class="c1">//train the network using the given trainingSet</span>
+<a name="True-13"></a>  <span class="k">this</span><span class="p">.</span><span class="nx">trainer</span><span class="p">.</span><span class="nx">train</span><span class="p">(</span><span class="nx">trainingSet</span><span class="p">);</span>
+<a name="True-14"></a>  <span class="c1">//return a standalone function for the network that </span>
+<a name="True-15"></a>  <span class="c1">//does not rely on any dependencies</span>
+<a name="True-16"></a>  <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">network</span><span class="p">.</span><span class="nx">standalone</span><span class="p">();</span> 
+<a name="True-17"></a><span class="p">};</span>
+<a name="True-18"></a>
+<a name="True-19"></a><span class="c1">//Next we instantiate and train a network for that item, and then store it in our Mongo database</span>
+<a name="True-20"></a><span class="kd">var</span> <span class="nx">pantryItem</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">PantryItem</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
+<a name="True-21"></a><span class="kd">var</span> <span class="nx">trained</span> <span class="o">=</span> <span class="nx">pantryItem</span><span class="p">.</span><span class="nx">train</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<a name="True-22"></a>
+<a name="True-23"></a><span class="c1">//household is the Mongo table where we stored each user&#39;s information</span>
+<a name="True-24"></a><span class="nx">household</span><span class="p">.</span><span class="nx">pantry</span><span class="p">[</span><span class="nx">item</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+<a name="True-25"></a>    <span class="c1">// Store the standalone function inside the database by converting it to a string</span>
+<a name="True-26"></a>    <span class="nx">network</span><span class="o">:</span> <span class="nx">trained</span><span class="p">.</span><span class="nx">toString</span><span class="p">(),</span>
+<a name="True-27"></a>    <span class="nx">data</span><span class="o">:</span> <span class="nx">additionaData</span>
+<a name="True-28"></a><span class="p">};</span>
+<a name="True-29"></a>
+<a name="True-30"></a><span class="c1">//Then, use [Javascript&#39;s notorious eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don&#39;t_use_eval_needlessly!) when we want to use the trained network</span>
+<a name="True-31"></a><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;var network = &quot;</span><span class="o">+</span><span class="nx">household</span><span class="p">.</span><span class="nx">pantry</span><span class="p">[</span><span class="nx">item</span><span class="p">].</span><span class="nx">network</span><span class="p">);</span></code></pre></div>
+
+<p>And that’s that! We did not choose to use <code>eval</code> lightly, as we are well aware of the potential security risks it can introduce. I’d love to hear if anyone has ideas for an alternate (potentially more secure) solution too!</p>
+
+  </div>
+
+  <div class = "sharing">
+  	<a href="https://twitter.com/share" class="twitter-share-button" data-via="fosterfication">Tweet</a>
+		<script>
+			!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+			</script>
+			<script src="//platform.linkedin.com/in.js" type="text/javascript"> lang: en_US</script>
+<script type="IN/Share" data-counter="right"></script>
+	<div class="g-plus" data-action="share" data-annotation="bubble"></div>
+		</div>
+
+  <div class="date">
+    Written on December  6, 2015
+  </div>
+  <p id="post-meta"></p>
+  <div id="comments">
+<div class="comments">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+
+	    var disqus_shortname = 'haileyfoster';
+
+	    (function() {
+	        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+	        dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+	        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	    })();
+
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</div>
+</div>
+</article>
+
+<script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+
+    </div>
+
+    <div class="wrapper-footer">
+      <div class="container">
+        <footer class="footer">
+          
+<a href="mailto:hailey@haileyfoster.com"><i class="svg-icon email"></i></a>
+
+
+<a href="https://github.com/hmfoster"><i class="svg-icon github"></i></a>
+
+<a href="https://www.linkedin.com/in/haileyfoster"><i class="svg-icon linkedin"></i></a>
+
+
+<a href="https://www.twitter.com/fosterfication"><i class="svg-icon twitter"></i></a>
+
+
+
+        </footer>
+      </div>
+    </div>
+
+    
+	<!-- Google Analytics -->
+	<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+		ga('create', 'UA-63332031-1', 'auto');
+		ga('send', 'pageview', {
+		  'page': '/storing-trained-nn/',
+		  'title': 'Storing a Trained Neural Network- How I Beat Mongo\'s Limitations'
+		});
+	</script>
+	<!-- End Google Analytics -->
+
+
+  </body>
+</html>

@@ -7,6 +7,58 @@
     <atom:link href="http://hmfoster.github.io//feed.xml" rel="self" type="application/rss+xml" />
     
       <item>
+        <title>Storing a Trained Neural Network- How I Beat Mongo&#39;s Limitations</title>
+        <description>&lt;h3 id=&quot;the-problem&quot;&gt;The Problem&lt;/h3&gt;
+&lt;p&gt;We wrote an app that needed a personalized neural network for different users.
+Training a neural network with user data takes a long time.
+A trained neural network is a function.
+Most databases won’t store functions.&lt;/p&gt;
+
+&lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
+&lt;p&gt;The neural network library we were using—&lt;a href=&quot;http://synaptic.juancazala.com/#/&quot;&gt;Synaptic.js&lt;/a&gt;— provides a function that allows you to store a trained network as a standalone function. This allows you to repeatedly use the trained function, as opposed to continuously training the network each time it is used.&lt;/p&gt;
+
+&lt;p&gt;We then called &lt;code&gt;toString()&lt;/code&gt; on the resulting function so we could store it in MongoDB, and then used &lt;code&gt;eval()&lt;/code&gt; when we wanted to use it later:&lt;/p&gt;
+
+&lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//First, we create a PantryItem class and a train function&lt;/span&gt;
+&lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PantryItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-3&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//create the network using a long short term memory architecture&lt;/span&gt;
+&lt;a name=&quot;True-4&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;// that has one input neuron, one hidden neuron, and one output neuron&lt;/span&gt;
+&lt;a name=&quot;True-5&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Architect&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;LSTM&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;2&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-6&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-7&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//create a trainer for the network&lt;/span&gt;
+&lt;a name=&quot;True-8&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trainer&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;Trainer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-9&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-10&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-11&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;PantryItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;prototype&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;train&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trainingSet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
+&lt;a name=&quot;True-12&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//train the network using the given trainingSet&lt;/span&gt;
+&lt;a name=&quot;True-13&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trainer&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;trainingSet&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-14&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//return a standalone function for the network that &lt;/span&gt;
+&lt;a name=&quot;True-15&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;c1&quot;&gt;//does not rely on any dependencies&lt;/span&gt;
+&lt;a name=&quot;True-16&quot;&gt;&lt;/a&gt;  &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;this&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;standalone&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;();&lt;/span&gt; 
+&lt;a name=&quot;True-17&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-18&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-19&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Next we instantiate and train a network for that item, and then store it in our Mongo database&lt;/span&gt;
+&lt;a name=&quot;True-20&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pantryItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PantryItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-21&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;trained&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;pantryItem&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;train&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;
+&lt;a name=&quot;True-22&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-23&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//household is the Mongo table where we stored each user&amp;#39;s information&lt;/span&gt;
+&lt;a name=&quot;True-24&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nx&quot;&gt;household&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pantry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;]&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+&lt;a name=&quot;True-25&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;c1&quot;&gt;// Store the standalone function inside the database by converting it to a string&lt;/span&gt;
+&lt;a name=&quot;True-26&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;trained&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;toString&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(),&lt;/span&gt;
+&lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;additionaData&lt;/span&gt;
+&lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
+&lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Then, use [Javascript&amp;#39;s notorious eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don&amp;#39;t_use_eval_needlessly!) when we want to use the trained network&lt;/span&gt;
+&lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;var network = &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;household&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pantry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;And that’s that! We did not choose to use &lt;code&gt;eval&lt;/code&gt; lightly, as we are well aware of the potential security risks it can introduce. I’d love to hear if anyone has ideas for an alternate (potentially more secure) solution too!&lt;/p&gt;
+</description>
+        <pubDate>Sun, 06 Dec 2015 00:00:00 -0800</pubDate>
+        <link>http://hmfoster.github.io//storing-trained-nn/</link>
+        <guid isPermaLink="true">http://hmfoster.github.io//storing-trained-nn/</guid>
+      </item>
+    
+      <item>
         <title>The KISS Principle, or How I Made an App in Half a Day</title>
         <description>&lt;h3 id=&quot;rabbit-holes&quot;&gt;Rabbit Holes&lt;/h3&gt;
 &lt;p&gt;One day you come up with a great idea for a little project. You figure you already have all the tools and knowledge you need to get it done in a few hours, settle in with some snacks, and get started.&lt;/p&gt;
@@ -1490,111 +1542,6 @@ AssertionError: expected undefined to be a string
         <pubDate>Fri, 17 Jul 2015 00:00:00 -0700</pubDate>
         <link>http://hmfoster.github.io//TDD-3/</link>
         <guid isPermaLink="true">http://hmfoster.github.io//TDD-3/</guid>
-      </item>
-    
-      <item>
-        <title>A Beginner&#39;s Guide to Test Driven Development, Part 2</title>
-        <description>&lt;p&gt;&lt;a href=&quot;http://haileyfoster.com/Test-Driven-Development/&quot;&gt;Part 1&lt;/a&gt; of this short series on test driven development gave a brief overview or what TDD is, explained why you would use it, and introduced a few tools with which you can implement it. Part 2 will provide you with a step-by-step guide for how to set up a basic TDD environment using &lt;a href=&quot;http://mochajs.org/&quot;&gt;Mocha&lt;/a&gt; and &lt;a href=&quot;http://chaijs.com/&quot;&gt;Chai&lt;/a&gt;. We will actually implement this environment in &lt;a href=&quot;http://haileyfoster.com/TDD-3&quot;&gt;Part 3&lt;/a&gt;, and finally, Part 4 will provide additional details about when, why, and how to use &lt;a href=&quot;http://sinonjs.org/&quot;&gt;Sinon&lt;/a&gt; to test more complex programs.&lt;/p&gt;
-
-&lt;p&gt;Let’s say you want to write a JavaScript program that will determine if a sequence of numbers is &lt;a href=&quot;https://purplemath.com/modules/series3.htm&quot;&gt;arithmetic, geometric, or neither&lt;/a&gt;. This is a fairly straightforward task that gives us a good example with which to set-up a testing environment.&lt;/p&gt;
-
-&lt;p&gt;Remember, the main premise of TDD is to write and test small units of code at a time to minimize the chances of writing a hard-to-catch-bug. This means that we will want to set up our environment &lt;em&gt;before&lt;/em&gt; writing any code. Of course, there are many options for how to go about setting up your environment depending upon your level of experience. The goal of this post is to simplify the process so that novice programmers will be more likely to use these tools from the beginning. Therefore, we will be using &lt;a href=&quot;https://github.com/phillipalexander/generator-test&quot;&gt;a generator&lt;/a&gt; from Phillip Alexander for our initial set-up.&lt;/p&gt;
-
-&lt;hr /&gt;
-&lt;p&gt;####Before Moving On&lt;/p&gt;
-
-&lt;p&gt;In order to use the test generator, you will need to have &lt;a href=&quot;https://nodejs.org/download/&quot;&gt;Node.js&lt;/a&gt; installed and have some familiarity with your command line. If you have yet to use your command line, I recommend going through at least the first few chapters in &lt;a href=&quot;http://cli.learncodethehardway.org/book/&quot;&gt;The Command Line Crash Course&lt;/a&gt; to get over your fear of breaking your computer (which you won’t do). There are many options for installing Node; check out a clear set of directions &lt;a href=&quot;http://blog.teamtreehouse.com/install-node-js-npm-mac&quot;&gt;here&lt;/a&gt; if you use a Mac. Node will allow us to use a package manager called &lt;strong&gt;npm&lt;/strong&gt; to install the remaining tools we will need, and will allow us to run our tests from the command line if we choose.&lt;/p&gt;
-
-&lt;p&gt;We will also be installing &lt;a href=&quot;http://yeoman.io/&quot;&gt;Yeoman&lt;/a&gt; in our initial set-up, but you don’t actually need to understand what it is or how it works.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;h3 id=&quot;initial-set-up&quot;&gt;Initial Set-Up&lt;/h3&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;
-    &lt;p&gt;Create an &lt;em&gt;empty&lt;/em&gt; folder for your program. All of the rest of the files needed for our program will be added here.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Install Yeoman&lt;/strong&gt;: In your command line, type: &lt;code&gt;$ npm install -g yo&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;&lt;strong&gt;Install Phillip Alexander’s generator&lt;/strong&gt;: In your command line, type: &lt;code&gt;npm install -g generator-test&lt;/code&gt;&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;&lt;strong&gt;Initiate the generator&lt;/strong&gt;:
-    &lt;ol&gt;
-      &lt;li&gt;From the command line, change directories into the folder you created earlier. For example, since I created my directory on my Desktop, I would type: &lt;code&gt;cd ~/Desktop/Arith-Geo-Test&lt;/code&gt;.&lt;/li&gt;
-      &lt;li&gt;Type &lt;code&gt;yo test&lt;/code&gt;. This will use Yeoman to install the files you will need. At this point, your command line should look something like this:
- &lt;img src=&quot;../images/TDD/Yeoman1.png&quot; alt=&quot;Generator Welcome Screen&quot; /&gt;&lt;/li&gt;
-    &lt;/ol&gt;
-  &lt;/li&gt;
-  &lt;li&gt;
-    &lt;p&gt;You now need to decide if you want to run your tests in the browser, or in Node. I recommend using the browser unless you are already comfortable with Node, and the remainder of this tutorial will make use of the browser for our tests. Use your arrow keys to make your choice, and hit enter.&lt;/p&gt;
-  &lt;/li&gt;
-  &lt;li&gt;The generator will now ask for the &lt;em&gt;name&lt;/em&gt; of the algorithm you’d like to test. Enter a name for the program you want to write. We’re going to call ours &lt;code&gt;sequenceType&lt;/code&gt;. Note that if you already have some JavaScript files in your directory, the generator will ask you to choose one of these instead, and base the rest of the set-up upon this existing file.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/TDD/Yeoman2.png&quot; alt=&quot;Generator file choice&quot; /&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-  &lt;li&gt;After entering your choice, the generator will do its thing and create all of the files you will need to run your unit tests. It will also install another package manager called &lt;a href=&quot;http://blog.teamtreehouse.com/getting-started-bower&quot;&gt;Bower&lt;/a&gt; so it can install all of the &lt;a href=&quot;http://askubuntu.com/questions/361741/what-are-dependencies&quot;&gt;dependencies&lt;/a&gt; you’ll need—in our case, this is Mocha and Chai.
-&lt;img src=&quot;../images/TDD/Yeoman3.png&quot; alt=&quot;Generator install screen&quot; /&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;h3 id=&quot;the-tdd-scaffold&quot;&gt;The TDD Scaffold&lt;/h3&gt;
-
-&lt;p&gt;Now when we look in our previously empty directory, we should see the following file structure:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;code&gt;Bower Components&lt;/code&gt;: contains the packages for Mocha and Chai&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;bower.json&lt;/code&gt;: lists the packages downloaded by Bower—useful for installing updates if needed in the future&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;index.html&lt;/code&gt;: the html file through which we will run our tests&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: our JavaScript file&lt;/li&gt;
-  &lt;li&gt;&lt;code&gt;spec&lt;/code&gt;
-    &lt;ul&gt;
-      &lt;li&gt;&lt;code&gt;sequenceType.js&lt;/code&gt;: the JavaScript file within which we will write our tests. Also called the &lt;strong&gt;spec&lt;/strong&gt; file.&lt;/li&gt;
-    &lt;/ul&gt;
-  &lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Although we need the packages stored in the Bower Components, we don’t need to do anything with them. If you are curious, by all means feel free to explore the contents of this folder. What we really care about is the index.html file, and the two sequenceType.js files. Note that both the spec file and our program have the same name, but are located in different places in our directory. If this is confusing, you can change the name of the spec file, but you’ll need to be careful to change it every it is referenced from within the generated documents.&lt;/p&gt;
-
-&lt;p&gt;Let’s begin by opening the index.html file in your text editor.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/TDD/index_html.png&quot; alt=&quot;The index.html file&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Notice that the generator has automatically set up our index.html file for us:&lt;/p&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;The meta and title elements have been created&lt;/li&gt;
-  &lt;li&gt;The css file from the Mocha package is referenced&lt;/li&gt;
-  &lt;li&gt;The Mocha, Chai, spec, and algorithm scripts are referenced&lt;/li&gt;
-  &lt;li&gt;Scripts needed to setup and run Mocha and Chai are embedded&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;If we open this file in the browser, we will see a nicely formatted document with some dummy text.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/TDD/Mocha_Spec_Runner.png&quot; alt=&quot;The index.html file in the browser&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Don’t worry about what any of this means, or where it came from yet. We’ll get there.&lt;/p&gt;
-
-&lt;p&gt;Next, let’s open up our program, &lt;code&gt;sequenceType.js&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/TDD/EmptyProgram.png&quot; alt=&quot;Our program&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;The generator has pre-populated our file for us, but we can alter it as we like. Feel free to remove the first two lines entirely if you wish.&lt;/p&gt;
-
-&lt;p&gt;Finally, let’s look at that spec file from &lt;code&gt;spec/sequenceType.js&lt;/code&gt;. This is the one we’re really interested in.&lt;/p&gt;
-
-&lt;p&gt;&lt;img src=&quot;../images/TDD/Spec.png&quot; alt=&quot;The spec&quot; /&gt;&lt;/p&gt;
-
-&lt;p&gt;Again, the generator has pre-populated this file for us with a small template. The lines starting with &lt;code&gt;describe&lt;/code&gt; and &lt;code&gt;it&lt;/code&gt; are from the Mocha framework, while the lines starting with &lt;code&gt;expect&lt;/code&gt; come from Chai.&lt;/p&gt;
-
-&lt;p&gt;You should now be ready to actually start using TDD to write your program. Feel free to start playing around, or watch out for Part 3: Implementing TDD.&lt;/p&gt;
-</description>
-        <pubDate>Sun, 12 Jul 2015 00:00:00 -0700</pubDate>
-        <link>http://hmfoster.github.io//TDD-2/</link>
-        <guid isPermaLink="true">http://hmfoster.github.io//TDD-2/</guid>
       </item>
     
   </channel>
