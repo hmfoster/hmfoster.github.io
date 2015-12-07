@@ -135,7 +135,7 @@ sticks = {
         <title>Analyzing nth Fibonacci Solutions</title>
         <description>&lt;p&gt;Calculating the &lt;a href=&quot;https://en.wikipedia.org/wiki/Fibonacci_number&quot;&gt;Fibonacci sequence&lt;/a&gt; is one of the first programs many people learn to write once they’re past &lt;code&gt;Hello World&lt;/code&gt;. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the &lt;em&gt;nth&lt;/em&gt; Fibonacci number and put them to the test.&lt;/p&gt;
 
-&lt;p&gt;I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used by 2013 Mac with an i7 processor running Yosemite.&lt;/p&gt;
+&lt;p&gt;I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used my 2013 Mac with an i7 processor running Yosemite.&lt;/p&gt;
 
 &lt;h3 id=&quot;basic-recursion&quot;&gt;Basic Recursion&lt;/h3&gt;
 &lt;p&gt;First up, I tried out a basic recursive function. Notice how simple this functions is (only one line!)–it reads almost the same as the definition of the sequence: The next value in the sequence is found by summing the previous two values–except for when &lt;code&gt;n = 0&lt;/code&gt; and &lt;code&gt;n = 1&lt;/code&gt;; these values are equal to &lt;em&gt;n&lt;/em&gt;.&lt;/p&gt;

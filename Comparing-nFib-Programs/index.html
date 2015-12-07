@@ -62,7 +62,7 @@
   <div class="entry">
     <p>Calculating the <a href="https://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci sequence</a> is one of the first programs many people learn to write once they’re past <code>Hello World</code>. Of course, there are many ways of solving this problem; for example, it can be solved iteratively, or recursively. I was curious if my intuitive expectations about the performance of a few different methods were correct, so I wrote five different programs that all return the <em>nth</em> Fibonacci number and put them to the test.</p>
 
-<p>I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used by 2013 Mac with an i7 processor running Yosemite.</p>
+<p>I first tested each function by running it in node, passing in increasing values of n until a) it took so long to return I lost patience, or b) the max call size was reached. FYI, I used my 2013 Mac with an i7 processor running Yosemite.</p>
 
 <h3 id="basic-recursion">Basic Recursion</h3>
 <p>First up, I tried out a basic recursive function. Notice how simple this functions is (only one line!)–it reads almost the same as the definition of the sequence: The next value in the sequence is found by summing the previous two values–except for when <code>n = 0</code> and <code>n = 1</code>; these values are equal to <em>n</em>.</p>
