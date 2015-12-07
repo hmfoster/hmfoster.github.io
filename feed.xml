@@ -17,7 +17,7 @@ Most databases won’t store functions.&lt;/p&gt;
 &lt;h3 id=&quot;the-solution&quot;&gt;The Solution&lt;/h3&gt;
 &lt;p&gt;The neural network library we were using—&lt;a href=&quot;http://synaptic.juancazala.com/#/&quot;&gt;Synaptic.js&lt;/a&gt;— provides a function that allows you to store a trained network as a standalone function. This allows you to repeatedly use the trained function, as opposed to continuously training the network each time it is used.&lt;/p&gt;
 
-&lt;p&gt;We then called &lt;code&gt;toString()&lt;/code&gt; on the resulting function so we could store it in MongoDB, and then used &lt;code&gt;eval()&lt;/code&gt; when we wanted to use it later:&lt;/p&gt;
+&lt;p&gt;We then called &lt;code&gt;toString()&lt;/code&gt; on the resulting function so we could store it in MongoDB, and then used &lt;a href=&quot;https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don&#39;t_use_eval_needlessly!&quot;&gt;Javascript’s notorious eval function&lt;/a&gt; when we wanted to use it later:&lt;/p&gt;
 
 &lt;div class=&quot;highlight&quot;&gt;&lt;pre&gt;&lt;code class=&quot;language-js&quot; data-lang=&quot;js&quot;&gt;&lt;a name=&quot;True-1&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//First, we create a PantryItem class and a train function&lt;/span&gt;
 &lt;a name=&quot;True-2&quot;&gt;&lt;/a&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;PantryItem&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;function&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;){&lt;/span&gt;
@@ -48,7 +48,7 @@ Most databases won’t store functions.&lt;/p&gt;
 &lt;a name=&quot;True-27&quot;&gt;&lt;/a&gt;    &lt;span class=&quot;nx&quot;&gt;data&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;nx&quot;&gt;additionaData&lt;/span&gt;
 &lt;a name=&quot;True-28&quot;&gt;&lt;/a&gt;&lt;span class=&quot;p&quot;&gt;};&lt;/span&gt;
 &lt;a name=&quot;True-29&quot;&gt;&lt;/a&gt;
-&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Then, use [Javascript&amp;#39;s notorious eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don&amp;#39;t_use_eval_needlessly!) when we want to use the trained network&lt;/span&gt;
+&lt;a name=&quot;True-30&quot;&gt;&lt;/a&gt;&lt;span class=&quot;c1&quot;&gt;//Then, use eval() when we want to use the network &lt;/span&gt;
 &lt;a name=&quot;True-31&quot;&gt;&lt;/a&gt;&lt;span class=&quot;nb&quot;&gt;eval&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&amp;quot;var network = &amp;quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;+&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;household&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;pantry&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;item&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;].&lt;/span&gt;&lt;span class=&quot;nx&quot;&gt;network&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;);&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;And that’s that! We did not choose to use &lt;code&gt;eval&lt;/code&gt; lightly, as we are well aware of the potential security risks it can introduce. I’d love to hear if anyone has ideas for an alternate (potentially more secure) solution too!&lt;/p&gt;

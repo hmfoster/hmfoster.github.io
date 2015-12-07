@@ -77,7 +77,7 @@ Most databases won’t store functions.</p>
 <h3 id="the-solution">The Solution</h3>
 <p>The neural network library we were using—<a href="http://synaptic.juancazala.com/#/">Synaptic.js</a>— provides a function that allows you to store a trained network as a standalone function. This allows you to repeatedly use the trained function, as opposed to continuously training the network each time it is used.</p>
 
-<p>We then called <code>toString()</code> on the resulting function so we could store it in MongoDB, and then used <code>eval()</code> when we wanted to use it later:</p>
+<p>We then called <code>toString()</code> on the resulting function so we could store it in MongoDB, and then used <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don't_use_eval_needlessly!">Javascript’s notorious eval function</a> when we wanted to use it later:</p>
 
 <div class="highlight"><pre><code class="language-js" data-lang="js"><a name="True-1"></a><span class="c1">//First, we create a PantryItem class and a train function</span>
 <a name="True-2"></a><span class="kd">var</span> <span class="nx">PantryItem</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">item</span><span class="p">){</span>
@@ -108,7 +108,7 @@ Most databases won’t store functions.</p>
 <a name="True-27"></a>    <span class="nx">data</span><span class="o">:</span> <span class="nx">additionaData</span>
 <a name="True-28"></a><span class="p">};</span>
 <a name="True-29"></a>
-<a name="True-30"></a><span class="c1">//Then, use [Javascript&#39;s notorious eval function](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/eval#Don&#39;t_use_eval_needlessly!) when we want to use the trained network</span>
+<a name="True-30"></a><span class="c1">//Then, use eval() when we want to use the network </span>
 <a name="True-31"></a><span class="nb">eval</span><span class="p">(</span><span class="s2">&quot;var network = &quot;</span><span class="o">+</span><span class="nx">household</span><span class="p">.</span><span class="nx">pantry</span><span class="p">[</span><span class="nx">item</span><span class="p">].</span><span class="nx">network</span><span class="p">);</span></code></pre></div>
 
 <p>And that’s that! We did not choose to use <code>eval</code> lightly, as we are well aware of the potential security risks it can introduce. I’d love to hear if anyone has ideas for an alternate (potentially more secure) solution too!</p>
